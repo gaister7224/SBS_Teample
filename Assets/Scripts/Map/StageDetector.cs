@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using Unity.Cinemachine;
 using UnityEngine;
 
@@ -56,7 +57,9 @@ public class StageDetector : MonoBehaviour
                 stageManager.monsterSpawnManager.isMonsterSpawn = true;
             stageManager.activePortal = false;
             stageManager.curStageCleared = portalManager.isCleared;
-            stageManager.curStageSpawnPrefabs = portalManager.SpawnPrefabs;
+            stageManager.curStageSpawnPrefabs = portalManager.SpawnPrefabs != null
+                ? new List<GameObject>(portalManager.SpawnPrefabs)
+                : new List<GameObject>();
             stageManager.surroundStagePositions.Clear();
             for (int i = 0; i < 9; i++)
             {
@@ -69,7 +72,7 @@ public class StageDetector : MonoBehaviour
                 }
             }
 
-            other.GetComponent<PlayerProfile>()?.ResetLocomotion();
+            PlayerLocomotion.GetProfile(other)?.ResetLocomotion();
             NotifyDungeonMap(stageManager);
         }
     }

@@ -27,7 +27,7 @@ public class PlayerProfile : PlayerState
     private Image mpMask;
     private TextMeshProUGUI mpText;
 
-    [Header("???¡Æ??? ???????")]
+    [Header("???????? ???????")]
     private Slider acSlider;
     private TextMeshProUGUI acText;
 
@@ -136,7 +136,7 @@ public class PlayerProfile : PlayerState
     public void AnimationReset() => ResetLocomotion();
 
     /// <summary>
-    /// ¹æ ÀÌµ¿¡¤UI Á¾·á µîÀ¸·Î °ø°Ý ¾Ö´Ï¸ÞÀÌ¼Ç ÀÌº¥Æ®°¡ ²÷±ä µÚ moveSpeed°¡ 0À¸·Î ³²´Â °æ¿ì¸¦ º¹±¸ÇÕ´Ï´Ù.
+    /// ?? ?????UI ???? ?????? ???? ??????? ?????? ???? ?? moveSpeed?? 0???? ???? ??®œ ????????.
     /// </summary>
     public void ResetLocomotion()
     {
@@ -145,14 +145,15 @@ public class PlayerProfile : PlayerState
         currentState = PlayerSituation.Idle;
         skillStart = false;
 
-        if (passiveMoveSpeed < 0.01f)
-            passiveMoveSpeed = originMoveSpeed;
-
-        ChangeMoveSpeed(0);
+        RestoreMoveSpeed();
 
         var body = GetComponent<Rigidbody>();
         if (body != null)
+        {
             body.linearVelocity = Vector3.zero;
+            body.angularVelocity = Vector3.zero;
+            body.WakeUp();
+        }
 
         if (ani == null)
             return;
@@ -328,7 +329,7 @@ public class PlayerProfile : PlayerState
         maxMp = (int)(maxMp * (increasedPercent / 100f));
     }
 
-    //?¬ß?? ???
+    //????? ???
     public void PassiveATK(float increasedPercent)
     {
         passiveATK = maxATK * (1f + (increasedPercent / 100f));
@@ -534,6 +535,27 @@ public class PlayerProfile : PlayerState
         moveSpeed = passiveMoveSpeed * (1f + (changePercent / 100f));
     }
 
+    public void RestoreMoveSpeed()
+    {
+        if (originMoveSpeed < 0.01f)
+            originMoveSpeed = 5.5f;
+
+        if (passiveMoveSpeed < 0.01f)
+            passiveMoveSpeed = originMoveSpeed;
+
+        moveSpeed = passiveMoveSpeed;
+    }
+
+    /// <summary>WASD ÀÔ·ÂÀÌ ÀÖ´Âµ¥ ÀÌµ¿ ¼Óµµ/»óÅÂ°¡ ¸·Çô ÀÖÀ» ¶§ È£ÃâÇÕ´Ï´Ù.</summary>
+    public void EnsureCanMove()
+    {
+        if (currentState == PlayerSituation.Attack && !skillStart)
+            currentState = PlayerSituation.Idle;
+
+        if (moveSpeed < 0.01f)
+            RestoreMoveSpeed();
+    }
+
     public void BloodHealHp(float bloodPercent, float damage)
     {
         float bloodValue;
@@ -690,7 +712,7 @@ public class PlayerProfile : PlayerState
         //???? ??
         float curWidth = _mask.GetComponent<RectTransform>().sizeDelta.x;
 
-        //?????? ?¥å÷é?? ???
+        //?????? ??????? ???
         float newWidth = Mathf.Lerp(curWidth, targetWidth, Time.deltaTime * lerpSpeed);
         _mask.GetComponent<RectTransform>().sizeDelta = new Vector2(newWidth, height);
     }

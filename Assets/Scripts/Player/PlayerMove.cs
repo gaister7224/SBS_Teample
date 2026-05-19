@@ -39,6 +39,7 @@ public class PlayerMove : MonoBehaviour
     void OnEnable()
     {
         moveAction?.Enable();
+        rb?.WakeUp();
     }
 
     void FixedUpdate()
@@ -49,19 +50,44 @@ public class PlayerMove : MonoBehaviour
         if (!GameplayInputUtility.IsGameplayInputAllowed(inventory))
         {
             movement = Vector2.zero;
-            rb.linearVelocity = Vector3.zero;
+            StopHorizontalMotion();
             return;
         }
 
         movement = ReadMovementInput();
 
-        if (playerProfile.moveSpeed < 0.01f && playerProfile.currentState == PlayerSituation.Idle)
-            playerProfile.ChangeMoveSpeed(0);
+        if (movement.sqrMagnitude > 0.01f)
+            playerProfile.EnsureCanMove();
 
-        var moveVelocity = new Vector3(movement.x, 0f, movement.y) * playerProfile.moveSpeed;
-        rb.linearVelocity = moveVelocity;
+        ApplyMovement();
 
         UpdateWalkAnimation();
+    }
+
+    void ApplyMovement()
+    {
+        var speed = playerProfile.moveSpeed;
+        if (movement.sqrMagnitude < 0.01f || speed < 0.01f)
+        {
+            StopHorizontalMotion();
+            return;
+        }
+
+        var direction = new Vector3(movement.x, 0f, movement.y);
+        if (direction.sqrMagnitude > 1f)
+            direction.Normalize();
+
+        var delta = direction * (speed * Time.fixedDeltaTime);
+        rb.MovePosition(rb.position + delta);
+        rb.WakeUp();
+
+        // 물리 엔진이 XZ 속도를 덮어쓰지 않도록 수평 속도만 제거
+        StopHorizontalMotion();
+    }
+
+    void StopHorizontalMotion()
+    {
+        rb.linearVelocity = new Vector3(0f, rb.linearVelocity.y, 0f);
     }
 
     Vector2 ReadMovementInput()
@@ -130,7 +156,6 @@ public class PlayerMove : MonoBehaviour
         return false;
     }
 
-    /// <summary>PlayerInput SendMessage 호환. 실제 이동 입력은 FixedUpdate에서 폴링합니다.</summary>
     public void OnMove(InputAction.CallbackContext context)
     {
         if (!GameplayInputUtility.IsGameplayInputAllowed(inventory))
