@@ -82,6 +82,7 @@ public class StampAttackManager : MonoBehaviour
     public void IncreasedColliderSize(float size)
     {
         bombScale = bombStartScale + size;
+        newBomb.transform.localScale = new Vector3(bombScale, bombScale, bombScale);
     }
 
     private Collider _other;

@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class ArrowStormSkill : MonoBehaviour
@@ -99,6 +100,7 @@ public class ArrowStormSkill : MonoBehaviour
                     other.gameObject.GetComponent<MonsterBehavior>().TakeDamage(damage);
                 if (other.gameObject.GetComponent<SealStoneManager>() != null)
                     other.gameObject.GetComponent<SealStoneManager>().Damage(damage);
+                StartCoroutine(NuckBack(other.GetComponent<Rigidbody>(), other));
             }
             if (playerProfile.BloodHeal)
             {
@@ -109,5 +111,14 @@ public class ArrowStormSkill : MonoBehaviour
         {
             //Destroy(gameObject);
         }
+    }
+
+    IEnumerator NuckBack(Rigidbody enemyRb, Collider enemy)
+    {
+        enemyRb.linearVelocity = Vector3.zero;
+        Vector3 dist = enemy.transform.position - transform.position;
+        enemyRb.AddForce(dist * 7f, ForceMode.Impulse);
+        yield return new WaitForSeconds(0.5f);
+        enemyRb.linearVelocity = Vector3.zero;
     }
 }

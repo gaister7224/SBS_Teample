@@ -319,15 +319,18 @@ public class PlayerProfile : PlayerState
 
     public void GetDamage(int damage)
     {
-        if (!noDamage)
+        if (!barrier)
         {
-            curHp -= damage * (1 - curDEF);
-            noDamage = true;
-        }
+            if (!noDamage)
+            {
+                curHp -= damage * (1 - curDEF);
+                noDamage = true;
+            }
 
-        if(noDamage)
-        {
-            StartCoroutine(NoDamageReMove());
+            if (noDamage)
+            {
+                StartCoroutine(NoDamageReMove());
+            }
         }
 
         curHp = Mathf.Clamp(curHp, 0, maxHp);

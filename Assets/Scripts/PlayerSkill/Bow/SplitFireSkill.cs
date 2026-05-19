@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class SplitFireSkill : MonoBehaviour
@@ -62,6 +63,7 @@ public class SplitFireSkill : MonoBehaviour
                         other.gameObject.GetComponent<MonsterBehavior>().TakeDamage(damage);
                     if (other.gameObject.GetComponent<SealStoneManager>() != null)
                         other.gameObject.GetComponent<SealStoneManager>().Damage(damage);
+                    StartCoroutine(NuckBack(other.GetComponent<Rigidbody>(), other));
                 }
                 if (playerProfile.BloodHeal)
                 {
@@ -80,6 +82,7 @@ public class SplitFireSkill : MonoBehaviour
                 else if (other.CompareTag("Enemy"))
                 {
                     Debug.Log("스킬 : 분할 사격" + other.gameObject.name + "을(를) 공격했습니다!" + "damage = " + damage);
+                    StartCoroutine(NuckBack(other.GetComponent<Rigidbody>(), other));
                 }
                 if (playerProfile.BloodHeal)
                 {
@@ -92,5 +95,15 @@ public class SplitFireSkill : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+
+    IEnumerator NuckBack(Rigidbody enemyRb, Collider enemy)
+    {
+        Debug.Log("aa");
+        enemyRb.linearVelocity = Vector3.zero;
+        Vector3 dist = enemy.transform.position - transform.position;
+        enemyRb.AddForce(dist * 4f, ForceMode.Impulse);
+        yield return new WaitForSeconds(0.5f);
+        enemyRb.linearVelocity = Vector3.zero;
     }
 }

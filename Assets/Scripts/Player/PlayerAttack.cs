@@ -266,7 +266,7 @@ public class PlayerAttack : MonoBehaviour
     {
         Debug.Log("stampskill");
 
-        StateDecision(2.5f, 10.0f, 5.0f, false, Job.Stamp, 7, 4, 0, 2, stampAnimation);
+        StateDecision(2.5f, 10.0f, 5.0f, false, Job.Stamp, 7, 3, 0, 2, stampAnimation);
         JobSelect();
         //playerProfile.ChangeMoveSpeed(0);
     }
