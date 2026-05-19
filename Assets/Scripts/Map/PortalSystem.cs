@@ -49,6 +49,7 @@ public class PortalSystem : MonoBehaviour
                 Vector2 randomPos = stageManager.StagePositions.ElementAt(randomIndex);
 
                 player.transform.position = new Vector3(randomPos.x * stageManager.spacing, 1.9f, randomPos.y * stageManager.spacing - 9f);
+                player.GetComponent<PlayerProfile>()?.ResetLocomotion();
 
                 GameManager.instance.OnRandomPortalEnter?.Invoke();
                 //������Ż
@@ -98,7 +99,10 @@ public class PortalSystem : MonoBehaviour
                 break;
         }
 
-        player.GetComponent<PlayerProfile>().UseActCount(1);
+        var profile = player.GetComponent<PlayerProfile>();
+        profile?.UseActCount(1);
+        profile?.ResetLocomotion();
+        GameplayInputUtility.ReleaseUiFocus();
         GameManager.instance.OnPortalEnter?.Invoke();
         yield return null;
     }

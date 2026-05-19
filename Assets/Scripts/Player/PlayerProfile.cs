@@ -17,21 +17,21 @@ public enum PlayerSituation
 
 public class PlayerProfile : PlayerState
 {
-    [Header("HP관련 오브젝트")]
+    [Header("HP???? ???????")]
     private Image hpBackground;
     private Image hpMask;
     private TextMeshProUGUI hpText;
 
-    [Header("Mp관련 오브젝트")]
+    [Header("Mp???? ???????")]
     private Image mpBackground;
     private Image mpMask;
     private TextMeshProUGUI mpText;
 
-    [Header("행동력관련 오브젝트")]
+    [Header("???°??? ???????")]
     private Slider acSlider;
     private TextMeshProUGUI acText;
 
-    [Header("스테이터스 표시")]
+    [Header("????????? ???")]
     private TextMeshProUGUI hpTestText;
     private TextMeshProUGUI mpTestText;
     private TextMeshProUGUI atkTestText;
@@ -42,7 +42,7 @@ public class PlayerProfile : PlayerState
     private TextMeshProUGUI nameText;
     private TextMeshProUGUI levelText;
     private TextMeshProUGUI jobText;
-    [Header("Hit 프리펩")]
+    [Header("Hit ??????")]
     [SerializeField] private GameObject swordSkillHitPrefab;
     [SerializeField] private GameObject bowSkillHitPrefab;
     [SerializeField] private GameObject stampSkillHitPrefab;
@@ -58,9 +58,20 @@ public class PlayerProfile : PlayerState
 
     private void Start()
     {
-        GameManager.instance.maxActCount = 10;
-        maxActCount = GameManager.instance.maxActCount;
+        if (GameManager.instance != null)
+        {
+            GameManager.instance.maxActCount = 10;
+            maxActCount = GameManager.instance.maxActCount;
+        }
+        else
+        {
+            maxActCount = 10;
+        }
+
         curActCount = maxActCount;
+
+        if (UIManager.Instance == null)
+            return;
 
         hpBackground = UIManager.Instance.hpBackground;
         hpMask = UIManager.Instance.hpMask;
@@ -81,8 +92,13 @@ public class PlayerProfile : PlayerState
         levelText = UIManager.Instance.levelText;
         jobText = UIManager.Instance.jobText;
 
-        UIManager.Instance.profileNameText.text = GameManager.instance.name.ToString();
-        UIManager.Instance.profileLevelText.text = "LV." + GameManager.instance.level.ToString(); 
+        if (GameManager.instance != null)
+        {
+            if (UIManager.Instance.profileNameText != null)
+                UIManager.Instance.profileNameText.text = GameManager.instance.nickName;
+            if (UIManager.Instance.profileLevelText != null)
+                UIManager.Instance.profileLevelText.text = "LV." + GameManager.instance.level;
+        }
 
         if (UIManager.Instance.virtualCamera != null)
         {
@@ -92,10 +108,13 @@ public class PlayerProfile : PlayerState
 
     private void Update()
     {
-        UpdateStateBarStatue(curHp, maxHp, hpText, hpMask, hpBackground);
-        UpdateStateBarStatue(curMp, maxMp, mpText, mpMask, mpBackground);
+        if (hpText != null && hpMask != null && hpBackground != null)
+            UpdateStateBarStatue(curHp, maxHp, hpText, hpMask, hpBackground);
+        if (mpText != null && mpMask != null && mpBackground != null)
+            UpdateStateBarStatue(curMp, maxMp, mpText, mpMask, mpBackground);
 
-        UpdateActCountBar();
+        if (acSlider != null)
+            UpdateActCountBar();
 
         //StateTestText();
     }
@@ -114,14 +133,36 @@ public class PlayerProfile : PlayerState
         jobText.text = GameManager.instance.job.ToString();
     }
 
-    public void AnimationReset()
+    public void AnimationReset() => ResetLocomotion();
+
+    /// <summary>
+    /// 방 이동·UI 종료 등으로 공격 애니메이션 이벤트가 끊긴 뒤 moveSpeed가 0으로 남는 경우를 복구합니다.
+    /// </summary>
+    public void ResetLocomotion()
     {
+        GameplayInputUtility.ReleaseUiFocus();
+
+        currentState = PlayerSituation.Idle;
+        skillStart = false;
+
+        if (passiveMoveSpeed < 0.01f)
+            passiveMoveSpeed = originMoveSpeed;
+
+        ChangeMoveSpeed(0);
+
+        var body = GetComponent<Rigidbody>();
+        if (body != null)
+            body.linearVelocity = Vector3.zero;
+
+        if (ani == null)
+            return;
+
         ani.SetBool("isWalk", false);
         ani.ResetTrigger("Attack1");
         ani.ResetTrigger("Attack2");
     }
 
-    //Hit 프리펩 소환
+    //Hit ?????? ???
     public void SwordSkillHit(Vector3 hitPoint)
     {
         Instantiate(swordSkillHitPrefab, hitPoint, Quaternion.identity);
@@ -135,7 +176,7 @@ public class PlayerProfile : PlayerState
         Instantiate(bowSkillHitPrefab, hitPoint, Quaternion.identity);
     }
 
-    //카메라 흔들림
+    //???? ???
     public void ShakeCamera(float duration, float intensity, float frequency)
     {
         if (noiseComponent != null)
@@ -154,7 +195,7 @@ public class PlayerProfile : PlayerState
         noiseComponent.FrequencyGain = 0f;
     }
 
-    //카메라 줌 인
+    //???? ?? ??
     public void CameraZoom(float duration, float zoomSpeed, float zoomInFOV)
     {
         StartCoroutine(ZoomRoutine(duration, zoomSpeed, zoomInFOV));
@@ -240,7 +281,7 @@ public class PlayerProfile : PlayerState
         set { emergencyEscape = value; }
     }
 
-    //max스테이터스 설정
+    //max????????? ????
     public void SetMaxHp(float hpPoint, float a_hp, float e_hp)
     {
         maxHp = Mathf.Round((hpPoint * 10) * (1 + a_hp) + e_hp);
@@ -287,7 +328,7 @@ public class PlayerProfile : PlayerState
         maxMp = (int)(maxMp * (increasedPercent / 100f));
     }
 
-    //패시브 효과
+    //?н?? ???
     public void PassiveATK(float increasedPercent)
     {
         passiveATK = maxATK * (1f + (increasedPercent / 100f));
@@ -329,7 +370,7 @@ public class PlayerProfile : PlayerState
 
     IEnumerator NoDamageReMove()
     {
-        Debug.Log("무적 중");
+        Debug.Log("???? ??");
         yield return new WaitForSeconds(0.4f);
         noDamage = false;
     }
@@ -352,7 +393,7 @@ public class PlayerProfile : PlayerState
             curActCount -= 5;
             int GoldDown = Mathf.RoundToInt(GameManager.instance.gold * 0.1f);
             GameManager.instance.gold -= GoldDown;
-            //가장 가까운 대기 장소 찾기
+            //???? ????? ??? ??? ???
             DieMove();
 
             curHp = maxHp;
@@ -499,12 +540,12 @@ public class PlayerProfile : PlayerState
         bloodValue = damage * (bloodPercent / 100f);
         float limitValue = maxHp * 0.01f;
 
-        float finalHealAmount = Mathf.Min(bloodValue, limitValue); //더 작은 값 반환
+        float finalHealAmount = Mathf.Min(bloodValue, limitValue); //?? ???? ?? ???
         curHp += finalHealAmount;
 
         curHp = Mathf.Clamp(curHp, 0, maxHp);
 
-        Debug.Log($"데미지: {damage} | 계산된 흡혈: {bloodValue} | 실제 흡혈(제한적용): {finalHealAmount}");
+        Debug.Log($"??????: {damage} | ???? ????: {bloodValue} | ???? ????(????????): {finalHealAmount}");
     }
 
     public void GetBuffStone()
@@ -632,6 +673,9 @@ public class PlayerProfile : PlayerState
 
     private void UpdateStateBarStatue(float curState, float maxState, TextMeshProUGUI stateText, Image _mask, Image _background)
     {
+        if (stateText == null || _mask == null || _background == null)
+            return;
+
         float _curState = curState;
         float _maxState = maxState;
 
@@ -640,13 +684,13 @@ public class PlayerProfile : PlayerState
         float height = _mask.GetComponent<RectTransform>().sizeDelta.y;
         float fullWidth = _background.GetComponent<RectTransform>().sizeDelta.x;
 
-        //목표 값
+        //??? ??
         float targetWidth = (_curState / _maxState) * fullWidth;
 
-        //현재 값
+        //???? ??
         float curWidth = _mask.GetComponent<RectTransform>().sizeDelta.x;
 
-        //게이지 부드럽게 이동
+        //?????? ?ε巴?? ???
         float newWidth = Mathf.Lerp(curWidth, targetWidth, Time.deltaTime * lerpSpeed);
         _mask.GetComponent<RectTransform>().sizeDelta = new Vector2(newWidth, height);
     }

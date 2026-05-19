@@ -43,13 +43,17 @@ public class StageDetector : MonoBehaviour
             {
                 Debug.Log("potalManager.CinemachineCamera ����");
             }
-            var confinder = portalManager.CinemachineCamera.GetComponent<CinemachineConfiner3D>();
-            
-            confinder.BoundingVolume = gameObject.GetComponent<Collider>();
+            if (portalManager.CinemachineCamera != null)
+            {
+                var confinder = portalManager.CinemachineCamera.GetComponent<CinemachineConfiner3D>();
+                if (confinder != null)
+                    confinder.BoundingVolume = gameObject.GetComponent<Collider>();
+            }
 
             stageManager.curStagePos = new Vector2Int((int)(transform.position.x / stageManager.spacing), (int)(transform.position.z / stageManager.spacing));
             stageManager.curStageType = portalManager.stageType;
-            stageManager.monsterSpawnManager.isMonsterSpawn = true;
+            if (stageManager.monsterSpawnManager != null)
+                stageManager.monsterSpawnManager.isMonsterSpawn = true;
             stageManager.activePortal = false;
             stageManager.curStageCleared = portalManager.isCleared;
             stageManager.curStageSpawnPrefabs = portalManager.SpawnPrefabs;
@@ -64,7 +68,27 @@ public class StageDetector : MonoBehaviour
                     stageManager.surroundStagePositions.Add(pos);
                 }
             }
+
+            other.GetComponent<PlayerProfile>()?.ResetLocomotion();
+            NotifyDungeonMap(stageManager);
         }
+    }
+
+    static void NotifyDungeonMap(StageManager stageManager)
+    {
+        if (DungeonMapService.Instance == null)
+        {
+            var serviceObject = new GameObject("DungeonMapService");
+            serviceObject.AddComponent<DungeonMapService>();
+        }
+
+        DungeonMapService.Instance.EnsureLoadedForCurrentDungeon();
+
+        DungeonMapService.Instance.RevealAround(
+            stageManager.curStagePos,
+            1,
+            stageManager.StagePositions);
+        DungeonMapService.Instance.SetPlayerPosition(stageManager.curStagePos);
     }
 
     IEnumerator StageChangeCoroutine()
