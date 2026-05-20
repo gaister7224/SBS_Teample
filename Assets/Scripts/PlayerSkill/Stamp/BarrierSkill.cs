@@ -1,4 +1,5 @@
 using System.Collections;
+using TMPro;
 using UnityEngine;
 
 public class BarrierSkill : MonoBehaviour
@@ -20,6 +21,7 @@ public class BarrierSkill : MonoBehaviour
     private int random;
 
     private bool selfBomb;
+    private TextMeshProUGUI hpText;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -29,6 +31,11 @@ public class BarrierSkill : MonoBehaviour
 
         spriteRenderer = GetComponent<SpriteRenderer>();
         sphereCollider = GetComponent<SphereCollider>();
+
+        if (UIManager.Instance != null)
+            hpText = UIManager.Instance.barrierHpText.GetComponent<TextMeshProUGUI>();
+        else if (UIManager.Instance == null)
+            Debug.Log("UIManager null");
 
         if (playerProfile != null)
         {
@@ -45,6 +52,7 @@ public class BarrierSkill : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
         if (playerAttack.stampPassiveSkill2)
         {
             if (random >= 1 && random <= 90)
@@ -64,12 +72,16 @@ public class BarrierSkill : MonoBehaviour
             time += Time.deltaTime;
             if (barrierHp <= 0 || time > stopTime)
             {
+                barrierHp = 0;
                 Instantiate(shockWave, transform.position, shockWave.transform.rotation);
                 playerProfile.SkillStart = false;
                 playerProfile.Barrier = false;
+                UIManager.Instance.barrierHpText.SetActive(false);
                 Destroy(gameObject);
             }
         }
+
+        hpText.text = "+ " + barrierHp.ToString();
     }
 
     private float healTime;

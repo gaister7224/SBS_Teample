@@ -257,6 +257,12 @@ public class PlayerAttack : MonoBehaviour
         GameManager.instance.atkPoint = (int)setATK;
         GameManager.instance.defPoint = (int)setDEF;
 
+        if (playerProfile != null)
+        {
+            playerProfile.SetMaxHp(setHp, 0, 0);
+            playerProfile.SetMaxATK(setATK, 0, 0);
+            playerProfile.SetMaxDEF(setDEF, 0, 0);
+
             if (animation != null && playerProfile.ani != null)
                 playerProfile.ani.runtimeAnimatorController = animation;
         }
@@ -319,7 +325,7 @@ public class PlayerAttack : MonoBehaviour
                 = UIManager.Instance.villageCollider;
         }
 
-        Invoke("StoreExplainDialogue", 0.5f);
+        //Invoke("StoreExplainDialogue", 0.5f);
     }
 
     private void StoreExplainDialogue()

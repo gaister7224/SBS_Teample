@@ -79,11 +79,7 @@ public class StampAttackManager : MonoBehaviour
         }
     }
 
-    public void IncreasedColliderSize(float size)
-    {
-        bombScale = bombStartScale + size;
-        newBomb.transform.localScale = new Vector3(bombScale, bombScale, bombScale);
-    }
+    
 
     private Collider _other;
     private void OnTriggerEnter(Collider other)
@@ -128,30 +124,10 @@ public class StampAttackManager : MonoBehaviour
         yield return new WaitForSeconds(0.2f);
         //Color32 orange = new Color32(255, 160, 0, 255);
         //GetComponent<SpriteRenderer>().color = orange;
-        if ((playerAttack.stampSkill6 && !playerAttack.stampPassiveSkill1)
-        || (!playerAttack.stampSkill6 && playerAttack.stampPassiveSkill1))
-        {
-            IncreasedColliderSize(0.5f);
-        }
-        else if (playerAttack.stampSkill6 && playerAttack.stampPassiveSkill1)
-        {
-            IncreasedColliderSize(1.0f);
-        }
+        
         //transform.localScale = new Vector3(bombScale, bombScale, bombScale);
 
-        if (other.CompareTag("Boss"))
-        {
-            Debug.Log("스탬프 기본 폭발 공격" + other.gameObject.name + "을(를) 공격했습니다!" + "damage2 = " + damage2);
-            other.gameObject.GetComponent<BossStatus>().GetDamage(damage2);
-        }
-        else if (other.CompareTag("Enemy"))
-        {
-            Debug.Log("스탬프 기본 폭발 공격" + other.gameObject.name + "을(를) 공격했습니다!" + "damage2 = " + damage2);
-            if (other.gameObject.GetComponent<MonsterBehavior>() != null)
-                other.gameObject.GetComponent<MonsterBehavior>().TakeDamage(damage2);
-            if (other.gameObject.GetComponent<SealStoneManager>() != null)
-                other.gameObject.GetComponent<SealStoneManager>().Damage(damage2);
-        }
+        
         yield return new WaitForSeconds(0.5f);
         Destroy(newBomb);
         Destroy(gameObject);

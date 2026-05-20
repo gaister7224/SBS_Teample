@@ -128,7 +128,7 @@ public class PlayerProfile : PlayerState
         defTestText.text = maxDEF.ToString();
         moveSpeedTestText.text = moveSpeed.ToString();
         criticalTestText.text = critical.ToString();
-        nameText.text = GameManager.instance.name;
+        nameText.text = GameManager.instance.nickName;
         levelText.text = GameManager.instance.level.ToString();
         jobText.text = GameManager.instance.job.ToString();
     }

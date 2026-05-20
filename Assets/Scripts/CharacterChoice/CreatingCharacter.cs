@@ -82,7 +82,7 @@ public class CreatingCharacter : MonoBehaviour, IPointerClickHandler
             UpdatePlayerPreview(GameManager.instance.profileIndex);
             pos.position = new Vector3(pos.position.x, pos.position.y + 130, pos.position.z);
             pos.localScale = new Vector3(2.5f, 4.5f, 4);
-            GameManager.instance.name = curName;
+            GameManager.instance.nickName = curName;
             create = true;
             nameZone.SetActive(false);
         }

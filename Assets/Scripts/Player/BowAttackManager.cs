@@ -75,7 +75,7 @@ public class BowAttackManager : MonoBehaviour
                 Debug.Log("BowExplosionRandomNumber : " + number);
                 if (number > 0 && number <= 30)
                 {
-                    Instantiate(bowExplosionObj, transform.position, transform.rotation);
+                    Instantiate(bowExplosionObj, transform.position, bowExplosionObj.transform.rotation);
                 }
             }
 

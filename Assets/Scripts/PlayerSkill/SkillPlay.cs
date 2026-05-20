@@ -349,6 +349,7 @@ public class SkillPlay : MonoBehaviour
                 break;
             case 3:
                 {
+                    UIManager.Instance.barrierHpText.SetActive(true);
                     Instantiate(stamp3, transform.position, stamp3.transform.rotation);
                 }
                 break;
