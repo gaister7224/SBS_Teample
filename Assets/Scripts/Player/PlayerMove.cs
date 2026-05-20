@@ -60,7 +60,7 @@ public class PlayerMove : MonoBehaviour
     {
         movement = context.ReadValue<Vector2>();
 
-        if (inventory.currentUI == UIType.None)
+        if (inventory == null || inventory.currentUI == UIType.None)
         {
             if ((movement.x != 0 || movement.y != 0) && playerProfile.currentState != PlayerSituation.Attack)
             {
