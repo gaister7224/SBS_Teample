@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6430823037f83e478bec5124980ed35, type: 3}
+  m_Name: "\uD63C\uB3C8\uC758 \uB098\uCE68\uBC18"
+  m_EditorClassIdentifier: 
+  IsEquipment: 0
+  IsAccessory: 0
+  itemID: 705
+  itemName: "\uD63C\uB3C8\uC758 \uB098\uCE68\uBC18"
+  canOverlap: 0
+  isInteractivity: 1
+  isConsumable: 0
+  itemType: 262144
+  tier: 0
+  itemImage: {fileID: 21300000, guid: cf8b902bdfe108046aa7e2a74af2a882, type: 3}
+  price: 0
+  coolTime: 0
+  explanation: "\uC774\uB3D9\uC2DC \uD589\uB3D9\uB825\uC774 \uD655\uB960\uC801\uC73C\uB85C
+    \uC18C\uBAA8\uB41C\uB2E4.\r\n70%\uD655\uB960\uB85C 1, 20%\uD655\uB960\uB85C 2,
+    10% \uD655\uB960\uB85C 0\uC774 \uC18C\uBAA8\uB41C\uB2E4."
+  buff: 0
+  atkBuff: 0
+  criticalBuff: 0
+  defBuff: 0
+  hpBuff: 0
+  mpBuff: 0
+  skillCoolTimeBuff: 0
+  minGold: 0
+  maxGold: 0

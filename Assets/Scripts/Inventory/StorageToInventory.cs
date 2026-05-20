@@ -73,6 +73,11 @@ public class StorageToInventory : MonoBehaviour
                             }
                         }
                     }
+                    else if(allSlots[i].Item.Type == ItemType.ArtiFactSlot)
+                    {
+                        artiFactSlots[2].installImpossible = false;
+                        allSlots[i].ClearSlot();
+                    }
                     else
                     {
                         for (int j = 0; j < e_InventorySlots.Length; j++)
@@ -188,7 +193,7 @@ public class StorageToInventory : MonoBehaviour
         {
             if (inventorySlot.Item != null)
             {
-                if (artiFactSlots[i].Item == null) //그대로 장비 착용
+                if (artiFactSlots[i].Item == null && !artiFactSlots[i].installImpossible) //그대로 장비 착용
                 {
                     if (artiFactSlots[i].IsMask(inventorySlot.Item))
                     {
@@ -197,6 +202,10 @@ public class StorageToInventory : MonoBehaviour
                         inventorySlot.ClearSlot();
                         return;
                     }
+                }
+                else if(artiFactSlots[i].installImpossible)
+                {
+                    return;
                 }
             }
         }
@@ -211,7 +220,7 @@ public class StorageToInventory : MonoBehaviour
             {
                 if (GameManager.instance.installImpossibleStart)
                 {
-                    if(slot.Item.ItemID == 707)
+                    if (slot.Item.ItemID == 707)
                     {
                         break;
                     }

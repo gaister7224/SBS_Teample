@@ -33,6 +33,8 @@ public class EquipmentItemSlot : MonoBehaviour, IPointerClickHandler
     [SerializeField] private TextMeshProUGUI toolTipNameText;
     [SerializeField] private TextMeshProUGUI toolTipExplainText;
 
+    [SerializeField] private Animator ani;
+
     [Header("어떤 버프를 받았는지 확인")]
     public bool onAtkBuff = false;
     public bool onHpBuff = false;
@@ -95,7 +97,14 @@ public class EquipmentItemSlot : MonoBehaviour, IPointerClickHandler
         }
         else if (item != null && item.Type == ItemType.ArtiFact && eventData.clickCount == 2 && !installImpossible)
         {
-            storageToInventory.ReleaseOfArtFact(this);
+            if (DayManager.instance.curDay == Day.day)
+            {
+                storageToInventory.ReleaseOfArtFact(this);
+            }
+            else if(DayManager.instance.curDay == Day.night)
+            {
+                ani.SetTrigger("OnClick");
+            }
         }
     }
 }

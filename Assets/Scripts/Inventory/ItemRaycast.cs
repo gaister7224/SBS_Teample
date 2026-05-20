@@ -87,7 +87,7 @@ public class ItemRaycast : MonoBehaviour
 
     private void OnOpenStorage(InputAction.CallbackContext context)
     {
-        if (isStorageActive && GameManager.instance.mapState == MapState.Village)
+        if (isStorageActive /*&& GameManager.instance.mapState == MapState.Village*/)
         {
             if (inventory.currentUI == UIType.None)
             {
@@ -163,16 +163,31 @@ public class ItemRaycast : MonoBehaviour
         if (other.tag == "Storage" && !isStorageActive && inventory.currentUI == UIType.None)
         {
             isStorageActive = true;
+            GameObject fKey = other.transform.GetChild(0).gameObject;
+            if(fKey != null)
+            {
+                fKey.SetActive(true);
+            }
         }
 
         if (other.tag == "Store" && !isStoreActive && inventory.currentUI == UIType.None)
         {
             isStoreActive = true;
+            GameObject fKey = other.transform.GetChild(0).gameObject;
+            if (fKey != null)
+            {
+                fKey.SetActive(true);
+            }
         }
 
         if (other.tag == "VillageStore" && !isStoreActive && inventory.currentUI == UIType.None)
         {
             isVillageStoreActive = true;
+            GameObject fKey = other.transform.GetChild(0).gameObject;
+            if (fKey != null)
+            {
+                fKey.SetActive(true);
+            }
         }
     }
 
@@ -181,16 +196,31 @@ public class ItemRaycast : MonoBehaviour
         if (other.tag == "Storage")
         {
             isStorageActive = false;
+            GameObject fKey = other.transform.GetChild(0).gameObject;
+            if (fKey != null)
+            {
+                fKey.SetActive(false);
+            }
         }
 
         if (other.tag == "Store")
         {
             isStoreActive = false;
+            GameObject fKey = other.transform.GetChild(0).gameObject;
+            if (fKey != null)
+            {
+                fKey.SetActive(false);
+            }
         }
 
         if (other.tag == "VillageStore")
         {
             isVillageStoreActive = false;
+            GameObject fKey = other.transform.GetChild(0).gameObject;
+            if (fKey != null)
+            {
+                fKey.SetActive(false);
+            }
         }
     }
 

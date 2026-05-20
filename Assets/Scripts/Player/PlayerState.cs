@@ -40,5 +40,10 @@ public class PlayerState : MonoBehaviour
     protected bool emergencyEscape = false;
     protected int loanActCount = 0;
 
+    protected float originHp;
+    protected float originDEF;
+    protected float originATK;
+    protected float basicOriginATK;
+
     [SerializeField] protected bool noDamage = false;
 }

@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6430823037f83e478bec5124980ed35, type: 3}
+  m_Name: "\uC0DD\uD658\uC758 \uBD80\uC801"
+  m_EditorClassIdentifier: 
+  IsEquipment: 0
+  IsAccessory: 0
+  itemID: 706
+  itemName: "\uC0DD\uD658\uC758 \uBD80\uC801"
+  canOverlap: 0
+  isInteractivity: 1
+  isConsumable: 0
+  itemType: 262144
+  tier: 0
+  itemImage: {fileID: 21300000, guid: cf8b902bdfe108046aa7e2a74af2a882, type: 3}
+  price: 0
+  coolTime: 0
+  explanation: "\uD589\uB3D9\uB825 0\uC73C\uB85C \uC778\uD55C \uC0AC\uB9DD \uC9C1\uC804
+    \uB358\uC804 \uC785\uAD6C\uB85C \uD0C8\uCD9C\uD55C\uB2E4. \uC720\uBB3C \uBC1C\uB3D9\uC2DC
+    3\uC77C\uCC28\uB3D9\uC548 \uC774 \uC720\uBB3C\uC744 \uC7A5\uCC29\uD55C \uC720\uBB3C
+    \uC2AC\uB86F\uC774 \uBD09\uC778\uB41C\uB2E4."
+  buff: 0
+  atkBuff: 0
+  criticalBuff: 0
+  defBuff: 0
+  hpBuff: 0
+  mpBuff: 0
+  skillCoolTimeBuff: 0
+  minGold: 0
+  maxGold: 0

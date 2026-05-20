@@ -16,6 +16,8 @@ MonoBehaviour:
   skillItemType: 65536
   itemName: "\uD654\uC0B4 \uD3ED\uD48D"
   itemImage: {fileID: 21300000, guid: 78a357f502b4c85458c8571c1707fa30, type: 3}
-  explanation: bow
+  explanation: "150%\uC758 \uD53C\uD574\uB97C\uC8FC\uACE0 \uD53C\uACA9\uB41C \uC801\uC744
+    \uB109\uBC31\uC2DC\uD0A4\uB294 \uD22C\uC0AC\uCCB4\uB97C 10\uBC29\uD5A5\uC73C\uB85C
+    1\uD68C \uBC1C\uC0AC\uD55C\uB2E4."
   number: 3
   coolTime: 20

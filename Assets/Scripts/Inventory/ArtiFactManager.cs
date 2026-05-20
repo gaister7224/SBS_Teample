@@ -8,7 +8,6 @@ public class ArtiFactManager : MonoBehaviour
     public static ArtiFactManager instance;
 
     private List<int> equippedArtifactIDs = new List<int>();
-    private float recoveryMultiplier = 1.0f;
 
     private bool artifactImpassible = false;
     private int setCount = 0;
@@ -76,40 +75,42 @@ public class ArtiFactManager : MonoBehaviour
                 break;
             case 706:
                 {
-                    if (isEquip) GameManager.instance.OnPortalEnter += ApplyChaosStaminaCost;
-                    else GameManager.instance.OnPortalEnter -= ApplyChaosStaminaCost;
-                }
-                break;
-            case 707:
-                {
                     if (isEquip) GameManager.instance.OnActCountDeath += EmergencyEscapeOnDeath;
                     else GameManager.instance.OnActCountDeath -= EmergencyEscapeOnDeath;
                 }
                 break;
-            case 708:
+            case 707:
                 {
                     LoanStaminaOnMove(isEquip);
                     if (isEquip) GameManager.instance.OnActCountDeath += LoanStaminaUse;
                     else GameManager.instance.OnActCountDeath -= LoanStaminaUse;
                 }
                 break;
-            case 709:
+            case 708:
                 {
                     SealReturnPortal(isEquip);
                 }
                 break;
-            case 710:
+            case 709:
                 {
                     SealShelterRest(isEquip);
                 }
                 break;
-            case 711:
+            case 710:
                 {
-                    if (isEquip) GameManager.instance.OnPortalEnter += RegenerateHpOnMove;
-                    else GameManager.instance.OnPortalEnter -= RegenerateHpOnMove;
+                    if (isEquip)
+                    {
+                        GameManager.instance.OnPortalEnter += RegenerateHpOnMove;
+                        GameManager.instance.shelterHpBan = true;
+                    }
+                    else
+                    {
+                        GameManager.instance.OnPortalEnter -= RegenerateHpOnMove;
+                        GameManager.instance.shelterHpBan = false;
+                    }
                 }
                 break;
-            case 712:
+            case 711:
                 {
                     ApplyGreedBuffAndDebuff(isEquip);
                 }
@@ -125,29 +126,32 @@ public class ArtiFactManager : MonoBehaviour
     private void RecoverStaminaOnShelter()
     {
         PlayerProfile playerProfile = GameObject.FindWithTag("Player").GetComponent<PlayerProfile>();
-        playerProfile.ActCountPlus(3, recoveryMultiplier);
+        playerProfile.ActCountPlus(3, GameManager.instance.recoveryMultiplier);
+        Debug.Log("RecoverStaminaOnShelter");
     }
     private void DoubleStaminaRecovery(bool isEquip, int amount)
     {
         if (isEquip)
         {
             GameManager.instance.maxActCount -= amount;
-            recoveryMultiplier *= 2.0f;
+            GameManager.instance.recoveryMultiplier *= 2.0f;
         }
         else
         {
             GameManager.instance.maxActCount += amount;
-            recoveryMultiplier /= 2.0f;
+            GameManager.instance.recoveryMultiplier /= 2.0f;
         }
     }
     private void ChanceToSkipStaminaCost()
     {
         PlayerProfile playerProfile = GameObject.FindWithTag("Player").GetComponent<PlayerProfile>();
         int random = Random.Range(0, 100);
-        if(random >= 0 && random < 10)
+        Debug.Log(random);
+        if (random >= 0 && random < 10)
         {
             playerProfile.BuffActCount(1);
             playerProfile.NotUseActCount = true;
+            
         }
         else
         {
@@ -158,11 +162,12 @@ public class ArtiFactManager : MonoBehaviour
     {
         PlayerProfile playerProfile = GameObject.FindWithTag("Player").GetComponent<PlayerProfile>();
         int random = Random.Range(0, 100);
-        if (random >= 0 && random < 75)
+        Debug.Log(random);
+        if (random >= 0 && random < 70)
         {
             
         }
-        else if(random >= 75 && random < 95)
+        else if(random >= 70 && random < 90)
         {
             playerProfile.NotUseActCount = false;
             playerProfile.UseActCount(1);
@@ -181,6 +186,7 @@ public class ArtiFactManager : MonoBehaviour
         PlayerProfile playerProfile = GameObject.FindWithTag("Player").GetComponent<PlayerProfile>();
         playerProfile.EmergencyEscape = true;
         GameManager.instance.installImpossibleStart = true;
+        //생환의 부적 만들기
     }
 
     private void LoanStaminaOnMove(bool isEquip)
@@ -234,24 +240,34 @@ public class ArtiFactManager : MonoBehaviour
     }
     private void SealShelterRest(bool isEquip)
     {
-        //쉼터 행동력 회복 사용 불가 넣어야함
+        PlayerProfile playerProfile = GameObject.FindWithTag("Player").GetComponent<PlayerProfile>();
 
         if (isEquip)
         {
             artifactImpassible = true;
+            GameManager.instance.shelterActCountBan = true;
             setCount++;
             if(setCount >= 2)
             {
                 GameManager.instance.maxActCount += 5;
+                if(playerProfile != null)
+                {
+                    playerProfile.BuffActCount(5);
+                }
             }
             else if(setCount < 2)
             {
                 GameManager.instance.maxActCount += 2;
+                if (playerProfile != null)
+                {
+                    playerProfile.BuffActCount(2);
+                }
             }
         }
         else
         {
             artifactImpassible = false;
+            GameManager.instance.shelterActCountBan = false;
             if (setCount >= 2)
             {
                 GameManager.instance.maxActCount -= 5;
@@ -266,7 +282,7 @@ public class ArtiFactManager : MonoBehaviour
     private void RegenerateHpOnMove()
     {
         PlayerProfile playerProfile = GameObject.FindWithTag("Player").GetComponent<PlayerProfile>();
-        playerProfile.HPBuff(0.15f);
+        playerProfile.HPBuff(0.1f);
     }
     private void ApplyGreedBuffAndDebuff(bool isEquip)
     {

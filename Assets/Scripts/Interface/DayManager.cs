@@ -23,6 +23,9 @@ public class DayManager : MonoBehaviour
 
     public Day curDay = Day.day;
 
+    [SerializeField] private GameObject dayIcon;
+    [SerializeField] private GameObject nightIcon;
+
     public static DayManager instance;
 
     private void Awake()
@@ -35,7 +38,10 @@ public class DayManager : MonoBehaviour
         storageToInventory = GameObject.Find("InventorySystem").GetComponent<StorageToInventory>();
         storeManager = GameObject.Find("InventorySystem").GetComponent<StoreManager>();
         playerProfile = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerProfile>();
-        dayEndButton.interactable = false;
+        if (dayEndButton != null)
+        {
+            dayEndButton.interactable = false;
+        }
         daySunRotation = new Vector3(50, -30, 0);
         nightSunRotation = new Vector3(-49, -195, -11);
     }
@@ -47,6 +53,7 @@ public class DayManager : MonoBehaviour
             dayEndButton.interactable = false;
             sunLight.transform.rotation = Quaternion.Euler(daySunRotation);
             curDay = Day.day;
+            DayIconAppear();
             GameManager.instance.dayCount++;
             if(GameManager.instance.installImpossibleStart)
             {
@@ -91,5 +98,16 @@ public class DayManager : MonoBehaviour
         Time.timeScale = 1;
         DialogueManager.instance.OnDialogueComplete -= PortalZoom;
         UIManager.Instance.storageDirector.gameObject.SetActive(false);
+    }
+
+    public void DayIconAppear()
+    {
+        dayIcon.SetActive(true);
+        nightIcon.SetActive(false);
+    }
+    public void NightIconAppear()
+    {
+        dayIcon.SetActive(false);
+        nightIcon.SetActive(true);
     }
 }

@@ -16,12 +16,13 @@ MonoBehaviour:
   - gradeName: Gold
     items:
     - {fileID: 11400000, guid: b366a2c225fb47c4182881bd97ff2e6c, type: 2}
-    dropChance: 20
+    dropChance: 10
   - gradeName: Weapon
     items:
     - {fileID: 11400000, guid: 23f23f6ce5b79f64d82e3315c7e3f35f, type: 2}
     - {fileID: 11400000, guid: de5b1ea007f6b3b4fa51296ddc48de82, type: 2}
-    dropChance: 15
+    - {fileID: 11400000, guid: 34fe90666b10e934697ec1a45de45f14, type: 2}
+    dropChance: 10
   - gradeName: Head
     items:
     - {fileID: 11400000, guid: 9d79ba84a869dd243980aabee5a2a665, type: 2}
@@ -50,3 +51,7 @@ MonoBehaviour:
     items:
     - {fileID: 11400000, guid: 709e855d3fe48ef4588ac0c33e968ad7, type: 2}
     dropChance: 5
+  - gradeName: Shoes
+    items:
+    - {fileID: 11400000, guid: a11b2cb889b308845873bd3379bd491b, type: 2}
+    dropChance: 15

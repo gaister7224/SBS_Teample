@@ -35,7 +35,10 @@ public enum ItemType
     Gold = 1 << 17,
 
     //유물
-    ArtiFact = 1 << 18
+    ArtiFact = 1 << 18,
+
+    //유물 슬롯
+    ArtiFactSlot = 1 << 19
 }
 
 [CreateAssetMenu(fileName = "Item", menuName = "Add Item/Item")]
@@ -170,7 +173,7 @@ public class Item : ScriptableObject
         }
     }
 
-    [Header("아이템 설명")]
+    [Header("아이템 설명"), TextArea]
     [SerializeField] private string explanation;
 
     public string Explanation

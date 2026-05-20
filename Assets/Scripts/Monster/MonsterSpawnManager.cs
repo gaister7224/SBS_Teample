@@ -79,7 +79,18 @@ public class MonsterSpawnManager : MonoBehaviour
                 }
 
                 Debug.Log("플레이어 회복");
-                //쉽터
+               
+                GameManager.instance.OnShelterEnter?.Invoke();
+                PlayerProfile playerProfile = GameObject.FindWithTag("Player").GetComponent<PlayerProfile>();
+                if (playerProfile != null)
+                {
+                    playerProfile.MPBuff(4);
+                    if (!GameManager.instance.shelterHpBan)
+                        playerProfile.HPBuff(0.5f);
+                    
+                    if (!GameManager.instance.shelterActCountBan)
+                        playerProfile.ActCountPlus(3, GameManager.instance.recoveryMultiplier);
+                }
             }
             else if (stageManager.curStageType == StageType.Trap)
             {

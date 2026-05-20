@@ -75,7 +75,7 @@ public class InventoryMain : InventoryBase
     {
         if (GameManager.instance.storageTutorial)
         {
-            if (!IsInventoryActive && currentUI == UIType.None && GameManager.instance.mapState == MapState.Village)
+            if (!IsInventoryActive && currentUI == UIType.None /*&& GameManager.instance.mapState == MapState.Village*/)
             {
                 OpenInventory();
             }

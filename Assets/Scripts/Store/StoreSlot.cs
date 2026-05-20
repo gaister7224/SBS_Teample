@@ -25,6 +25,7 @@ public class StoreSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     public int canBuyCount; //구매 가능 횟수
     public int maxCanBuyCount; //구매 가능 횟수
     public int slotNumber; //슬롯 번호
+    public bool resetPossible; //다시 구매 가능한지
 
     [SerializeField] private bool thisVillageStore; //이 슬롯이 마을 상점 슬롯인지 확인
 
@@ -86,7 +87,16 @@ public class StoreSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         item = nItem;
         itemCount = count;
         itemImage.sprite = item.Image;
-        priceText.text = item.Price.ToString();
+        if (item.Type == ItemType.GoldBox)
+        {
+            priceText.text = item.Price.ToString();
+        }
+        else
+        {
+            int randomPrice = Random.Range(item.MinGold, item.MaxGold + 1);
+            priceText.text = randomPrice.ToString();
+        }
+
         if (explanText != null)
         {
             explanText.text = item.Explanation;
