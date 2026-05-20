@@ -12,7 +12,7 @@ public class SkillPlay : MonoBehaviour
     private GameObject slotParent;
     private PlayerProfileSkill[] slots;
 
-    [Header("쿨타임")]
+    [Header("?????")]
     private Slider[] coolTimeSlider;
     [SerializeField] private float coolTimeSkill1;
     [SerializeField] private float coolTimeSkill2;
@@ -27,7 +27,7 @@ public class SkillPlay : MonoBehaviour
     [SerializeField] private bool skill1Start = false;
     [SerializeField] private bool skill2Start = false;
 
-    [Header("칼 오브젝트")]
+    [Header("? ???????")]
     [SerializeField] private GameObject sword1;
     [SerializeField] private GameObject sword2;
     [SerializeField] private GameObject sword3;
@@ -35,7 +35,7 @@ public class SkillPlay : MonoBehaviour
     [SerializeField] private GameObject sword5;
     [SerializeField] private GameObject sword6;
 
-    [Header("활 오브젝트")]
+    [Header("? ???????")]
     [SerializeField] private GameObject bow1;
     [SerializeField] private GameObject bow2;
     [SerializeField] private GameObject bow3;
@@ -43,7 +43,7 @@ public class SkillPlay : MonoBehaviour
     [SerializeField] private GameObject bow5;
     [SerializeField] private GameObject bow6;
 
-    [Header("스탬프 오브젝트")]
+    [Header("?????? ???????")]
     [SerializeField] private GameObject stamp1;
     [SerializeField] private GameObject stamp2;
     [SerializeField] private GameObject stamp3;
@@ -62,15 +62,21 @@ public class SkillPlay : MonoBehaviour
         playerAttack = GetComponent<PlayerAttack>();
         playerProfile = GetComponent<PlayerProfile>();
 
+        if (UIManager.Instance == null)
+            return;
+
         slotParent = UIManager.Instance.slotParent;
         coolTimeSlider = UIManager.Instance.coolTimeSlider;
     }
 
     private void Update()
     {
+        if (coolTimeSlider == null)
+            return;
+
         CoolTime();
 
-        if (playerAttack.stampPassiveSkill2)
+        if (playerAttack != null && playerAttack.stampPassiveSkill2)
         {
             MpHeal();
         }
@@ -373,12 +379,12 @@ public class SkillPlay : MonoBehaviour
         int count = 0;
         while (count < 5)
         {
-            BowSkill1Create(); // 화살 생성
+            BowSkill1Create(); // ??? ????
             count++;
-            yield return new WaitForSeconds(0.1f); // 0.1초 대기
+            yield return new WaitForSeconds(0.1f); // 0.1?? ???
         }
 
-        // 5번 다 실행 후 종료 로직
+        // 5?? ?? ???? ?? ???? ????
         playerProfile.SkillStart = false;
     }
     private void BowSkill1Create()
@@ -391,12 +397,12 @@ public class SkillPlay : MonoBehaviour
         int count = 0;
         while (count < 3)
         {
-            BowSkill2Create(); // 화살 생성
+            BowSkill2Create(); // ??? ????
             count++;
-            yield return new WaitForSeconds(0.1f); // 0.1초 대기
+            yield return new WaitForSeconds(0.1f); // 0.1?? ???
         }
 
-        // 5번 다 실행 후 종료 로직
+        // 5?? ?? ???? ?? ???? ????
         playerProfile.SkillStart = false;
     }
     private void BowSkill2Create()

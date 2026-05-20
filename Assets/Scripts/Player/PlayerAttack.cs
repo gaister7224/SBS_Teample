@@ -18,10 +18,10 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] private GameObject swordAttackObj;
     [SerializeField] private GameObject bowAttackObj;
     [SerializeField] private GameObject stampAttackObj;
-    [Header("직업 별 이미지")]
+    [Header("???? ?? ?????")]
     [SerializeField] private Sprite[] profileImages;
     [SerializeField] private SpriteRenderer playerSpriteRenderer;
-    [Header("직업 별 애니메이션 컨드롤러")]
+    [Header("???? ?? ??????? ??????")]
     [SerializeField] private RuntimeAnimatorController swordAnimation;
     [SerializeField] private RuntimeAnimatorController stampAnimation;
     [SerializeField] private RuntimeAnimatorController bowAnimation;
@@ -64,14 +64,21 @@ public class PlayerAttack : MonoBehaviour
     void Start()
     {
         playerProfile = GetComponent<PlayerProfile>();
-        jobChoiceUI = UIManager.Instance.jobChoiceUI;
-        jobChoice = UIManager.Instance.jobChoice;
 
-        UIManager.Instance.swordJobButton.onClick.AddListener(SwordChoice);
-        UIManager.Instance.bowJobButton.onClick.AddListener(BowChoice);
-        UIManager.Instance.stampJobButton.onClick.AddListener(StampChoice);
+        if (UIManager.Instance != null)
+        {
+            jobChoiceUI = UIManager.Instance.jobChoiceUI;
+            jobChoice = UIManager.Instance.jobChoice;
 
-        //처음은 검사
+            if (UIManager.Instance.swordJobButton != null)
+                UIManager.Instance.swordJobButton.onClick.AddListener(SwordChoice);
+            if (UIManager.Instance.bowJobButton != null)
+                UIManager.Instance.bowJobButton.onClick.AddListener(BowChoice);
+            if (UIManager.Instance.stampJobButton != null)
+                UIManager.Instance.stampJobButton.onClick.AddListener(StampChoice);
+        }
+
+        //????? ???
         StateDecision(1f, 0f, 0f, false, Job.Sword, 10, 3, 0, 0, swordAnimation);
     }
 
@@ -90,7 +97,8 @@ public class PlayerAttack : MonoBehaviour
                 attackTime = 0;
             }
         }
-        playerProfile.PlayerDie();
+        if (playerProfile != null)
+            playerProfile.PlayerDie();
     }
 
     public void ChangeAttackDelay(float changePercent)
@@ -127,14 +135,17 @@ public class PlayerAttack : MonoBehaviour
 
     void AttackArrow()
     {
+        if (attackPos == null || Camera.main == null || Mouse.current == null)
+            return;
+
         Vector3 mousePos = Mouse.current.position.ReadValue();
         Ray ray = Camera.main.ScreenPointToRay(mousePos);
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit))
         {
             //Debug.DrawRay(ray.origin, ray.direction * 100f, Color.red);
-            targetDir = hit.point - attackPos.transform.position; //방향 벡터
-            angle = Mathf.Atan2(targetDir.x, targetDir.z) * Mathf.Rad2Deg; //수평면 상에서 몇 도 방향인지 계산
+            targetDir = hit.point - attackPos.transform.position; //???? ????
+            angle = Mathf.Atan2(targetDir.x, targetDir.z) * Mathf.Rad2Deg; //????? ??? ?? ?? ???????? ???
             Quaternion targetRotation = Quaternion.Euler(90f, 0f, -angle);
             attackPos.transform.localRotation = Quaternion.Slerp(
                 attackPos.transform.localRotation,
@@ -148,7 +159,7 @@ public class PlayerAttack : MonoBehaviour
         get { return attackPos; }
     }
 
-    //일반 공격 실행
+    //??? ???? ????
     public void OnAttack(InputAction.CallbackContext context)
     {
         if (!attack && !uiClicking)
@@ -229,11 +240,16 @@ public class PlayerAttack : MonoBehaviour
         passivePower = originPower;
         attack = _attack;
         curJob = _curJob;
-        GameManager.instance.job = curJob;
 
-        playerProfile.SetMaxHp(setHp, 0, 0);
-        playerProfile.SetMaxATK(setATK, 0, 0);
-        playerProfile.SetMaxDEF(setDEF, 0, 0);
+        if (GameManager.instance != null)
+        {
+            GameManager.instance.job = curJob;
+            GameManager.instance.hpPoint = (int)setHp;
+            GameManager.instance.atkPoint = (int)setATK;
+            GameManager.instance.defPoint = (int)setDEF;
+            GameManager.instance.profileIndex = profile;
+            GameManager.instance.curAnimation = animation;
+        }
 
         playerProfile.SetPassiveATK(setATK);
 
@@ -241,11 +257,12 @@ public class PlayerAttack : MonoBehaviour
         GameManager.instance.atkPoint = (int)setATK;
         GameManager.instance.defPoint = (int)setDEF;
 
-        playerSpriteRenderer.sprite = profileImages[profile];
-        GameManager.instance.profileIndex = profile;
+            if (animation != null && playerProfile.ani != null)
+                playerProfile.ani.runtimeAnimatorController = animation;
+        }
 
-        GameManager.instance.curAnimation = animation;
-        playerProfile.ani.runtimeAnimatorController = animation;
+        if (playerSpriteRenderer != null && profileImages != null && profile >= 0 && profile < profileImages.Length)
+            playerSpriteRenderer.sprite = profileImages[profile];
     }
 
     public void SwordChoice()
@@ -273,17 +290,35 @@ public class PlayerAttack : MonoBehaviour
 
     private void JobSelect()
     {
+        if (UIManager.Instance == null)
+            return;
+
         jobChoiceUI = UIManager.Instance.jobChoiceUI;
         jobChoice = UIManager.Instance.jobChoice;
         Time.timeScale = 1;
-        jobChoiceUI.SetActive(false);
-        jobChoice.enabled = true;
+
+        if (jobChoiceUI != null)
+            jobChoiceUI.SetActive(false);
+        if (jobChoice != null)
+            jobChoice.enabled = true;
+
         uiClicking = false;
-        transform.position = UIManager.Instance.villagePos.position;
-        UIManager.Instance.inventory.playerProfile.SetActive(true);
-        GameManager.instance.mapState = MapState.Village;
-        UIManager.Instance.virtualCamera.GetComponent<CinemachineConfiner3D>().BoundingVolume
-            = UIManager.Instance.villageCollider;
+
+        if (UIManager.Instance.villagePos != null)
+            transform.position = UIManager.Instance.villagePos.position;
+
+        if (UIManager.Instance.inventory != null && UIManager.Instance.inventory.playerProfile != null)
+            UIManager.Instance.inventory.playerProfile.SetActive(true);
+
+        if (GameManager.instance != null)
+            GameManager.instance.mapState = MapState.Village;
+
+        if (UIManager.Instance.virtualCamera != null && UIManager.Instance.villageCollider != null)
+        {
+            UIManager.Instance.virtualCamera.GetComponent<CinemachineConfiner3D>().BoundingVolume
+                = UIManager.Instance.villageCollider;
+        }
+
         Invoke("StoreExplainDialogue", 0.5f);
     }
 
