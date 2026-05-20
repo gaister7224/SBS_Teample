@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Unity.Cinemachine;
 using UnityEngine;
@@ -52,7 +53,7 @@ public class PortalManager : MonoBehaviour
         else if (PlayerObject == null)
             PlayerObject = GameObject.FindGameObjectWithTag("Player");
 
-        //PortalEffectImage = UIManager.Instance.fade.GetComponent<Image>();
+        PortalEffectImage = UIManager.Instance.fade.GetComponent<Image>();
         if(MainCameraObject == null)
         {
             MainCameraObject = GameObject.FindGameObjectWithTag("MainCamera");
@@ -70,6 +71,54 @@ public class PortalManager : MonoBehaviour
         {
             isPortalActive = false;
         }
+
+        if (!stageManager.Tutorial)
+        {
+            SurroundStageCheck();
+
+            BossPortalCheck();
+        }
+
+        for (int i = 0; i < PortalObject.Count; i++)
+        {
+            if (PortalObject[i] != null)
+            {
+                if (PortalObject[i].GetComponent<PortalSystem>().toBoss)
+                {
+                    if (stageManager.SealedStoneLeft == 0 && stageManager.curStageCleared)
+                    {
+                        PortalObject[i].SetActive(true);
+                    }
+                    else
+                    {
+                        PortalObject[i].SetActive(false);
+                    }
+                }
+            }
+        }
+    }
+
+    void BossPortalCheck()
+    {
+        if (PortalObject[0] != null && stageManager.curStagePos.y == -2 && (stageManager.curStagePos.x >= -1 && stageManager.curStagePos.x <= 1))
+        {
+            PortalObject[0].GetComponent<PortalSystem>().toBoss = true;
+        }
+
+        if (PortalObject[1] != null && stageManager.curStagePos.y == 2 && (stageManager.curStagePos.x >= -1 && stageManager.curStagePos.x <= 1))
+        {
+            PortalObject[1].GetComponent<PortalSystem>().toBoss = true;
+        }
+
+        if (PortalObject[2] != null && stageManager.curStagePos.x == 2 && (stageManager.curStagePos.y >= -1 && stageManager.curStagePos.y <= 1))
+        {
+            PortalObject[2].GetComponent<PortalSystem>().toBoss = true;
+        }
+
+        if (PortalObject[3] != null && stageManager.curStagePos.x == -2 && (stageManager.curStagePos.y >= -1 && stageManager.curStagePos.y <= 1))
+        {
+            PortalObject[3].GetComponent<PortalSystem>().toBoss = true;
+        }
     }
 
     void PortalActivation()
@@ -83,25 +132,54 @@ public class PortalManager : MonoBehaviour
         bool west = stageManager.StagePositions.Contains(new Vector2Int(pos.x - 1, pos.y));
         bool east = stageManager.StagePositions.Contains(new Vector2Int(pos.x + 1, pos.y));
 
-        if (PortalObject[0] != null)
+        if (PortalObject[0] != null && !PortalObject[0].GetComponent<PortalSystem>().toBoss)
         {
             PortalObject[0].SetActive(north && isPortalActive);
             PortalObject[0].SetActive(isPortalActive);
         }
-        if (PortalObject[1] != null)
+        if (PortalObject[1] != null && !PortalObject[1].GetComponent<PortalSystem>().toBoss)
         {
             PortalObject[1].SetActive(south && isPortalActive);
             PortalObject[1].SetActive(isPortalActive);
         }
-        if (PortalObject[2] != null)
+        if (PortalObject[2] != null && !PortalObject[2].GetComponent<PortalSystem>().toBoss)
         {
             PortalObject[2].SetActive(west && isPortalActive);
             PortalObject[2].SetActive(isPortalActive);
         }
-        if (PortalObject[3] != null)
+        if (PortalObject[3] != null && !PortalObject[3].GetComponent<PortalSystem>().toBoss)
         {
             PortalObject[3].SetActive(east && isPortalActive);
             PortalObject[3].SetActive(isPortalActive);
+        }
+    }
+
+    void SurroundStageCheck()
+    {
+        Vector2Int stageV2I = new Vector2Int((int)(ThisStage.transform.position.x / stageManager.spacing), (int)(ThisStage.transform.position.z / stageManager.spacing));
+        Vector2Int frontStageV2I = new Vector2Int(stageV2I.x, stageV2I.y + 1);
+        Vector2Int backStageV2I = new Vector2Int(stageV2I.x, stageV2I.y - 1);
+        Vector2Int leftStageV2I = new Vector2Int(stageV2I.x - 1, stageV2I.y);
+        Vector2Int rightStageV2I = new Vector2Int(stageV2I.x + 1, stageV2I.y);
+
+        if (PortalObject[0] != null && !stageManager.surroundStagePositions.Contains(frontStageV2I) && stageType != StageType.Boss)
+        {
+            PortalObject[0].SetActive(false);
+        }
+
+        if (PortalObject[1] != null && !stageManager.surroundStagePositions.Contains(backStageV2I) && stageType != StageType.Boss)
+        {
+            PortalObject[1].SetActive(false);
+        }
+
+        if (PortalObject[2] != null && !stageManager.surroundStagePositions.Contains(leftStageV2I) && stageType != StageType.Boss)
+        {
+            PortalObject[2].SetActive(false);
+        }
+
+        if (PortalObject[3] != null && !stageManager.surroundStagePositions.Contains(rightStageV2I) && stageType != StageType.Boss)
+        {
+            PortalObject[3].SetActive(false);
         }
     }
 }

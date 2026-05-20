@@ -101,6 +101,8 @@ public class StampAttackManager : MonoBehaviour
                     other.gameObject.GetComponent<MonsterBehavior>().TakeDamage(damage1);
                 if (other.gameObject.GetComponent<SealStoneManager>() != null)
                     other.gameObject.GetComponent<SealStoneManager>().Damage(damage1);
+                if (other.gameObject.GetComponent<SealedStone>() != null)
+                    other.gameObject.GetComponent<SealedStone>().TakeDamage(damage1);
             }
             //Instantiate(hitPrefab, transform.position, Quaternion.identity);
             bomb = true;
@@ -150,6 +152,8 @@ public class StampAttackManager : MonoBehaviour
                 other.gameObject.GetComponent<MonsterBehavior>().TakeDamage(damage2);
             if (other.gameObject.GetComponent<SealStoneManager>() != null)
                 other.gameObject.GetComponent<SealStoneManager>().Damage(damage2);
+            if (other.gameObject.GetComponent<SealedStone>() != null)
+                other.gameObject.GetComponent<SealedStone>().TakeDamage(damage2);
         }
         yield return new WaitForSeconds(0.5f);
         Destroy(newBomb);

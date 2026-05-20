@@ -10,11 +10,11 @@ public class StageDetector : MonoBehaviour
     private void Awake()
     {
         stageManager = GameObject.Find("StageManager").GetComponent<StageManager>();
+        portalManager = GetComponentInParent<PortalManager>();
     }
 
     void Start()
     {
-        portalManager = GetComponentInParent<PortalManager>();
 
         //StartCoroutine(StageChangeCoroutine());
     }
@@ -27,8 +27,7 @@ public class StageDetector : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            Debug.Log(stageManager);
-            //StartCoroutine(StageChangeCoroutine());
+            StartCoroutine(StageChangeCoroutine());
             var confinder = portalManager.CinemachineCamera.GetComponent<CinemachineConfiner3D>();
             confinder.BoundingVolume = gameObject.GetComponent<Collider>();
 

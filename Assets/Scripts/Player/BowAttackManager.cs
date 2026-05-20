@@ -94,6 +94,7 @@ public class BowAttackManager : MonoBehaviour
                         Debug.Log("궁수 기본 공격" + other.gameObject.name + "을(를) 공격했습니다!" + "damage1 = " + damage1);
                         other.gameObject.GetComponent<MonsterBehavior>().TakeDamage(damage1);
                         other.gameObject.GetComponent<SealStoneManager>().Damage(damage1);
+                        other.gameObject.GetComponent<SealedStone>().TakeDamage(damage1);
                     }
                     Vector3 hitPoint = other.ClosestPoint(transform.position);
                     Instantiate(hitPrefab, hitPoint, Quaternion.identity);
@@ -110,6 +111,7 @@ public class BowAttackManager : MonoBehaviour
                         Debug.Log("궁수 기본 공격" + other.gameObject.name + "을(를) 공격했습니다!" + "damage2 = " + damage2);
                         other.gameObject.GetComponent<MonsterBehavior>().TakeDamage(damage2);
                         other.gameObject.GetComponent<SealStoneManager>().Damage(damage2);
+                        other.gameObject.GetComponent<SealedStone>().TakeDamage(damage2);
                     }
                     Vector3 hitPoint = other.ClosestPoint(transform.position);
                     Instantiate(hitPrefab, hitPoint, Quaternion.identity);
@@ -130,6 +132,8 @@ public class BowAttackManager : MonoBehaviour
                         other.gameObject.GetComponent<MonsterBehavior>().TakeDamage(damage1);
                     if (other.gameObject.GetComponent<SealStoneManager>() != null)
                         other.gameObject.GetComponent<SealStoneManager>().Damage(damage1);
+                    if (other.gameObject.GetComponent<SealedStone>() != null)
+                        other.gameObject.GetComponent<SealedStone>().TakeDamage(damage1);
                 }
                 Vector3 hitPoint = other.ClosestPoint(transform.position);
                 Instantiate(hitPrefab, hitPoint, Quaternion.identity);

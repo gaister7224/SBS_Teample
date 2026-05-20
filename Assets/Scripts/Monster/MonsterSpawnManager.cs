@@ -62,6 +62,7 @@ public class MonsterSpawnManager : MonoBehaviour
                 else if (CurrentAliveMonsters.Count == 0)
                 {
                     stageManager.activePortal = true;
+                    stageManager.curStageCleared = true;
                 }
             }
             else if (stageManager.curStageType == StageType.Bonfire)
@@ -69,7 +70,7 @@ public class MonsterSpawnManager : MonoBehaviour
                 stageManager.curStageCleared = true;
                 stageManager.activePortal = true;
 
-                if (isMonsterSpawn)
+                if (isMonsterSpawn && stageManager.curStageSpawnPrefabs[0] != null)
                 {
                     Vector3 spawnPos = new Vector3(stageManager.curStagePos.x * stageManager.spacing, 2f, stageManager.curStagePos.y * stageManager.spacing);
                     Instantiate(stageManager.curStageSpawnPrefabs[0], spawnPos, Quaternion.identity, stageManager.transform);
@@ -113,12 +114,39 @@ public class MonsterSpawnManager : MonoBehaviour
                     isMonsterSpawn = false;
                 }
             }
+            else if (stageManager.curStageType == StageType.Boss)
+            {
+                if (isMonsterSpawn)
+                {
+                    SpawnGrid();
+                } //몬스터 스폰 로직
+
+                if (CurrentAliveMonsters.Count > 0)
+                {
+                    for (int i = 0; i < CurrentAliveMonsters.Count; i++)
+                    {
+                        if (CurrentAliveMonsters[i] == null)
+                        {
+                            CurrentAliveMonsters.RemoveAt(i);
+                        }
+                    }
+
+                    stageManager.activePortal = false;
+                } //몬스터 생존 여부 확인
+                else if (CurrentAliveMonsters.Count == 0)
+                {
+                    stageManager.activePortal = true;
+                    stageManager.curStageCleared = true;
+                }
+            }
             else if (stageManager.curStageType == StageType.None)
             {
                 stageManager.curStageCleared = true;
+                stageManager.activePortal = true;
             }
             else
             {
+                stageManager.curStageCleared = true;
                 stageManager.activePortal = true;
             }
         }
