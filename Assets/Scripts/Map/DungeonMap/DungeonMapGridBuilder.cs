@@ -104,18 +104,18 @@ public class DungeonMapGridBuilder : MonoBehaviour
 
     public void BuildGrid()
     {
-        if (built && cells.Count > 0)
-            return;
-
-        ClearGrid();
-        built = false;
-
         if (cellPrefab == null)
             cellPrefab = CreateRuntimeCellPrefab();
 
         var positions = GetStagePositions();
         if (positions.Count == 0)
             return;
+
+        if (built && cells.Count > 0 && SameCellLayout(cells.Keys, positions))
+            return;
+
+        ClearGrid();
+        built = false;
 
         foreach (var pos in positions)
         {
@@ -186,8 +186,15 @@ public class DungeonMapGridBuilder : MonoBehaviour
 
     HashSet<Vector2Int> GetStagePositions()
     {
-        if (StageManager.instance != null && StageManager.instance.StagePositions.Count > 0)
-            return StageManager.instance.StagePositions;
+        if (StageManager.instance != null)
+        {
+            StageManager.instance.EnsureStagePositions();
+            if (StageManager.instance.StagePositions.Count > 0)
+                return new HashSet<Vector2Int>(StageManager.instance.StagePositions);
+
+            if (StageManager.instance.Tutorial)
+                return new HashSet<Vector2Int>();
+        }
 
         var fallback = new HashSet<Vector2Int>();
         var stageCount = StageManager.instance != null ? StageManager.instance.StageCount : 7;
@@ -205,6 +212,19 @@ public class DungeonMapGridBuilder : MonoBehaviour
         }
 
         return fallback;
+    }
+
+    static bool SameCellLayout(IEnumerable<Vector2Int> current, HashSet<Vector2Int> next)
+    {
+        var count = 0;
+        foreach (var pos in current)
+        {
+            count++;
+            if (!next.Contains(pos))
+                return false;
+        }
+
+        return count == next.Count;
     }
 
     void ClearGrid()

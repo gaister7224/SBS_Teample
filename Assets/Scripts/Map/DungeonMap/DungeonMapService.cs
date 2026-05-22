@@ -129,8 +129,12 @@ public class DungeonMapService : MonoBehaviour
 
     public void SetPlayerPosition(Vector2Int cell)
     {
+        if (Current.PlayerPosition.HasValue && Current.PlayerPosition.Value == cell)
+            return;
+
         Current.SetPlayerPosition(cell);
         ScheduleSave();
+        NotifyAllMapGridsRefresh();
     }
 
     /// <summary>
@@ -155,28 +159,23 @@ public class DungeonMapService : MonoBehaviour
             return false;
 
         var stage = StageManager.instance;
+        var player = GameObject.FindGameObjectWithTag("Player");
+
+        if (player != null && stage != null && stage.spacing > 0.0001f)
+        {
+            var fromWorld = stage.WorldToGrid(player.transform.position);
+            if (ContainsCell(validCells, fromWorld))
+            {
+                cell = fromWorld;
+                stage.curStagePos = fromWorld;
+                return true;
+            }
+        }
+
         if (stage != null && ContainsCell(validCells, stage.curStagePos))
         {
             cell = stage.curStagePos;
             return true;
-        }
-
-        var player = GameObject.FindGameObjectWithTag("Player");
-        if (player != null && stage != null)
-        {
-            var spacing = stage.spacing;
-            if (spacing > 0.0001f)
-            {
-                var fromWorld = new Vector2Int(
-                    Mathf.RoundToInt(player.transform.position.x / spacing),
-                    Mathf.RoundToInt(player.transform.position.z / spacing));
-
-                if (ContainsCell(validCells, fromWorld))
-                {
-                    cell = fromWorld;
-                    return true;
-                }
-            }
         }
 
         if (Instance != null && Instance.Current.PlayerPosition.HasValue)

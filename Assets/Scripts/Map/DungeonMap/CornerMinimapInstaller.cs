@@ -61,7 +61,7 @@ public class CornerMinimapInstaller : MonoBehaviour
             if (gridBuilder != null)
             {
                 gridBuilder.ConfigureForCornerMinimap();
-                gridBuilder.RefreshAll();
+                gridBuilder.ForceRebuild();
             }
 
             RemoveMarkingToolbarIfDisabled(existing);
@@ -113,7 +113,11 @@ public class CornerMinimapInstaller : MonoBehaviour
         }
 
         DungeonMapService.Instance?.EnsureLoadedForCurrentDungeon();
-        gridBuilder.BuildGrid();
+
+        if (StageManager.instance != null)
+            StageManager.instance.SyncDungeonMapAfterLayout();
+        else
+            gridBuilder.BuildGrid();
     }
 
     void ApplyLayoutFromLegacyOrDefault()
