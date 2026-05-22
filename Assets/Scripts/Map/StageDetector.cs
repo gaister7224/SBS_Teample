@@ -90,6 +90,7 @@ public class StageDetector : MonoBehaviour
                 }
             }
 
+            PlayerLocomotion.GetProfile(other)?.ResetLocomotion();
             NotifyDungeonMap(stageManager);
         }
     }

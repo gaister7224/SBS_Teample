@@ -11,6 +11,9 @@ public class DungeonEntryPortal : MonoBehaviour
         if (!other.CompareTag("Player"))
             return;
 
+        if (DayManager.instance != null && DayManager.instance.curDay != Day.day)
+            return;
+
         if (!EnsureUiResolved())
         {
             Debug.LogWarning(
