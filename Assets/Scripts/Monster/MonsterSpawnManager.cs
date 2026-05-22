@@ -57,6 +57,7 @@ public class MonsterSpawnManager : MonoBehaviour
             }
             else if (stageManager.curStageType != StageType.Normal)
             {
+                stageManager.curStageCleared = true;
                 stageManager.activePortal = true;
             }
         }

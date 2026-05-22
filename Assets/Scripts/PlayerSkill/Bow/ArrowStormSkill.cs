@@ -90,12 +90,12 @@ public class ArrowStormSkill : MonoBehaviour
             playerProfile.BowSkillHit(hitPoint);
             if (other.CompareTag("Boss"))
             {
-                Debug.Log("½ºÅ³ : È­»ì ÆøÇ³" + other.gameObject.name + "À»(¸¦) °ø°ÝÇß½À´Ï´Ù!" + "damage = " + damage);
+                Debug.Log("ï¿½ï¿½Å³ : È­ï¿½ï¿½ ï¿½ï¿½Ç³" + other.gameObject.name + "ï¿½ï¿½(ï¿½ï¿½) ï¿½ï¿½ï¿½ï¿½ï¿½ß½ï¿½ï¿½Ï´ï¿½!" + "damage = " + damage);
                 other.gameObject.GetComponent<BossStatus>().GetDamage(damage);
             }
             else if (other.CompareTag("Enemy"))
             {
-                Debug.Log("½ºÅ³ : È­»ì ÆøÇ³" + other.gameObject.name + "À»(¸¦) °ø°ÝÇß½À´Ï´Ù!" + "damage = " + damage);
+                Debug.Log("ï¿½ï¿½Å³ : È­ï¿½ï¿½ ï¿½ï¿½Ç³" + other.gameObject.name + "ï¿½ï¿½(ï¿½ï¿½) ï¿½ï¿½ï¿½ï¿½ï¿½ß½ï¿½ï¿½Ï´ï¿½!" + "damage = " + damage);
                 if (other.gameObject.GetComponent<MonsterBehavior>() != null)
                     other.gameObject.GetComponent<MonsterBehavior>().TakeDamage(damage);
                 if (other.gameObject.GetComponent<SealStoneManager>() != null)

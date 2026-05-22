@@ -1,0 +1,127 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2491353122495895482
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 407389857633774038}
+  - component: {fileID: 9219160503716778401}
+  m_Layer: 0
+  m_Name: StageManager
+  m_TagString: Map
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &407389857633774038
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2491353122495895482}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 6282571864916064781}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &9219160503716778401
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2491353122495895482}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 784d08b0841951d45a98785d2257f2cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  monsterSpawnManager: {fileID: 0}
+  Tutorial: 1
+  stage:
+  - {fileID: 2619334703123621966, guid: e3ee7a9894fb6e745964e54dbb501bc7, type: 3}
+  - {fileID: 2619334703123621966, guid: fcdd8c6f399c9eb4aad768dc5bc0025d, type: 3}
+  - {fileID: 2619334703123621966, guid: e616edc21ac447144baad3ba5f60526e, type: 3}
+  - {fileID: 2619334703123621966, guid: 353ea65809b425841a05bdfb1f94b72f, type: 3}
+  - {fileID: 2619334703123621966, guid: 1f1178efe564fe74c9c264d5649f9803, type: 3}
+  - {fileID: 2619334703123621966, guid: 1ce88f6b9d73df64c865d495d578e115, type: 3}
+  - {fileID: 2619334703123621966, guid: b7ab20b399a8d9c4ab8d81a44ad3c795, type: 3}
+  - {fileID: 2619334703123621966, guid: 27879d518414c104cb9e48db9a870536, type: 3}
+  - {fileID: 2619334703123621966, guid: 3da9d2620cae6b24293b1f6eee5079aa, type: 3}
+  BossStage: {fileID: 2619334703123621966, guid: dfbf6f4a30574c24ea5345b27d3913f9, type: 3}
+  spacing: 40
+  TutorialStage:
+  - {fileID: 7745263230637702956, guid: 163aa95d14003fe4d992f1c73003c75e, type: 3}
+  - {fileID: 2027069352563740379, guid: 80b95b25fe286354b887f35bf6a57c89, type: 3}
+  StageCount: 7
+  MaxSealedStoneCount: 3
+  surroundStagePositions: []
+  curStagePos: {x: 0, y: 0}
+  curStageType: 0
+  curStageCleared: 0
+  curStageSpawnPrefabs: []
+  curFloorCleared: 0
+  LeftFloorCount: 2
+  curFloor: 0
+  SealedStoneLeft: 0
+  Player: {fileID: 0}
+  activePortal: 0
+--- !u!1 &4068588460955110503
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6282571864916064781}
+  - component: {fileID: 1218370593192950615}
+  m_Layer: 0
+  m_Name: MonsterSpawnManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6282571864916064781
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4068588460955110503}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 407389857633774038}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1218370593192950615
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4068588460955110503}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0faf3cd9ae1c4f24da601d4c995b8376, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CurrentAliveMonsters:
+  - {fileID: 0}
+  stageManager: {fileID: 0}
+  isMonsterSpawn: 0
+  dropItems:
+  - {fileID: 4084295170943574036, guid: 29f047a5b5198194a9a0652820a7e8ae, type: 3}

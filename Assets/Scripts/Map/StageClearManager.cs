@@ -5,6 +5,12 @@ using UnityEngine;
 public class StageClearManager : MonoBehaviour
 {
     [SerializeField] private GameObject jobChoiceUI;
+
+    void Start()
+    {
+        jobChoiceUI = GameObject.Find("JobChoiceUI");
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if(other.CompareTag("Player"))

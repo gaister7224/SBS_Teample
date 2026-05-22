@@ -10,18 +10,12 @@ public class StageDetector : MonoBehaviour
 
     private void Awake()
     {
+        stageManager = GameObject.Find("StageManager").GetComponent<StageManager>();
         portalManager = GetComponentInParent<PortalManager>();
-        stageManager = StageManager.instance;
-        if (stageManager == null)
-        {
-            Debug.Log("awake : stageManager ����");
-        }
     }
 
     void Start()
     {
-        
-        
 
         //StartCoroutine(StageChangeCoroutine());
     }
