@@ -28,22 +28,10 @@ public class StageDetector : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            Debug.Log(stageManager);
-            //StartCoroutine(StageChangeCoroutine());
-            if (portalManager == null)
-            {
-                Debug.Log("potalManager ����");
-            }
-            if(portalManager.CinemachineCamera == null)
-            {
-                Debug.Log("potalManager.CinemachineCamera ����");
-            }
-            if (portalManager.CinemachineCamera != null)
-            {
-                var confinder = portalManager.CinemachineCamera.GetComponent<CinemachineConfiner3D>();
-                if (confinder != null)
-                    confinder.BoundingVolume = gameObject.GetComponent<Collider>();
-            }
+            StartCoroutine(StageChangeCoroutine());
+            var confinder = portalManager.CinemachineCamera.GetComponent<CinemachineConfiner3D>();
+            
+            confinder.BoundingVolume = gameObject.GetComponent<Collider>();
 
             stageManager.curStagePos = new Vector2Int((int)(transform.position.x / stageManager.spacing), (int)(transform.position.z / stageManager.spacing));
             stageManager.curStageType = portalManager.stageType;

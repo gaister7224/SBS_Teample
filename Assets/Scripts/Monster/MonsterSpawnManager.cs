@@ -50,19 +50,102 @@ public class MonsterSpawnManager : MonoBehaviour
                     stageManager.activePortal = false;
                 else
                     stageManager.activePortal = true;
-            }
-            else if (isMonsterSpawn)
-            {
-                HandleSpecialStageEntry();
-            }
-            else if (stageManager.curStageType != StageType.Normal)
-            {
                 stageManager.curStageCleared = true;
-                stageManager.activePortal = true;
             }
+        }
+        else if (isMonsterSpawn)
+        {
+            stageManager.curStageCleared = true;
+            stageManager.activePortal = true;
+
+            if (isMonsterSpawn && stageManager.curStageSpawnPrefabs[0] != null)
+            {
+                Vector3 spawnPos = new Vector3(stageManager.curStagePos.x * stageManager.spacing, 2f, stageManager.curStagePos.y * stageManager.spacing);
+                Instantiate(stageManager.curStageSpawnPrefabs[0], spawnPos, Quaternion.identity, stageManager.transform);
+
+                isMonsterSpawn = false;
+            }
+
+            Debug.Log("�÷��̾� ȸ��");
+
+            GameManager.instance.OnShelterEnter?.Invoke();
+            PlayerProfile playerProfile = GameObject.FindWithTag("Player").GetComponent<PlayerProfile>();
+            if (playerProfile != null)
+            {
+                playerProfile.MPBuff(4);
+                if (!GameManager.instance.shelterHpBan)
+                    playerProfile.HPBuff(0.5f);
+
+                if (!GameManager.instance.shelterActCountBan)
+                    playerProfile.ActCountPlus(3, GameManager.instance.recoveryMultiplier);
+            }
+        }
+        else if (stageManager.curStageType == StageType.Trap)
+        {
+            stageManager.curStageCleared = true;
+            stageManager.activePortal = true;
+
+            if (isMonsterSpawn)
+            {
+                Vector3 spawnPos = new Vector3(stageManager.curStagePos.x * stageManager.spacing, 0f, stageManager.curStagePos.y * stageManager.spacing);
+                Instantiate(stageManager.curStageSpawnPrefabs[Random.Range(0, stageManager.curStageSpawnPrefabs.Count)], spawnPos, Quaternion.identity, stageManager.transform);
+
+                isMonsterSpawn = false;
+            }
+        }
+        else if (stageManager.curStageType == StageType.RandomPortal)
+        {
+            stageManager.curStageCleared = true;
+
+            Vector3 spawnPos = new Vector3(stageManager.curStagePos.x * stageManager.spacing, 2f, stageManager.curStagePos.y * stageManager.spacing);
+            //Instantiate(stageManager.randomPortalPrefab, spawnPos, Quaternion.identity);
+        }
+        else if (stageManager.curStageType == StageType.Treasure)
+        {
+            stageManager.curStageCleared = true;
+            stageManager.activePortal = true;
+
+            if (isMonsterSpawn)
+            {
+                Vector3 spawnPos = new Vector3(stageManager.curStagePos.x * stageManager.spacing, 2f, stageManager.curStagePos.y * stageManager.spacing);
+                Instantiate(stageManager.curStageSpawnPrefabs[Random.Range(0, stageManager.curStageSpawnPrefabs.Count)], spawnPos, Quaternion.identity, stageManager.transform);
+
+                isMonsterSpawn = false;
+            }
+        }
+        else if (stageManager.curStageType == StageType.Boss)
+        {
+            if (isMonsterSpawn)
+            {
+                SpawnGrid();
+            } //���� ���� ����
+
+            if (CurrentAliveMonsters.Count > 0)
+            {
+                for (int i = 0; i < CurrentAliveMonsters.Count; i++)
+                {
+                    if (CurrentAliveMonsters[i] == null)
+                    {
+                        CurrentAliveMonsters.RemoveAt(i);
+                    }
+                }
+
+                stageManager.activePortal = false;
+            } //���� ���� ���� Ȯ��
+            else if (CurrentAliveMonsters.Count == 0)
+            {
+                stageManager.activePortal = true;
+                stageManager.curStageCleared = true;
+            }
+        }
+        else if (stageManager.curStageType == StageType.None)
+        {
+            stageManager.curStageCleared = true;
+            stageManager.activePortal = true;
         }
         else
         {
+            stageManager.curStageCleared = true;
             stageManager.activePortal = true;
         }
     }

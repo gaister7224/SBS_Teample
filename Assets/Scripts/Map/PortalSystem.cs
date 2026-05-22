@@ -10,30 +10,25 @@ public class PortalSystem : MonoBehaviour
 
     GameObject player;
 
-    //0:¾Õ, 1:µÚ, 2:¿Þ, 3:¿À
     [SerializeField] PortalDirection direction;
 
-    public float distance = 9f;
     public bool toBoss;
+    public float distance = 9f;
 
     void Start()
+    {
+    }
+
+    void Update()
     {
         if (portalManager == null)
         {
             portalManager = GetComponentInParent<PortalManager>();
         }
 
-        if (stageManager == null)
+        if (stageManager == null && StageManager.instance != null)
         {
-            stageManager = GameObject.Find("StageManager").GetComponent<StageManager>();
-        }
-    }
-
-    void Update()
-    {
-        if (toBoss)
-        {
-            direction = PortalDirection.toBoss;
+            stageManager = StageManager.instance;
         }
     }
 
@@ -48,7 +43,6 @@ public class PortalSystem : MonoBehaviour
             }
             else if (portalManager.PlayerObject.GetComponent<PlayerProfile>().ActCount <= 0)
             {
-                
             }
         }
 
@@ -96,12 +90,12 @@ public class PortalSystem : MonoBehaviour
                 } while (randomPos.x == 0 && randomPos.y == 0);
 
                 player.transform.position = new Vector3(randomPos.x * stageManager.spacing, 1.9f, randomPos.y * stageManager.spacing - distance);
-                //·£´ýÆ÷Å»
+                //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å»
                 break;
             case PortalDirection.Clear:
                 Debug.Log(stageManager);
                 stageManager.curFloorCleared = true;
-                //Å¬¸®¾îÆ÷Å»
+                //Å¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å»
                 if (!stageManager.Tutorial)
                 {
                     int countHalf = (stageManager.StageCount % 2 == 1) ? stageManager.StageCount / 2 + 1 : stageManager.StageCount / 2;
