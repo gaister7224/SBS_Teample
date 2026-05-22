@@ -33,7 +33,7 @@ public class CornerMinimapView : MonoBehaviour
     void OnDungeonLoaded()
     {
         if (gridBuilder != null)
-            gridBuilder.BuildGrid();
+            gridBuilder.ForceRebuild();
 
         Refresh();
     }

@@ -10,9 +10,11 @@ public class DungeonMapService : MonoBehaviour
 
     public DungeonMapData Current { get; private set; } = new();
     public Vector2Int? SelectedCell { get; private set; }
+    public DungeonMapMarkType? PendingMarkType { get; private set; }
     public bool IsReadOnly { get; set; }
 
     public event Action<Vector2Int?> OnSelectionChanged;
+    public event Action<DungeonMapMarkType?> OnPendingMarkChanged;
     public event Action OnDungeonLoaded;
 
     float saveTimer = -1f;
@@ -57,17 +59,19 @@ public class DungeonMapService : MonoBehaviour
         return 1;
     }
 
-    public void LoadForCurrentDungeon()
-    {
-        var dungeonId = GetCurrentDungeonId();
-        LoadDungeon(dungeonId);
-    }
+    public void LoadForCurrentDungeon() => EnsureLoaded(GetCurrentDungeonId());
 
-    public void EnsureLoadedForCurrentDungeon()
+    public void EnsureLoadedForCurrentDungeon() => EnsureLoaded(GetCurrentDungeonId());
+
+    /// <summary>
+    /// 같은 던전이 이미 메모리에 있으면 밝힘·마크를 유지합니다. UI 토글용.
+    /// </summary>
+    public void EnsureLoaded(int dungeonId)
     {
-        var dungeonId = GetCurrentDungeonId();
-        if (loadedDungeonId != dungeonId || Current.DungeonId != dungeonId)
-            LoadDungeon(dungeonId);
+        if (loadedDungeonId == dungeonId && Current.DungeonId == dungeonId)
+            return;
+
+        LoadDungeon(dungeonId);
     }
 
     public void LoadDungeon(int dungeonId)
@@ -82,8 +86,25 @@ public class DungeonMapService : MonoBehaviour
             Current.SetDungeonId(dungeonId);
 
         SelectedCell = null;
+        SetPendingMark(null);
         OnSelectionChanged?.Invoke(null);
         OnDungeonLoaded?.Invoke();
+    }
+
+    public void SetPendingMark(DungeonMapMarkType? markType)
+    {
+        if (PendingMarkType == markType)
+            return;
+
+        PendingMarkType = markType;
+        OnPendingMarkChanged?.Invoke(markType);
+        NotifyAllMapGridsRefresh();
+    }
+
+    static void NotifyAllMapGridsRefresh()
+    {
+        foreach (var grid in UnityEngine.Object.FindObjectsByType<DungeonMapGridBuilder>(FindObjectsSortMode.None))
+            grid.RefreshAll();
     }
 
     public void RevealAround(Vector2Int center, int radius, HashSet<Vector2Int> validCells)
@@ -108,8 +129,77 @@ public class DungeonMapService : MonoBehaviour
 
     public void SetPlayerPosition(Vector2Int cell)
     {
+        if (Current.PlayerPosition.HasValue && Current.PlayerPosition.Value == cell)
+            return;
+
         Current.SetPlayerPosition(cell);
         ScheduleSave();
+        NotifyAllMapGridsRefresh();
+    }
+
+    /// <summary>
+    /// StageManager·플레이어 월드 좌표로 그리드 칸을 맞춥니다. 지도 갱신 시 호출.
+    /// </summary>
+    public bool TrySyncPlayerPositionFromWorld(IReadOnlyCollection<Vector2Int> validCells)
+    {
+        if (validCells == null || validCells.Count == 0)
+            return false;
+
+        if (!TryResolvePlayerGridCell(validCells, out var cell))
+            return false;
+
+        SetPlayerPosition(cell);
+        return true;
+    }
+
+    public static bool TryResolvePlayerGridCell(IReadOnlyCollection<Vector2Int> validCells, out Vector2Int cell)
+    {
+        cell = default;
+        if (validCells == null || validCells.Count == 0)
+            return false;
+
+        var stage = StageManager.instance;
+        var player = GameObject.FindGameObjectWithTag("Player");
+
+        if (player != null && stage != null && stage.spacing > 0.0001f)
+        {
+            var fromWorld = stage.WorldToGrid(player.transform.position);
+            if (ContainsCell(validCells, fromWorld))
+            {
+                cell = fromWorld;
+                stage.curStagePos = fromWorld;
+                return true;
+            }
+        }
+
+        if (stage != null && ContainsCell(validCells, stage.curStagePos))
+        {
+            cell = stage.curStagePos;
+            return true;
+        }
+
+        if (Instance != null && Instance.Current.PlayerPosition.HasValue)
+        {
+            var saved = Instance.Current.PlayerPosition.Value;
+            if (ContainsCell(validCells, saved))
+            {
+                cell = saved;
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    static bool ContainsCell(IReadOnlyCollection<Vector2Int> validCells, Vector2Int pos)
+    {
+        foreach (var c in validCells)
+        {
+            if (c.x == pos.x && c.y == pos.y)
+                return true;
+        }
+
+        return false;
     }
 
     public void SelectCell(Vector2Int cell)
@@ -131,11 +221,24 @@ public class DungeonMapService : MonoBehaviour
 
     public bool ApplyMark(Vector2Int cell, DungeonMapMarkType markType)
     {
-        if (IsReadOnly || !Current.IsRevealed(cell))
+        if (IsReadOnly)
             return false;
 
+        if (Current.TryGetMark(cell, out var existing) && existing == markType)
+            return ClearMark(cell);
+
         Current.ApplyMark(cell, markType);
-        ScheduleSave();
+        NotifyAllMapGridsRefresh();
+        return true;
+    }
+
+    public bool ClearMark(Vector2Int cell)
+    {
+        if (IsReadOnly || !Current.TryGetMark(cell, out _))
+            return false;
+
+        Current.ClearMark(cell);
+        NotifyAllMapGridsRefresh();
         return true;
     }
 

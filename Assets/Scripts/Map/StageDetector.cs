@@ -67,9 +67,14 @@ public class StageDetector : MonoBehaviour
             var confinder = portalManager.CinemachineCamera.GetComponent<CinemachineConfiner3D>();
             confinder.BoundingVolume = gameObject.GetComponent<Collider>();
 
-            stageManager.curStagePos = new Vector2Int((int)(transform.position.x / stageManager.spacing), (int)(transform.position.z / stageManager.spacing));
+            stageManager.EnsureStagePositions();
+            var stageRoot = portalManager.ThisStage != null
+                ? portalManager.ThisStage.transform
+                : portalManager.transform;
+            stageManager.curStagePos = stageManager.WorldToGrid(stageRoot.position);
             stageManager.curStageType = portalManager.stageType;
-            stageManager.monsterSpawnManager.isMonsterSpawn = true;
+            if (stageManager.monsterSpawnManager != null)
+                stageManager.monsterSpawnManager.isMonsterSpawn = true;
             stageManager.activePortal = false;
             stageManager.curStageCleared = portalManager.isCleared;
             stageManager.curStageSpawnPrefabs = portalManager.SpawnPrefabs;
@@ -92,19 +97,7 @@ public class StageDetector : MonoBehaviour
 
     static void NotifyDungeonMap(StageManager stageManager)
     {
-        if (DungeonMapService.Instance == null)
-        {
-            var serviceObject = new GameObject("DungeonMapService");
-            serviceObject.AddComponent<DungeonMapService>();
-        }
-
-        DungeonMapService.Instance.EnsureLoadedForCurrentDungeon();
-
-        DungeonMapService.Instance.RevealAround(
-            stageManager.curStagePos,
-            1,
-            stageManager.StagePositions);
-        DungeonMapService.Instance.SetPlayerPosition(stageManager.curStagePos);
+        stageManager.SyncPlayerToMinimap(stageManager.curStagePos);
     }
 
     IEnumerator StageChangeCoroutine()

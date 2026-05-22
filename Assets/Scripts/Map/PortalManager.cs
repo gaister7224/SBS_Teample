@@ -38,7 +38,7 @@ public class PortalManager : MonoBehaviour
 
     void Awake()
     {
-        ThisStage = gameObject;
+        ThisStage = transform.parent != null ? transform.parent.gameObject : gameObject;
         PlayerObject = GameObject.FindGameObjectWithTag("Player");
         MainCameraObject = GameObject.FindGameObjectWithTag("MainCamera");
         CinemachineCamera = GameObject.Find("PlayerCamera").GetComponent<CinemachineCamera>();

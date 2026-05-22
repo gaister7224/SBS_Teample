@@ -2,7 +2,6 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(Button))]
 public class DungeonMapCellView : MonoBehaviour
 {
     [SerializeField] Image backgroundImage;
@@ -14,11 +13,12 @@ public class DungeonMapCellView : MonoBehaviour
     [SerializeField] Color revealedColor = new(0.55f, 0.52f, 0.48f, 1f);
     [SerializeField] Color selectedFlashColor = new(1f, 0.95f, 0.6f, 1f);
     [SerializeField] Color playerPinColor = Color.red;
-    [SerializeField] float playerPinScale = 0.35f;
+    [SerializeField] float playerPinScale = 0.55f;
+    const float MarkIconSize = 28f * 1.2f;
+    const float PlayerPinMinSize = 10f;
 
     public Vector2Int Index { get; private set; }
 
-    Button button;
     MapMarkSpriteSet spriteSet;
     bool isRevealed;
     bool isSelected;
@@ -26,12 +26,15 @@ public class DungeonMapCellView : MonoBehaviour
 
     void Awake()
     {
-        button = GetComponent<Button>();
         if (backgroundImage == null)
             backgroundImage = GetComponent<Image>();
 
+        var legacyButton = GetComponent<Button>();
+        if (legacyButton != null)
+            Destroy(legacyButton);
+
         if (markIcon == null)
-            markIcon = CreateChildImage("MarkIcon", 14f);
+            markIcon = CreateChildImage("MarkIcon", MarkIconSize);
 
         if (selectionOutline == null)
             selectionOutline = CreateChildImage("SelectionOutline", 22f);
@@ -42,15 +45,12 @@ public class DungeonMapCellView : MonoBehaviour
         if (revealedImage == null)
             revealedImage = backgroundImage;
 
+        EnsureRaycastGraphic(backgroundImage);
+        EnsureRaycastGraphic(revealedImage);
+
         markIcon.enabled = false;
         selectionOutline.enabled = false;
         playerPin.enabled = false;
-
-        button.onClick.AddListener(OnClicked);
-
-        var nav = button.navigation;
-        nav.mode = Navigation.Mode.None;
-        button.navigation = nav;
     }
 
     Image CreateChildImage(string childName, float size)
@@ -70,8 +70,9 @@ public class DungeonMapCellView : MonoBehaviour
 
     Image CreatePlayerPin()
     {
-        var pin = CreateChildImage("PlayerPin", 8f);
+        var pin = CreateChildImage("PlayerPin", PlayerPinMinSize);
         pin.color = playerPinColor;
+        EnsureRaycastGraphic(pin);
         return pin;
     }
 
@@ -84,12 +85,13 @@ public class DungeonMapCellView : MonoBehaviour
         if (!visible)
             return;
 
+        EnsureRaycastGraphic(playerPin);
         playerPin.color = playerPinColor;
         var cellRect = transform as RectTransform;
         if (cellRect != null)
         {
             var pinSize = Mathf.Min(cellRect.sizeDelta.x, cellRect.sizeDelta.y) * playerPinScale;
-            pinSize = Mathf.Max(pinSize, 6f);
+            pinSize = Mathf.Max(pinSize, PlayerPinMinSize);
             var pinRect = playerPin.rectTransform;
             pinRect.sizeDelta = new Vector2(pinSize, pinSize);
         }
@@ -119,17 +121,25 @@ public class DungeonMapCellView : MonoBehaviour
         if (backgroundImage != null && backgroundImage != revealedImage)
             backgroundImage.color = isRevealed ? revealedColor : hiddenColor;
 
-        var canInteract = allowInteraction && isRevealed && DungeonMapService.Instance != null
-            && !DungeonMapService.Instance.IsReadOnly;
-        button.interactable = canInteract;
-
         if (backgroundImage != null)
-            backgroundImage.raycastTarget = canInteract;
+        {
+            EnsureRaycastGraphic(backgroundImage);
+            backgroundImage.raycastTarget = false;
+            backgroundImage.color = isRevealed ? revealedColor : hiddenColor;
+        }
+
+        if (revealedImage != null && revealedImage != backgroundImage)
+        {
+            EnsureRaycastGraphic(revealedImage);
+            revealedImage.raycastTarget = false;
+            revealedImage.color = isRevealed ? revealedColor : hiddenColor;
+        }
 
         if (markIcon != null)
         {
             if (data != null && data.TryGetMark(Index, out var markType) && spriteSet != null)
             {
+                ApplyMarkIconLayout();
                 var sprite = spriteSet.GetSprite(markType);
                 markIcon.sprite = sprite;
                 markIcon.enabled = sprite != null;
@@ -141,7 +151,7 @@ public class DungeonMapCellView : MonoBehaviour
         }
 
         if (selectionOutline != null)
-            selectionOutline.enabled = isSelected;
+            selectionOutline.enabled = false;
 
         UpdatePlayerPinVisual(showPlayer);
     }
@@ -154,7 +164,7 @@ public class DungeonMapCellView : MonoBehaviour
 
     IEnumerator MarkFeedbackRoutine()
     {
-        if (markIcon != null)
+        if (markIcon != null && markIcon.enabled)
         {
             markIcon.transform.localScale = Vector3.zero;
             var elapsed = 0f;
@@ -182,11 +192,86 @@ public class DungeonMapCellView : MonoBehaviour
         }
     }
 
-    void OnClicked()
+    public void ApplyMarkClick()
     {
-        if (DungeonMapService.Instance == null || !isRevealed)
+        var service = DungeonMapService.Instance;
+        if (service == null || service.IsReadOnly || !service.PendingMarkType.HasValue)
+            return;
+
+        var pending = service.PendingMarkType.Value;
+        if (service.Current.TryGetMark(Index, out var existing) && existing == pending)
+        {
+            RemoveMark();
+            return;
+        }
+
+        if (!service.ApplyMark(Index, pending))
+            return;
+
+        PlayMarkFeedbackOnAllGrids();
+    }
+
+    public void RemoveMark()
+    {
+        var service = DungeonMapService.Instance;
+        if (service == null || service.IsReadOnly)
+            return;
+
+        if (!service.ClearMark(Index))
+            return;
+
+        RefreshAllGrids();
+    }
+
+    public void SelectIfRevealed()
+    {
+        if (!isRevealed || DungeonMapService.Instance == null)
             return;
 
         DungeonMapService.Instance.SelectCell(Index);
     }
+
+    void ApplyMarkIconLayout()
+    {
+        if (markIcon == null)
+            return;
+
+        var cellRect = transform as RectTransform;
+        var size = MarkIconSize;
+        if (cellRect != null)
+        {
+            var cellSize = Mathf.Min(cellRect.sizeDelta.x, cellRect.sizeDelta.y);
+            size = Mathf.Min(MarkIconSize, cellSize * 0.9f);
+        }
+
+        var iconRect = markIcon.rectTransform;
+        iconRect.sizeDelta = new Vector2(size, size);
+        iconRect.anchoredPosition = Vector2.zero;
+        markIcon.preserveAspect = true;
+        markIcon.transform.SetAsLastSibling();
+    }
+
+    static void EnsureRaycastGraphic(Image image)
+    {
+        if (image == null)
+            return;
+
+        if (image.sprite == null)
+            image.sprite = MapUiSpriteUtil.White;
+    }
+
+    void PlayMarkFeedbackOnAllGrids()
+    {
+        var grids = UnityEngine.Object.FindObjectsByType<DungeonMapGridBuilder>(FindObjectsSortMode.None);
+        foreach (var grid in grids)
+            grid.GetCell(Index)?.PlayMarkFeedback();
+    }
+
+    void RefreshAllGrids()
+    {
+        var grids = UnityEngine.Object.FindObjectsByType<DungeonMapGridBuilder>(FindObjectsSortMode.None);
+        foreach (var grid in grids)
+            grid.RefreshAll();
+    }
 }
+
