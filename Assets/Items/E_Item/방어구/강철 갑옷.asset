@@ -33,5 +33,5 @@ MonoBehaviour:
   hpBuff: 90
   mpBuff: 0
   skillCoolTimeBuff: 0
-  minGold: 0
-  maxGold: 0
+  minGold: 200
+  maxGold: 400

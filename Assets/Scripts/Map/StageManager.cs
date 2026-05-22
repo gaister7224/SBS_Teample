@@ -24,8 +24,10 @@ public enum StageType
     Treasure,
     Boss,
     Bonfire,
+    Shop,
+    BuffStatue,
     RandomPortal,
-    BackPortal,
+    ReturnPortal,
     Store,
     None
 }
@@ -107,7 +109,7 @@ public class StageManager : MonoBehaviour
             }
             else
             {
-                //´øÀü Å¬¸®¾î
+                //ï¿½ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½
             }
         }
         else if (curFloorCleared && Tutorial && TutorialStage.Count > 0)
@@ -136,7 +138,7 @@ public class StageManager : MonoBehaviour
             }
             else if (LeftFloorCount == 0f)
             {
-                //Æ©Åä¸®¾ó Å¬¸®¾î
+                //Æ©ï¿½ä¸®ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½
             }
         }
 
@@ -160,7 +162,6 @@ public class StageManager : MonoBehaviour
         {
             int countHalf = (StageCount % 2 == 1) ? StageCount / 2 + 1 : StageCount / 2;
             HashSet<Vector2Int> sealedStonePositions = new HashSet<Vector2Int>();
-
             for (int i = 0; i < MaxSealedStoneCount; i++)
             {
                 int x, z;
@@ -170,6 +171,18 @@ public class StageManager : MonoBehaviour
                     z = Random.Range(-countHalf, StageCount - countHalf + 2);
                 } while ((x >= -1 && x <= 1 && z >= -1 && z <= 1) || sealedStonePositions.Contains(new Vector2Int(x, z)));
                 sealedStonePositions.Add(new Vector2Int(x, z));
+            }
+
+            HashSet<Vector2Int> trapStagePositions = new HashSet<Vector2Int>();
+            for (int i = 0; i < Mathf.FloorToInt((Mathf.Pow(StageCount + 2, 2) - 9) / 10f); i++)
+            {
+                int x, z;
+                do
+                {
+                    x = Random.Range(-countHalf, StageCount - countHalf + 2);
+                    z = Random.Range(-countHalf, StageCount - countHalf + 2);
+                } while ((x >= -1 && x <= 1 && z >= -1 && z <= 1) || trapStagePositions.Contains(new Vector2Int(x, z)));
+                trapStagePositions.Add(new Vector2Int(x, z));
             }
 
             for (int x = -countHalf; x < StageCount - countHalf + 2; x++)
@@ -214,6 +227,17 @@ public class StageManager : MonoBehaviour
                         StagePositions.Add(new Vector2Int(x, z));
                         Instantiate(stage[1], spawnPos, Quaternion.identity, StageParent.transform);
                     }
+                    else if (trapStagePositions.Contains(new Vector2Int(x, z)))
+                    {
+                        Vector3 spawnPos = new Vector3
+                        (
+                            x * spacing,
+                            0f,
+                            z * spacing
+                        );
+                        StagePositions.Add(new Vector2Int(x, z));
+                        Instantiate(stage[2], spawnPos, Quaternion.identity, transform);
+                    }
                     else
                     {
                         Vector3 spawnPos = new Vector3
@@ -224,7 +248,7 @@ public class StageManager : MonoBehaviour
                         );
                         StagePositions.Add(new Vector2Int(x, z));
 
-                        Instantiate(stage[Random.Range(2, stage.Count)], spawnPos, Quaternion.identity, StageParent.transform);
+                        Instantiate(stage[Random.Range(3, stage.Count)], spawnPos, Quaternion.identity, transform);
                     }
                 }
             }

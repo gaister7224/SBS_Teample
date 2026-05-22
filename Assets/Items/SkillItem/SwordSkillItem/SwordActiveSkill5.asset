@@ -16,6 +16,9 @@ MonoBehaviour:
   skillItemType: 65536
   itemName: "\uC77C\uC810 \uB3CC\uD30C"
   itemImage: {fileID: 21300000, guid: 6b6199c800015564ea4822a6a829ec4e, type: 3}
-  explanation: 
+  explanation: "\uC804\uBC29\uC73C\uB85C \uB3CC\uC9C4\uD558\uBA70 \uACBD\uB85C\uC0C1\uC758
+    \uC801\uC744 \uACF5\uACA9\uD55C\uB2E4. \uC911\uC2EC\uBD80\uC758 \uC801\uC5D0\uAC8C\uB294
+    400%\uC758 \uD53C\uD574\uB97C \uC8FC\uACE0, \uC678\uACFD\uC758 \uC801\uC5D0\uAC8C\uB294
+    150%\uC758 \uD53C\uD574\uB97C \uC785\uD78C\uB2E4.  "
   number: 5
   coolTime: 20

@@ -1,37 +1,18 @@
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
+/// <summary>
+/// 레거시 맵 셀. DungeonMapCellView가 지도 표시를 담당합니다.
+/// </summary>
 public class MinimapStage : MonoBehaviour
 {
-    MinimapManager minimapManager;
-
     public Vector2Int index;
-
     public StageType stageType;
 
-    private void Awake()
+    public void PingUiOn()
     {
+        if (DungeonMapService.Instance != null)
+            DungeonMapService.Instance.SelectCell(index);
     }
 
-    void Start()
-    {
-        
-    }
-
-    void Update()
-    {
-        if (minimapManager != null)
-        {
-            minimapManager = MinimapManager.instance;
-        }
-
-        transform.localPosition = new Vector2(index.x * 25, index.y * 25);
-    }
-
-    void OnStageClick()
-    {
-
-        minimapManager.curSelectedStage = index;
-    }
+    public void OnCellClicked() => PingUiOn();
 }

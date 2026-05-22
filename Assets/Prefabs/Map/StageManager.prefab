@@ -56,6 +56,7 @@ MonoBehaviour:
   - {fileID: 2619334703123621966, guid: 1ce88f6b9d73df64c865d495d578e115, type: 3}
   - {fileID: 2619334703123621966, guid: b7ab20b399a8d9c4ab8d81a44ad3c795, type: 3}
   - {fileID: 2619334703123621966, guid: 27879d518414c104cb9e48db9a870536, type: 3}
+  - {fileID: 2619334703123621966, guid: 3da9d2620cae6b24293b1f6eee5079aa, type: 3}
   BossStage: {fileID: 2619334703123621966, guid: dfbf6f4a30574c24ea5345b27d3913f9, type: 3}
   spacing: 40
   TutorialStage:

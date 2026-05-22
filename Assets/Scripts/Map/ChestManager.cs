@@ -12,10 +12,11 @@ public class ChestManager : MonoBehaviour
 
     [SerializeField] private GameObject[] itemObjects;
     private bool itemSpawn;
-
+    private GameObject fKey;
     private void Start()
     {
         inventory = UIManager.Instance.inventory;
+        fKey = transform.GetChild(0).gameObject;
 
         if (inventory == null)
         {
@@ -85,6 +86,7 @@ public class ChestManager : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             isChestActive = true;
+            fKey.SetActive(true);
         }
     }
 
@@ -93,6 +95,7 @@ public class ChestManager : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             isChestActive = false;
+            fKey.SetActive(false);
         }
     }
 }

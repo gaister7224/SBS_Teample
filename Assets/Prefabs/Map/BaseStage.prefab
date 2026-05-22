@@ -1721,7 +1721,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2652078531936724205}
   - component: {fileID: 3809560422600107664}
-  - component: {fileID: 6379256313729913447}
   m_Layer: 0
   m_Name: PortalManager
   m_TagString: PortalManager
@@ -1778,27 +1777,6 @@ MonoBehaviour:
   PortalEffectImage: {fileID: 0}
   CinemachineCamera: {fileID: 0}
   PlayerTransform: {fileID: 0}
---- !u!65 &6379256313729913447
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9095803923124381983}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 29, y: 20, z: 29}
-  m_Center: {x: 0, y: 10, z: 0}
 --- !u!1001 &255803404922264795
 PrefabInstance:
   m_ObjectHideFlags: 0

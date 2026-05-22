@@ -27,13 +27,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 83441256743603720}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.3, y: -15.8, z: 0}
+  m_LocalRotation: {x: 0.31682476, y: -0, z: -0, w: 0.9484841}
+  m_LocalPosition: {x: 0.3, y: -10.5, z: -4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1371917018998881616}
-  m_LocalEulerAnglesHint: {x: 50, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 36.942, y: 0, z: 0}
 --- !u!212 &7133356876189250769
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -180,8 +180,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5721302673860917450}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.42261827, y: -0, z: -0, w: 0.9063079}
-  m_LocalPosition: {x: 0.1, y: -1.3999999, z: 8.3}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -1.3999999, z: 2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -601,7 +601,6 @@ MonoBehaviour:
   curDEF: 1
   maxDEF: 1
   passiveDEF: 1
-  maxActCount: 0
   curActCount: 0
   skillPoint: 0
   level: 0
@@ -611,11 +610,13 @@ MonoBehaviour:
   bloodHeal: 0
   barrier: 0
   stampPassiveSKill3: 0
+  noDamage: 0
   swordSkillHitPrefab: {fileID: 469050128238217650, guid: 83b9e89c57522b34a8dd431fdde2e656, type: 3}
   bowSkillHitPrefab: {fileID: 7859502612978089624, guid: 6e6e728ebe3f6414ebecb78aabf7113f, type: 3}
   stampSkillHitPrefab: {fileID: 1652478156258771428, guid: 6173bdd4d2f4b8043ad31c472e7e3120, type: 3}
   currentState: 0
   ani: {fileID: 9004656422406603952}
+  actCountMin: 0
 --- !u!114 &5343555876010511114
 MonoBehaviour:
   m_ObjectHideFlags: 0

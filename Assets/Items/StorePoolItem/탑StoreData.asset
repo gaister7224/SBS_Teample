@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbfd13451843bc54a82efb9fb3a3346b, type: 3}
+  m_Name: "\uD0D1StoreData"
+  m_EditorClassIdentifier: 
+  itemPools:
+  - gradeName: Gold
+    items:
+    - {fileID: 11400000, guid: b366a2c225fb47c4182881bd97ff2e6c, type: 2}
+    dropChance: 10
+  - gradeName: Weapon
+    items:
+    - {fileID: 11400000, guid: 4d1f452f65b24534080de2495cb553ef, type: 2}
+    - {fileID: 11400000, guid: a2b85f16be28d22479e22329c1660028, type: 2}
+    - {fileID: 11400000, guid: dec48c081022ef84fa0b963c7e005f10, type: 2}
+    dropChance: 10
+  - gradeName: Head
+    items:
+    - {fileID: 11400000, guid: 97c9371e1f8ce55468993684e822fe74, type: 2}
+    dropChance: 15
+  - gradeName: Armor
+    items:
+    - {fileID: 11400000, guid: a37c8c616ff1d144cbd6ae513a9002d8, type: 2}
+    dropChance: 15
+  - gradeName: Bottoms
+    items:
+    - {fileID: 11400000, guid: 9f29d6f239537a9428f986e7be54b606, type: 2}
+    dropChance: 15
+  - gradeName: Pendent
+    items:
+    - {fileID: 11400000, guid: 76918d98960f1f446bd726453277cb1c, type: 2}
+    dropChance: 5
+  - gradeName: Ring
+    items:
+    - {fileID: 11400000, guid: 8136647c520c33e4c966ce49e63dd4cd, type: 2}
+    dropChance: 5
+  - gradeName: Amulet
+    items:
+    - {fileID: 11400000, guid: 5c64a538711bc084b8ea416c162bc6f0, type: 2}
+    dropChance: 5
+  - gradeName: Glove
+    items:
+    - {fileID: 11400000, guid: 3fffc202cb860c14cbf872fdf01a5c51, type: 2}
+    dropChance: 5
+  - gradeName: Shoes
+    items:
+    - {fileID: 11400000, guid: 89cd81458a5fa024fa86de6fa9556718, type: 2}
+    dropChance: 15

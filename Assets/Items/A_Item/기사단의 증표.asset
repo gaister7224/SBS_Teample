@@ -33,6 +33,5 @@ MonoBehaviour:
   hpBuff: 10
   mpBuff: 2
   skillCoolTimeBuff: 5
-  minGold: 0
-  maxGold: 0
-  actCount: 0
+  minGold: 1500
+  maxGold: 2000

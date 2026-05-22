@@ -44,16 +44,20 @@ public class StoreManager : MonoBehaviour
         }
     }
 
+    [ContextMenu("Refresh VillageStore")]
     public void VillageStoreReset()
     {
         GameManager.instance.canBuyCount.Clear();
         int count = 0;
         foreach (var slot in villageStoreSlots)
         {
-            slot.SetUpSlot(villageStoreItems[count], 1);
-            slot.slotNumber = count;
-            GameManager.instance.canBuyCount.Add(slot.maxCanBuyCount);
-            count++;
+            if (slot.resetPossible)
+            {
+                slot.SetUpSlot(villageStoreItems[count], 1);
+                slot.slotNumber = count;
+                GameManager.instance.canBuyCount.Add(slot.maxCanBuyCount);
+                count++;
+            }
         }
     }
 

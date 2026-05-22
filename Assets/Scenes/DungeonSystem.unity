@@ -966,11 +966,11 @@ Rigidbody:
     serializedVersion: 2
     m_Bits: 0
   m_ImplicitCom: 1
-  m_ImplicitTensor: 0
+  m_ImplicitTensor: 1
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 14
+  m_Constraints: 0
   m_CollisionDetection: 0
 --- !u!114 &1676313212
 MonoBehaviour:
@@ -1384,71 +1384,64 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1990583556}
   m_CullTransparentMesh: 1
---- !u!1001 &2989357307476369315
-PrefabInstance:
+--- !u!1 &2140156755
+GameObject:
   m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2140156756}
+  - component: {fileID: 2140156757}
+  m_Layer: 0
+  m_Name: StageManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2140156756
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2140156755}
   serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 5359780282930166228, guid: 390b7239dcdd8f345883e4f1b77a06ac, type: 3}
-      propertyPath: direction
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 5359780282930166228, guid: 390b7239dcdd8f345883e4f1b77a06ac, type: 3}
-      propertyPath: portalManager
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 7406889319076159530, guid: 390b7239dcdd8f345883e4f1b77a06ac, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7406889319076159530, guid: 390b7239dcdd8f345883e4f1b77a06ac, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7406889319076159530, guid: 390b7239dcdd8f345883e4f1b77a06ac, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7406889319076159530, guid: 390b7239dcdd8f345883e4f1b77a06ac, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7406889319076159530, guid: 390b7239dcdd8f345883e4f1b77a06ac, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7406889319076159530, guid: 390b7239dcdd8f345883e4f1b77a06ac, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7406889319076159530, guid: 390b7239dcdd8f345883e4f1b77a06ac, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7406889319076159530, guid: 390b7239dcdd8f345883e4f1b77a06ac, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7406889319076159530, guid: 390b7239dcdd8f345883e4f1b77a06ac, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7406889319076159530, guid: 390b7239dcdd8f345883e4f1b77a06ac, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8984379039852005066, guid: 390b7239dcdd8f345883e4f1b77a06ac, type: 3}
-      propertyPath: m_Name
-      value: RandomPortal
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 390b7239dcdd8f345883e4f1b77a06ac, type: 3}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2140156757
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2140156755}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 784d08b0841951d45a98785d2257f2cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  monsterSpawnManager: {fileID: 0}
+  Tutorial: 0
+  stage:
+  - {fileID: 2619334703123621966, guid: e616edc21ac447144baad3ba5f60526e, type: 3}
+  BossStage: {fileID: 0}
+  spacing: 40
+  StageCount: 7
+  surroundStagePositions: []
+  curStagePos: {x: 0, y: 0}
+  curStageType: 0
+  curStageCleared: 0
+  curStageSpawnPrefabs: []
+  Player: {fileID: 0}
+  activePortal: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

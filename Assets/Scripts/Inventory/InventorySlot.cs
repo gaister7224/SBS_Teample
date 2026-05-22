@@ -30,6 +30,8 @@ public class InventorySlot : MonoBehaviour, IPointerClickHandler, IPointerEnterH
     [SerializeField] private TextMeshProUGUI explanText;
     [SerializeField] private TextMeshProUGUI nameText;
 
+    [SerializeField] private Animator ani;
+
     private InventoryMain inventory;
     private StorageToInventory storageToInventory;
 
@@ -134,7 +136,14 @@ public class InventorySlot : MonoBehaviour, IPointerClickHandler, IPointerEnterH
         }
         else if (item != null && item.Type == ItemType.ArtiFact && eventData.clickCount == 2)
         {
-            storageToInventory.ArtiFactInstall(this);
+            if (DayManager.instance.curDay == Day.day)
+            {
+                storageToInventory.ArtiFactInstall(this);
+            }
+            else if(DayManager.instance.curDay == Day.night)
+            {
+                ani.SetTrigger("OnClick");
+            }
         }
     }
 

@@ -16,6 +16,9 @@ MonoBehaviour:
   skillItemType: 65536
   itemName: "\uB9C8\uB825 \uD3ED\uC8FC"
   itemImage: {fileID: 21300000, guid: cf8b902bdfe108046aa7e2a74af2a882, type: 3}
-  explanation: stamp
+  explanation: "20\uCD08\uB3D9\uC548 \uAE30\uBCF8 \uACF5\uACA9 \uB300\uAE30\uC2DC\uAC04\uC774
+    40%\uAC10\uC18C\uD558\uACE0, \uD22C\uC0AC\uCCB4\uC18D\uB3C4\uAC00 30%\uC99D\uAC00\uD558\uACE0
+    \uAE30\uBCF8\uACF5\uACA9 \uD3ED\uBC1C \uBC18\uACBD\uC774 \uC99D\uAC00\uD558\uB294
+    \uBC84\uD504\uD615 \uC2A4\uD0AC\uC774\uB2E4."
   number: 6
   coolTime: 40

@@ -135,22 +135,18 @@ public class PortalManager : MonoBehaviour
         if (PortalObject[0] != null && !PortalObject[0].GetComponent<PortalSystem>().toBoss)
         {
             PortalObject[0].SetActive(north && isPortalActive);
-            PortalObject[0].SetActive(isPortalActive);
         }
         if (PortalObject[1] != null && !PortalObject[1].GetComponent<PortalSystem>().toBoss)
         {
             PortalObject[1].SetActive(south && isPortalActive);
-            PortalObject[1].SetActive(isPortalActive);
         }
         if (PortalObject[2] != null && !PortalObject[2].GetComponent<PortalSystem>().toBoss)
         {
             PortalObject[2].SetActive(west && isPortalActive);
-            PortalObject[2].SetActive(isPortalActive);
         }
         if (PortalObject[3] != null && !PortalObject[3].GetComponent<PortalSystem>().toBoss)
         {
             PortalObject[3].SetActive(east && isPortalActive);
-            PortalObject[3].SetActive(isPortalActive);
         }
     }
 

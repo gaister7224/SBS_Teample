@@ -11,7 +11,7 @@ public class TrapRemover : MonoBehaviour
 
     void Update()
     {
-        if (stageManager.curStagePos.x * stageManager.spacing != transform.localPosition.x || stageManager.curStagePos.y * stageManager.spacing != transform.localPosition.y)
+        if (stageManager.curStagePos.x * stageManager.spacing != transform.localPosition.x || stageManager.curStagePos.y * stageManager.spacing != transform.localPosition.z)
         {
             Destroy(gameObject);
         }
