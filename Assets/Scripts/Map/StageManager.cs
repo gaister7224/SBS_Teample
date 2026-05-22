@@ -10,7 +10,8 @@ enum PortalDirection
     Right,
     Clear,
     Random,
-    Return
+    Return,
+    toBoss
 }
 
 public enum StageType
@@ -19,29 +20,36 @@ public enum StageType
     Difficult,
     Trap,
     SealedStone,
+    BuffStone,
     Treasure,
     Boss,
     Bonfire,
     Shop,
     BuffStatue,
     RandomPortal,
-    BackPortal,
+    ReturnPortal,
+    Store,
     None
 }
 
 public class StageManager : MonoBehaviour
 {
     public static StageManager instance;
+    [Space(10f)]
     public MonsterSpawnManager monsterSpawnManager;
 
     public bool Tutorial;
+    [Space(10f)]
 
 
     public List<GameObject> stage = new List<GameObject>();
     public GameObject BossStage;
     public float spacing = 40f;
+    public List<GameObject> TutorialStage = new List<GameObject>();
+    [Space(10f)]
 
     public int StageCount = 7;
+    public int MaxSealedStoneCount = 3;
 
     public HashSet<Vector2Int> StagePositions = new HashSet<Vector2Int>();
     public List<Vector2Int> surroundStagePositions = new List<Vector2Int>();
@@ -50,10 +58,18 @@ public class StageManager : MonoBehaviour
     public StageType curStageType;
     public bool curStageCleared;
     public List<GameObject> curStageSpawnPrefabs = new List<GameObject>();
+    [Space(10f)]
+    public bool curFloorCleared = true;
+    public int LeftFloorCount = 1;
+    public int curFloor;
+
+    [Space(10f)]
+    public int SealedStoneLeft;
 
     public GameObject Player;
 
     public bool activePortal;
+
 
     private void Awake()
     {
@@ -64,44 +80,129 @@ public class StageManager : MonoBehaviour
 
     void Start()
     {
-        if (!Tutorial)
-        {
-            StartCoroutine(StageCreate());
-        }
+        curFloorCleared = true;
     }
 
     void Update()
     {
         //StartCoroutine(SurroundStage());
-    }
+        //if (curFloorCleared && !Tutorial)
+        //{
+        //    curFloorCleared = false;
+        //    StagePositions.Clear();
 
-    IEnumerator SurroundStage()
-    {
-        for (int i = 0; i < 9; i++)
+        //    for (int i = transform.childCount - 1; i >= 0; i--)
+        //    {
+        //        if (transform.GetChild(i).name.Contains("Stage"))
+        //        {
+        //            Destroy(transform.GetChild(i).gameObject);
+        //        }
+        //    }
+
+        //    if (LeftFloorCount > 0)
+        //    {
+        //        curFloor++;
+        //        LeftFloorCount--;
+        //        StartCoroutine(StageCreate());
+        //    }
+        //    else
+        //    {
+        //        //던전 클리어
+        //    }
+        //}
+        //else if (curFloorCleared && Tutorial && TutorialStage.Count > 0)
+        //{
+        //    curFloorCleared = false; 
+            
+        //    for (int i = transform.childCount - 1; i >= 0; i--)
+        //    {
+        //        if (transform.GetChild(i).name.Contains("Stage"))
+        //        {
+        //            Destroy(transform.GetChild(i).gameObject);
+        //        }
+        //    }
+
+        //    if (LeftFloorCount == 2f)
+        //    {
+        //        curFloor++;
+        //        LeftFloorCount--;
+        //        Instantiate(TutorialStage[0], transform.position, Quaternion.identity, transform);
+        //    }
+        //    else if (LeftFloorCount == 1f)
+        //    {
+        //        curFloor++;
+        //        LeftFloorCount--;
+        //        Instantiate(TutorialStage[1], transform.position, Quaternion.identity, transform);
+        //    }
+        //    else if (LeftFloorCount == 0f)
+        //    {
+        //        //튜토리얼 클리어
+        //    }
+        //}
+
+        //IEnumerator SurroundStage()
+        //{
+        //    for (int i = 0; i < 9; i++)
+        //    {
+        //        int x = curStagePos.x + (i % 3 - 1);
+        //        int z = curStagePos.y + (i / 3 - 1);
+        //        Vector2Int pos = new Vector2Int(x, z);
+        //        if (StagePositions.Contains(pos))
+        //        {
+        //            surroundStagePositions.Add(pos);
+        //        }
+        //    }
+
+        //    yield return null;
+        //}
+
+        IEnumerator StageCreate()
         {
-            int x = curStagePos.x + (i % 3 - 1);
-            int z = curStagePos.y + (i / 3 - 1);
-            Vector2Int pos = new Vector2Int(x, z);
-            if (StagePositions.Contains(pos))
+            int countHalf = (StageCount % 2 == 1) ? StageCount / 2 + 1 : StageCount / 2;
+            HashSet<Vector2Int> sealedStonePositions = new HashSet<Vector2Int>();
+            for (int i = 0; i < MaxSealedStoneCount; i++)
             {
-                surroundStagePositions.Add(pos);
-            }
-        }
-
-        yield return null;
-    }
-
-    IEnumerator StageCreate()
-    {
-        int countHalf = (StageCount % 2 == 1) ? StageCount / 2 + 1 : StageCount / 2;
-
-        for (int x = -countHalf; x < StageCount - countHalf + 2; x++)
-        {
-            for (int z = -countHalf; z < StageCount - countHalf + 2; z++)
-            {
-                if (x >= -1 && x <= 1 && z >= -1 && z <= 1)
+                int x, z;
+                do
                 {
-                    if (x == 0 && z == 0)
+                    x = Random.Range(-countHalf, StageCount - countHalf + 2);
+                    z = Random.Range(-countHalf, StageCount - countHalf + 2);
+                } while ((x >= -1 && x <= 1 && z >= -1 && z <= 1) || sealedStonePositions.Contains(new Vector2Int(x, z)));
+                sealedStonePositions.Add(new Vector2Int(x, z));
+            }
+
+            HashSet<Vector2Int> trapStagePositions = new HashSet<Vector2Int>();
+            for (int i = 0; i < Mathf.FloorToInt((Mathf.Pow(StageCount + 2, 2) - 9) / 10f); i++)
+            {
+                int x, z;
+                do
+                {
+                    x = Random.Range(-countHalf, StageCount - countHalf + 2);
+                    z = Random.Range(-countHalf, StageCount - countHalf + 2);
+                } while ((x >= -1 && x <= 1 && z >= -1 && z <= 1) || trapStagePositions.Contains(new Vector2Int(x, z)));
+                trapStagePositions.Add(new Vector2Int(x, z));
+            }
+
+            for (int x = -countHalf; x < StageCount - countHalf + 2; x++)
+            {
+                for (int z = -countHalf; z < StageCount - countHalf + 2; z++)
+                {
+                    if (x >= -1 && x <= 1 && z >= -1 && z <= 1)
+                    {
+                        if (x == 0 && z == 0)
+                        {
+                            Vector3 spawnPos = new Vector3
+                            (
+                                x * spacing,
+                                0f,
+                                z * spacing
+                            );
+
+                            Instantiate(BossStage, transform.localPosition, Quaternion.identity, transform);
+                            StagePositions.Add(new Vector2Int(x, z));
+                        }
+                    }
+                    else if (x == -countHalf && z == -countHalf)
                     {
                         Vector3 spawnPos = new Vector3
                         (
@@ -110,37 +211,47 @@ public class StageManager : MonoBehaviour
                             z * spacing
                         );
 
-                        Instantiate(BossStage, transform.localPosition, Quaternion.identity, transform);
+                        Instantiate(stage[0], spawnPos, Quaternion.identity, transform);
                         StagePositions.Add(new Vector2Int(x, z));
                     }
-                }
-                else if (x == -countHalf && z == -countHalf)
-                {
-                    Vector3 spawnPos = new Vector3
-                    (
-                        x * spacing,
-                        0f,
-                        z * spacing
-                    );
+                    else if (sealedStonePositions.Contains(new Vector2Int(x, z)))
+                    {
+                        Vector3 spawnPos = new Vector3
+                        (
+                            x * spacing,
+                            0f,
+                            z * spacing
+                        );
+                        StagePositions.Add(new Vector2Int(x, z));
+                        Instantiate(stage[1], spawnPos, Quaternion.identity, transform);
+                    }
+                    else if (trapStagePositions.Contains(new Vector2Int(x, z)))
+                    {
+                        Vector3 spawnPos = new Vector3
+                        (
+                            x * spacing,
+                            0f,
+                            z * spacing
+                        );
+                        StagePositions.Add(new Vector2Int(x, z));
+                        Instantiate(stage[2], spawnPos, Quaternion.identity, transform);
+                    }
+                    else
+                    {
+                        Vector3 spawnPos = new Vector3
+                        (
+                            x * spacing,
+                            0f,
+                            z * spacing
+                        );
+                        StagePositions.Add(new Vector2Int(x, z));
 
-                    Instantiate(stage[0], spawnPos, Quaternion.identity, transform);
-                    StagePositions.Add(new Vector2Int(x, z));
+                        Instantiate(stage[Random.Range(3, stage.Count)], spawnPos, Quaternion.identity, transform);
+                    }
                 }
-                else
-                {
-                    Vector3 spawnPos = new Vector3
-                    (
-                        x * spacing,
-                        0f,
-                        z * spacing
-                    );
-                    StagePositions.Add(new Vector2Int(x, z));
-                    Instantiate(stage[Random.Range(0, stage.Count)], spawnPos, Quaternion.identity, transform);
-                }
-
             }
-        }
 
-        yield return null;
+            yield return null;
+        }
     }
 }

@@ -18,6 +18,7 @@ public class UIManager : MonoBehaviour
     public Image hpBackground;
     public Image hpMask;
     public TextMeshProUGUI hpText;
+    public GameObject barrierHpText;
     [Header("MP관련 오브젝트")]
     public Image mpBackground;
     public Image mpMask;

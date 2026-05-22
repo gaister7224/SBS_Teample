@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class SplitFireSkill : MonoBehaviour
@@ -44,7 +45,7 @@ public class SplitFireSkill : MonoBehaviour
     {
         if (other.CompareTag("Enemy") || other.CompareTag("Boss"))
         {
-            //³Ë¹éÃß°¡
+            //ï¿½Ë¹ï¿½ï¿½ß°ï¿½
             enemyHitCount++;
             if (enemyHitCount == 1)
             {
@@ -52,16 +53,20 @@ public class SplitFireSkill : MonoBehaviour
                 playerProfile.BowSkillHit(hitPoint);
                 if (other.CompareTag("Boss"))
                 {
-                    Debug.Log("½ºÅ³ : ºÐÇÒ »ç°Ý" + other.gameObject.name + "À»(¸¦) °ø°ÝÇß½À´Ï´Ù!" + "damage = " + damage);
+                    Debug.Log("ï¿½ï¿½Å³ : ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½" + other.gameObject.name + "ï¿½ï¿½(ï¿½ï¿½) ï¿½ï¿½ï¿½ï¿½ï¿½ß½ï¿½ï¿½Ï´ï¿½!" + "damage = " + damage);
                     other.gameObject.GetComponent<BossStatus>().GetDamage(damage);
                 }
                 else if (other.CompareTag("Enemy"))
                 {
-                    Debug.Log("½ºÅ³ : ºÐÇÒ »ç°Ý" + other.gameObject.name + "À»(¸¦) °ø°ÝÇß½À´Ï´Ù!" + "damage = " + damage);
+                    Debug.Log("ï¿½ï¿½Å³ : ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½" + other.gameObject.name + "ï¿½ï¿½(ï¿½ï¿½) ï¿½ï¿½ï¿½ï¿½ï¿½ß½ï¿½ï¿½Ï´ï¿½!" + "damage = " + damage);
                     if (other.gameObject.GetComponent<MonsterBehavior>() != null)
                         other.gameObject.GetComponent<MonsterBehavior>().TakeDamage(damage);
                     if (other.gameObject.GetComponent<SealStoneManager>() != null)
                         other.gameObject.GetComponent<SealStoneManager>().Damage(damage);
+                    if (other.gameObject.GetComponent<SealedStone>() != null)
+                        other.gameObject.GetComponent<SealedStone>().TakeDamage(damage);
+
+                    StartCoroutine(NuckBack(other.GetComponent<Rigidbody>(), other));
                 }
                 if (playerProfile.BloodHeal)
                 {
@@ -74,12 +79,13 @@ public class SplitFireSkill : MonoBehaviour
                 playerProfile.BowSkillHit(hitPoint);
                 if (other.CompareTag("Boss"))
                 {
-                    Debug.Log("½ºÅ³ : ºÐÇÒ »ç°Ý" + other.gameObject.name + "À»(¸¦) °ø°ÝÇß½À´Ï´Ù!" + "damage = " + damage);
+                    Debug.Log("ï¿½ï¿½Å³ : ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½" + other.gameObject.name + "ï¿½ï¿½(ï¿½ï¿½) ï¿½ï¿½ï¿½ï¿½ï¿½ß½ï¿½ï¿½Ï´ï¿½!" + "damage = " + damage);
                     other.gameObject.GetComponent<BossStatus>().GetDamage(damage);
                 }
                 else if (other.CompareTag("Enemy"))
                 {
-                    Debug.Log("½ºÅ³ : ºÐÇÒ »ç°Ý" + other.gameObject.name + "À»(¸¦) °ø°ÝÇß½À´Ï´Ù!" + "damage = " + damage);
+                    Debug.Log("ï¿½ï¿½Å³ : ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½" + other.gameObject.name + "ï¿½ï¿½(ï¿½ï¿½) ï¿½ï¿½ï¿½ï¿½ï¿½ß½ï¿½ï¿½Ï´ï¿½!" + "damage = " + damage);
+                    StartCoroutine(NuckBack(other.GetComponent<Rigidbody>(), other));
                 }
                 if (playerProfile.BloodHeal)
                 {
@@ -92,5 +98,15 @@ public class SplitFireSkill : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+
+    IEnumerator NuckBack(Rigidbody enemyRb, Collider enemy)
+    {
+        Debug.Log("aa");
+        enemyRb.linearVelocity = Vector3.zero;
+        Vector3 dist = enemy.transform.position - transform.position;
+        enemyRb.AddForce(dist * 4f, ForceMode.Impulse);
+        yield return new WaitForSeconds(0.5f);
+        enemyRb.linearVelocity = Vector3.zero;
     }
 }

@@ -59,6 +59,8 @@ public class SelfBombSkill : MonoBehaviour
                     enemy.gameObject.GetComponent<MonsterBehavior>().TakeDamage(damage);
                 if (enemy.gameObject.GetComponent<SealStoneManager>() != null)
                     enemy.gameObject.GetComponent<SealStoneManager>().Damage(damage);
+                if (enemy.gameObject.GetComponent<SealedStone>() != null)
+                    enemy.gameObject.GetComponent<SealedStone>().TakeDamage(damage);
             }
 
             if (playerProfile.BloodHeal)

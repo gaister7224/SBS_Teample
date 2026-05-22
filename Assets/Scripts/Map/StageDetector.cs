@@ -10,18 +10,12 @@ public class StageDetector : MonoBehaviour
 
     private void Awake()
     {
+        stageManager = GameObject.Find("StageManager").GetComponent<StageManager>();
         portalManager = GetComponentInParent<PortalManager>();
-        stageManager = StageManager.instance;
-        if (stageManager == null)
-        {
-            Debug.Log("awake : stageManager ����");
-        }
     }
 
     void Start()
     {
-        
-        
 
         //StartCoroutine(StageChangeCoroutine());
     }
@@ -30,36 +24,55 @@ public class StageDetector : MonoBehaviour
     {
     }
 
+    //private void OnTriggerEnter(Collider other)
+    //{
+    //    if (other.CompareTag("Player"))
+    //    {
+    //        StartCoroutine(StageChangeCoroutine());
+    //        var confinder = portalManager.CinemachineCamera.GetComponent<CinemachineConfiner3D>();
+
+    //        confinder.BoundingVolume = gameObject.GetComponent<Collider>();
+
+    //        stageManager.curStagePos = new Vector2Int((int)(transform.position.x / stageManager.spacing), (int)(transform.position.z / stageManager.spacing));
+    //        stageManager.curStageType = portalManager.stageType;
+    //        if (stageManager.monsterSpawnManager != null)
+    //            stageManager.monsterSpawnManager.isMonsterSpawn = true;
+    //        //stageManager.activePortal = false;
+    //        stageManager.curStageCleared = portalManager.isCleared;
+    //        stageManager.curStageSpawnPrefabs = portalManager.SpawnPrefabs != null
+    //            ? new List<GameObject>(portalManager.SpawnPrefabs)
+    //            : new List<GameObject>();
+    //        stageManager.surroundStagePositions.Clear();
+    //        for (int i = 0; i < 9; i++)
+    //        {
+    //            int x = stageManager.curStagePos.x + (i % 3 - 1);
+    //            int z = stageManager.curStagePos.y + (i / 3 - 1);
+    //            Vector2Int pos = new Vector2Int(x, z);
+    //            if (stageManager.StagePositions.Contains(pos))
+    //            {
+    //                stageManager.surroundStagePositions.Add(pos);
+    //            }
+    //        }
+
+    //        PlayerLocomotion.GetProfile(other)?.ResetLocomotion();
+    //        NotifyDungeonMap(stageManager);
+    //    }
+    //}
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            Debug.Log(stageManager);
-            //StartCoroutine(StageChangeCoroutine());
-            if (portalManager == null)
-            {
-                Debug.Log("potalManager ����");
-            }
-            if(portalManager.CinemachineCamera == null)
-            {
-                Debug.Log("potalManager.CinemachineCamera ����");
-            }
-            if (portalManager.CinemachineCamera != null)
-            {
-                var confinder = portalManager.CinemachineCamera.GetComponent<CinemachineConfiner3D>();
-                if (confinder != null)
-                    confinder.BoundingVolume = gameObject.GetComponent<Collider>();
-            }
+            StartCoroutine(StageChangeCoroutine());
+            var confinder = portalManager.CinemachineCamera.GetComponent<CinemachineConfiner3D>();
+            confinder.BoundingVolume = gameObject.GetComponent<Collider>();
 
             stageManager.curStagePos = new Vector2Int((int)(transform.position.x / stageManager.spacing), (int)(transform.position.z / stageManager.spacing));
             stageManager.curStageType = portalManager.stageType;
-            if (stageManager.monsterSpawnManager != null)
-                stageManager.monsterSpawnManager.isMonsterSpawn = true;
+            stageManager.monsterSpawnManager.isMonsterSpawn = true;
             stageManager.activePortal = false;
             stageManager.curStageCleared = portalManager.isCleared;
-            stageManager.curStageSpawnPrefabs = portalManager.SpawnPrefabs != null
-                ? new List<GameObject>(portalManager.SpawnPrefabs)
-                : new List<GameObject>();
+            stageManager.curStageSpawnPrefabs = portalManager.SpawnPrefabs;
             stageManager.surroundStagePositions.Clear();
             for (int i = 0; i < 9; i++)
             {
@@ -71,9 +84,6 @@ public class StageDetector : MonoBehaviour
                     stageManager.surroundStagePositions.Add(pos);
                 }
             }
-
-            PlayerLocomotion.GetProfile(other)?.ResetLocomotion();
-            NotifyDungeonMap(stageManager);
         }
     }
 

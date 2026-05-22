@@ -11,7 +11,7 @@ public class BreakThroughSkill : MonoBehaviour
     private PlayerAttack playerAttack;
     private PlayerProfile playerProfile;
 
-    private float rushSpeed = 10.0f;
+    private float rushSpeed = 300.0f;
     private float stopDist = 7.0f;
 
     private float damage;
@@ -100,6 +100,8 @@ public class BreakThroughSkill : MonoBehaviour
                 enemy.gameObject.GetComponent<MonsterBehavior>().TakeDamage(damage);
             if (enemy.gameObject.GetComponent<SealStoneManager>() != null)
                 enemy.gameObject.GetComponent<SealStoneManager>().Damage(damage);
+            if (enemy.gameObject.GetComponent<SealedStone>() != null)
+                enemy.gameObject.GetComponent<SealedStone>().TakeDamage(damage);
             StartCoroutine(NuckBack(enemy.GetComponent<Rigidbody>(), enemy));
         }
         if (playerProfile.BloodHeal)

@@ -21,9 +21,9 @@ public class ConcentrationOfBattleSkill : MonoBehaviour
         {
             bool critical = playerProfile.CriticalProbability();
             if (critical)
-                damage = playerProfile.CriticalBuff(playerProfile.ATK(55f));
+                damage = playerProfile.CriticalBuff(playerProfile.BasicATK(55f));
             else
-                damage = playerProfile.ATK(55f);
+                damage = playerProfile.BasicATK(55f);
         }
     }
 
@@ -58,6 +58,8 @@ public class ConcentrationOfBattleSkill : MonoBehaviour
                     other.gameObject.GetComponent<MonsterBehavior>().TakeDamage(damage);
                 if (other.gameObject.GetComponent<SealStoneManager>() != null)
                     other.gameObject.GetComponent<SealStoneManager>().Damage(damage);
+                if (other.gameObject.GetComponent<SealedStone>() != null)
+                    other.gameObject.GetComponent<SealedStone>().TakeDamage(damage);
             }
             if (playerProfile.BloodHeal)
                 playerProfile.BloodHealHp(10, damage);

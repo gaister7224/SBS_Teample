@@ -66,6 +66,8 @@ public class CuttingSwordSkill : MonoBehaviour
                     other.gameObject.GetComponent<MonsterBehavior>().TakeDamage(damage);
                 if (other.gameObject.GetComponent<SealStoneManager>() != null)
                     other.gameObject.GetComponent<SealStoneManager>().Damage(damage);
+                if (other.gameObject.GetComponent<SealedStone>() != null)
+                    other.gameObject.GetComponent<SealedStone>().TakeDamage(damage);
             }
             Vector3 hitPoint = other.ClosestPoint(transform.position);
             Instantiate(hitEffect, hitPoint, Quaternion.identity);

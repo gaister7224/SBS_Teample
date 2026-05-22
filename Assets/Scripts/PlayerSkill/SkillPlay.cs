@@ -53,15 +53,14 @@ public class SkillPlay : MonoBehaviour
 
     private PlayerAttack playerAttack;
     private PlayerProfile playerProfile;
-    private Rigidbody playerRid;
     [SerializeField] private SwordAttackManager swordAttackManager;
+    [SerializeField] private BowSkill3Rush bowSkill3Rush;
 
     private float mpBuffTime;
     private void Start()
     {
         playerAttack = GetComponent<PlayerAttack>();
         playerProfile = GetComponent<PlayerProfile>();
-        playerRid = GetComponent<Rigidbody>();
 
         if (UIManager.Instance == null)
             return;
@@ -304,7 +303,7 @@ public class SkillPlay : MonoBehaviour
                 {
                     int pos = 0;
                     playerProfile.UseMP(1);
-                    StartCoroutine(BowSkill3Rush());
+                    bowSkill3Rush.enabled = true;
                     for (int i = 0; i < 10; i++)
                     {
                         Instantiate(bow3, transform.position, Quaternion.Euler(0, rotation + pos, 0));
@@ -350,6 +349,7 @@ public class SkillPlay : MonoBehaviour
                 break;
             case 3:
                 {
+                    UIManager.Instance.barrierHpText.SetActive(true);
                     Instantiate(stamp3, transform.position, stamp3.transform.rotation);
                 }
                 break;
@@ -413,22 +413,6 @@ public class SkillPlay : MonoBehaviour
         Instantiate(bow2, transform.position, Quaternion.Euler(0, rotation - 45, 0));
     }
 
-    private float rushSpeed = 10;
-    IEnumerator BowSkill3Rush()
-    {
-        yield return new WaitForSeconds(0.2f);
-        playerProfile.moveSpeed = 0;
-        Vector3 rushDir = playerAttack.AttackPos.transform.up;
-        rushDir.y = 0;
-        rushDir.Normalize();
-        playerRid.AddForce(rushDir * rushSpeed
-                    , ForceMode.Impulse);
-        yield return new WaitForSeconds(1.2f);
-        playerRid.linearVelocity = Vector3.zero;
-        playerProfile.ChangeMoveSpeed(1);
-        playerProfile.SkillStart = false;
-    }
-
     IEnumerator BowSkill4Create()
     {
         playerProfile.UseMP(1);
@@ -489,7 +473,7 @@ public class SkillPlay : MonoBehaviour
                 break;
             case 3:
                 {
-                    BowPassiveBuff(0, 200, 0, false, false, 250, true, true);
+                    BowPassiveBuff(0, 200, 0, false, false, 0, true, true);
                 }
                 break;
         }

@@ -20,7 +20,7 @@ public class MonsterBehavior : MonoBehaviour
 
     private void Awake()
     {
-        monsterSpawnManager = MonsterSpawnManager.instance;
+        monsterSpawnManager = GameObject.Find("MonsterSpawnManager").GetComponent<MonsterSpawnManager>();
         MonsterData.CurHP = MonsterData.MaxHP;
         rb = GetComponent<Rigidbody>();
     }
@@ -36,7 +36,7 @@ public class MonsterBehavior : MonoBehaviour
         {
             if (!itemSpawn)
             {
-                monsterSpawnManager.MonsterDead(this.gameObject);
+                monsterSpawnManager.MonsterDead(gameObject);
                 itemSpawn = true;
             }
             Invoke("ObjDestroy", 0.5f);

@@ -35,7 +35,7 @@ public class ManaStormSkill : MonoBehaviour
 
     void CheckAttack()
     {
-        playerProfile.ShakeCamera(0.2f, 3.0f, 15.0f);
+        playerProfile.ShakeCamera(0.2f, 1.0f, 15.0f);
         Vector3 finalCenter = (transform.position)
                           + (transform.forward * center.z)
                           + (transform.up * center.y) + (transform.right * center.x);
@@ -60,6 +60,8 @@ public class ManaStormSkill : MonoBehaviour
                     enemy.gameObject.GetComponent<MonsterBehavior>().TakeDamage(damage);
                 if (enemy.gameObject.GetComponent<SealStoneManager>() != null)
                     enemy.gameObject.GetComponent<SealStoneManager>().Damage(damage);
+                if (enemy.gameObject.GetComponent<SealedStone>() != null)
+                    enemy.gameObject.GetComponent<SealedStone>().TakeDamage(damage);
             }
             //²ø¾î´ç±â±â
             Vector3 dist = enemy.transform.position - transform.position;

@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c9f5b303f09da94e8db8e9ef7a24760, type: 3}
+  m_Name: "\uC0AC\uB9C9 2F"
+  m_EditorClassIdentifier: 
+  dungeonNumber: 5
+  dungeonName: "\uC0AC\uB9C9 2F"
+  mapPrefab: {fileID: 0}
+  portalPrefab: {fileID: 0}
+  spawnOffset: {x: 300, y: 0, z: 2000}

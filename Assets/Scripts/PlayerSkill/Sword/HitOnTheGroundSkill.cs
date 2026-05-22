@@ -71,6 +71,8 @@ public class HitOnTheGroundSkill : MonoBehaviour
                         enemy.gameObject.GetComponent<MonsterBehavior>().TakeDamage(damage1);
                     if (enemy.gameObject.GetComponent<SealStoneManager>() != null)
                         enemy.gameObject.GetComponent<SealStoneManager>().Damage(damage1);
+                    if (enemy.gameObject.GetComponent<SealedStone>() != null)
+                        enemy.gameObject.GetComponent<SealedStone>().TakeDamage(damage1);
                 }
                 if (playerProfile.BloodHeal)
                     playerProfile.BloodHealHp(10, damage1);
@@ -100,6 +102,9 @@ public class HitOnTheGroundSkill : MonoBehaviour
                 enemy.gameObject.GetComponent<MonsterBehavior>().TakeDamage(damage2);
             if (enemy.gameObject.GetComponent<SealStoneManager>() != null)
                 enemy.gameObject.GetComponent<SealStoneManager>().Damage(damage2);
+            if (enemy.gameObject.GetComponent<SealedStone>() != null)
+                enemy.gameObject.GetComponent<SealedStone>().TakeDamage(damage2);
+
             //³Ë¹é
             enemyRb.linearVelocity = Vector3.zero;
             Vector3 dist = enemy.transform.position - transform.position;

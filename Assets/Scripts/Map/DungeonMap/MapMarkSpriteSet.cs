@@ -22,7 +22,7 @@ public class MapMarkSpriteSet : ScriptableObject
             DungeonMapMarkType.Shop => shop,
             DungeonMapMarkType.Bonfire => bonfire,
             DungeonMapMarkType.BuffStatue => buffStatue,
-            DungeonMapMarkType.BackPortal => backPortal,
+            DungeonMapMarkType.ReturnPortal => backPortal,
             DungeonMapMarkType.RandomPortal => randomPortal != null ? randomPortal : backPortal,
             _ => null
         };

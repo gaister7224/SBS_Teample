@@ -37,6 +37,8 @@ public class Meteo : MonoBehaviour
                     other.gameObject.GetComponent<MonsterBehavior>().TakeDamage(damage);
                 if (other.gameObject.GetComponent<SealStoneManager>() != null)
                     other.gameObject.GetComponent<SealStoneManager>().Damage(damage);
+                if (other.gameObject.GetComponent<SealedStone>() != null)
+                    other.gameObject.GetComponent<SealedStone>().TakeDamage(damage);
                 //기절상태 추가
             }
             playerProfile.SkillStart = false;

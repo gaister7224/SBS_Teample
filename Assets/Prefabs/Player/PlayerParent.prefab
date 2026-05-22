@@ -295,6 +295,7 @@ GameObject:
   - component: {fileID: 5343555876010511114}
   - component: {fileID: 3296323806307052892}
   - component: {fileID: 7810449380809779675}
+  - component: {fileID: 9125818116699637040}
   m_Layer: 8
   m_Name: PlayerParent
   m_TagString: Player
@@ -656,6 +657,7 @@ MonoBehaviour:
   stamp5: {fileID: 4765357629799751588, guid: 9dbd3597868bffb4bb24124d431c7654, type: 3}
   stamp6: {fileID: 8843407102932007515, guid: 4cec57bb4cffde04295e0bb322576ddd, type: 3}
   swordAttackManager: {fileID: 5961063175730277220, guid: fd5423290cc9bbd4690359a1784dc7db, type: 3}
+  bowSkill3Rush: {fileID: 9125818116699637040}
 --- !u!114 &3296323806307052892
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -688,6 +690,18 @@ MonoBehaviour:
   raisedHeight: 12
   smoothSpeed: 3
   detectionRadius: 5
+--- !u!114 &9125818116699637040
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6079222889359566662}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 736e440eecb9caf4eaddc89daada8ab9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6453711728712729560
 GameObject:
   m_ObjectHideFlags: 0

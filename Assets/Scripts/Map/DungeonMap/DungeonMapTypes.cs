@@ -8,7 +8,7 @@ public enum DungeonMapMarkType
     Shop,
     Bonfire,
     BuffStatue,
-    BackPortal,
+    ReturnPortal,
     RandomPortal
 }
 
@@ -36,8 +36,8 @@ public static class DungeonMapTypeMapping
             case StageType.BuffStatue:
                 markType = DungeonMapMarkType.BuffStatue;
                 return true;
-            case StageType.BackPortal:
-                markType = DungeonMapMarkType.BackPortal;
+            case StageType.ReturnPortal:
+                markType = DungeonMapMarkType.ReturnPortal;
                 return true;
             case StageType.RandomPortal:
                 markType = DungeonMapMarkType.RandomPortal;
