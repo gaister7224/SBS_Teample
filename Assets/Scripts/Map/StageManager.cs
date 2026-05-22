@@ -68,6 +68,8 @@ public class StageManager : MonoBehaviour
 
     public bool activePortal;
 
+    public GameObject StageParent;
+
 
     private void Awake()
     {
@@ -185,7 +187,7 @@ public class StageManager : MonoBehaviour
                                 z * spacing
                             );
 
-                            Instantiate(BossStage, transform.localPosition, Quaternion.identity, transform);
+                            Instantiate(BossStage, transform.localPosition, Quaternion.identity, StageParent.transform);
                             StagePositions.Add(new Vector2Int(x, z));
                         }
                     }
@@ -198,7 +200,7 @@ public class StageManager : MonoBehaviour
                             z * spacing
                         );
 
-                        Instantiate(stage[0], spawnPos, Quaternion.identity, transform);
+                        Instantiate(stage[0], spawnPos, Quaternion.identity, StageParent.transform);
                         StagePositions.Add(new Vector2Int(x, z));
                     }
                     else if (sealedStonePositions.Contains(new Vector2Int(x, z)))
@@ -210,7 +212,7 @@ public class StageManager : MonoBehaviour
                             z * spacing
                         );
                         StagePositions.Add(new Vector2Int(x, z));
-                        Instantiate(stage[1], spawnPos, Quaternion.identity, transform);
+                        Instantiate(stage[1], spawnPos, Quaternion.identity, StageParent.transform);
                     }
                     else
                     {
@@ -222,7 +224,7 @@ public class StageManager : MonoBehaviour
                         );
                         StagePositions.Add(new Vector2Int(x, z));
 
-                        Instantiate(stage[Random.Range(2, stage.Count)], spawnPos, Quaternion.identity, transform);
+                        Instantiate(stage[Random.Range(2, stage.Count)], spawnPos, Quaternion.identity, StageParent.transform);
                     }
                 }
             }

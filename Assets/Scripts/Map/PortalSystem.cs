@@ -93,7 +93,6 @@ public class PortalSystem : MonoBehaviour
                 //·£´ýÆ÷Å»
                 break;
             case PortalDirection.Clear:
-                Debug.Log(stageManager);
                 stageManager.curFloorCleared = true;
                 //Å¬¸®¾îÆ÷Å»
                 if (!stageManager.Tutorial)
