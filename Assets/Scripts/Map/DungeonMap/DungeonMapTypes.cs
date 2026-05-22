@@ -36,7 +36,7 @@ public static class DungeonMapTypeMapping
             case StageType.BuffStatue:
                 markType = DungeonMapMarkType.BuffStatue;
                 return true;
-            case StageType.BackPortal:
+            case StageType.ReturnPortal:
                 markType = DungeonMapMarkType.BackPortal;
                 return true;
             case StageType.RandomPortal:
