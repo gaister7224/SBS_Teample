@@ -7,7 +7,7 @@ public class BlowSkill : MonoBehaviour
     private PlayerAttack playerAttack;
     private PlayerProfile playerProfile;
 
-    private float rushSpeed = 15.0f;
+    private float rushSpeed = 450.0f;
     private float stopDist = 10.0f;
 
     private float damage;
@@ -44,6 +44,7 @@ public class BlowSkill : MonoBehaviour
         dist = Vector3.Distance(firstPos, transform.position);
         if (!attack)
         {
+            Debug.Log(rush);
             if (!rush)
             {
                 transform.rotation = Quaternion.Euler(0, playerAttack.AttackPos.transform.localRotation.eulerAngles.y, 0);
@@ -81,12 +82,12 @@ public class BlowSkill : MonoBehaviour
             playerProfile.SwordSkillHit(hitPoint);
             if (other.CompareTag("Boss"))
             {
-                Debug.Log("스킬 : 회심의 일격" + other.gameObject.name + "을(를) 공격했습니다!");
+                Debug.Log("스킬 : 회심의 일격" + other.gameObject.name + "을(를) 공격했습니다!" + "damage = " + damage);
                 other.gameObject.GetComponent<BossStatus>().GetDamage(damage);
             }
             else if (other.CompareTag("Enemy"))
             {
-                Debug.Log("스킬 : 회심의 일격" + other.gameObject.name + "을(를) 공격했습니다!");
+                Debug.Log("스킬 : 회심의 일격" + other.gameObject.name + "을(를) 공격했습니다!" + "damage = " + damage);
                 if (other.gameObject.GetComponent<MonsterBehavior>() != null)
                     other.gameObject.GetComponent<MonsterBehavior>().TakeDamage(damage);
                 if (other.gameObject.GetComponent<SealStoneManager>() != null)

@@ -28,13 +28,13 @@ public class BowAttackManager : MonoBehaviour
             bool critical = playerProfile.CriticalProbability();
             if (critical)
             {
-                damage1 = playerProfile.CriticalBuff(playerProfile.BasicATK(300));
-                damage2 = playerProfile.CriticalBuff(playerProfile.BasicATK(200));
+                damage1 = playerProfile.CriticalBuff(playerProfile.BasicATK(90));
+                damage2 = playerProfile.CriticalBuff(playerProfile.BasicATK(190));
             }
             else
             {
-                damage1 = playerProfile.BasicATK(300);
-                damage2 = playerProfile.BasicATK(200);
+                damage1 = playerProfile.BasicATK(90);
+                damage2 = playerProfile.BasicATK(60); 
             }
         }
         else if (playerAttack.bowPassiveSkill3)
@@ -75,7 +75,7 @@ public class BowAttackManager : MonoBehaviour
                 Debug.Log("BowExplosionRandomNumber : " + number);
                 if (number > 0 && number <= 30)
                 {
-                    Instantiate(bowExplosionObj, transform.position, transform.rotation);
+                    Instantiate(bowExplosionObj, transform.position, bowExplosionObj.transform.rotation);
                 }
             }
 
@@ -86,16 +86,22 @@ public class BowAttackManager : MonoBehaviour
                 {
                     if (other.CompareTag("Boss"))
                     {
-                        Debug.Log("±Ã¼ö ±âº» °ø°Ý" + other.gameObject.name + "À»(¸¦) °ø°ÝÇß½À´Ï´Ù!" + "damage1 = " + damage1);
+                        Debug.Log("ï¿½Ã¼ï¿½ ï¿½âº» ï¿½ï¿½ï¿½ï¿½" + other.gameObject.name + "ï¿½ï¿½(ï¿½ï¿½) ï¿½ï¿½ï¿½ï¿½ï¿½ß½ï¿½ï¿½Ï´ï¿½!" + "damage1 = " + damage1);
                         other.gameObject.GetComponent<BossStatus>().GetDamage(damage1);
                     }
                     else if (other.CompareTag("Enemy"))
                     {
-                        Debug.Log("±Ã¼ö ±âº» °ø°Ý" + other.gameObject.name + "À»(¸¦) °ø°ÝÇß½À´Ï´Ù!" + "damage1 = " + damage1);
-                        other.gameObject.GetComponent<MonsterBehavior>().TakeDamage(damage1);
-                        other.gameObject.GetComponent<SealStoneManager>().Damage(damage1);
-                        other.gameObject.GetComponent<SealedStone>().TakeDamage(damage1);
+                        Debug.Log("ï¿½Ã¼ï¿½ ï¿½âº» ï¿½ï¿½ï¿½ï¿½" + other.gameObject.name + "ï¿½ï¿½(ï¿½ï¿½) ï¿½ï¿½ï¿½ï¿½ï¿½ß½ï¿½ï¿½Ï´ï¿½!" + "damage1 = " + damage1);
+                        if(other.gameObject.GetComponent<MonsterBehavior>() != null)
+                            other.gameObject.GetComponent<MonsterBehavior>().TakeDamage(damage1);
+                        if (other.gameObject.GetComponent<SealStoneManager>() != null)
+                            other.gameObject.GetComponent<SealStoneManager>().Damage(damage1);
+                        if (other.gameObject.GetComponent<SealedStone>() != null)
+                            other.gameObject.GetComponent<SealedStone>().TakeDamage(damage1);
+
                     }
+                    if (playerProfile.BloodHeal)
+                        playerProfile.BloodHealHp(10, damage1);
                     Vector3 hitPoint = other.ClosestPoint(transform.position);
                     Instantiate(hitPrefab, hitPoint, Quaternion.identity);
                 }
@@ -103,16 +109,19 @@ public class BowAttackManager : MonoBehaviour
                 {
                     if (other.CompareTag("Boss"))
                     {
-                        Debug.Log("±Ã¼ö ±âº» °ø°Ý" + other.gameObject.name + "À»(¸¦) °ø°ÝÇß½À´Ï´Ù!" + "damage2 = " + damage2);
+                        Debug.Log("ï¿½Ã¼ï¿½ ï¿½âº» ï¿½ï¿½ï¿½ï¿½" + other.gameObject.name + "ï¿½ï¿½(ï¿½ï¿½) ï¿½ï¿½ï¿½ï¿½ï¿½ß½ï¿½ï¿½Ï´ï¿½!" + "damage2 = " + damage2);
                         other.gameObject.GetComponent<BossStatus>().GetDamage(damage2);
                     }
                     else if (other.CompareTag("Enemy"))
                     {
-                        Debug.Log("±Ã¼ö ±âº» °ø°Ý" + other.gameObject.name + "À»(¸¦) °ø°ÝÇß½À´Ï´Ù!" + "damage2 = " + damage2);
-                        other.gameObject.GetComponent<MonsterBehavior>().TakeDamage(damage2);
-                        other.gameObject.GetComponent<SealStoneManager>().Damage(damage2);
-                        other.gameObject.GetComponent<SealedStone>().TakeDamage(damage2);
+                        Debug.Log("ï¿½Ã¼ï¿½ ï¿½âº» ï¿½ï¿½ï¿½ï¿½" + other.gameObject.name + "ï¿½ï¿½(ï¿½ï¿½) ï¿½ï¿½ï¿½ï¿½ï¿½ß½ï¿½ï¿½Ï´ï¿½!" + "damage2 = " + damage2);
+                        if (other.gameObject.GetComponent<MonsterBehavior>() != null)
+                            other.gameObject.GetComponent<MonsterBehavior>().TakeDamage(damage2);
+                        if (other.gameObject.GetComponent<SealStoneManager>() != null)
+                            other.gameObject.GetComponent<SealStoneManager>().Damage(damage2);
                     }
+                    if (playerProfile.BloodHeal)
+                        playerProfile.BloodHealHp(10, damage2);
                     Vector3 hitPoint = other.ClosestPoint(transform.position);
                     Instantiate(hitPrefab, hitPoint, Quaternion.identity);
                     Destroy(gameObject);
@@ -122,12 +131,12 @@ public class BowAttackManager : MonoBehaviour
             {
                 if (other.CompareTag("Boss"))
                 {
-                    Debug.Log("±Ã¼ö ±âº» °ø°Ý" + other.gameObject.name + "À»(¸¦) °ø°ÝÇß½À´Ï´Ù!" + "damage1 = " + damage1);
+                    Debug.Log("ï¿½Ã¼ï¿½ ï¿½âº» ï¿½ï¿½ï¿½ï¿½" + other.gameObject.name + "ï¿½ï¿½(ï¿½ï¿½) ï¿½ï¿½ï¿½ï¿½ï¿½ß½ï¿½ï¿½Ï´ï¿½!" + "damage1 = " + damage1);
                     other.gameObject.GetComponent<BossStatus>().GetDamage(damage1);
                 }
                 else if (other.CompareTag("Enemy"))
                 {
-                    Debug.Log("±Ã¼ö ±âº» °ø°Ý" + other.gameObject.name + "À»(¸¦) °ø°ÝÇß½À´Ï´Ù!" + "damage1 = " + damage1);
+                    Debug.Log("ï¿½Ã¼ï¿½ ï¿½âº» ï¿½ï¿½ï¿½ï¿½" + other.gameObject.name + "ï¿½ï¿½(ï¿½ï¿½) ï¿½ï¿½ï¿½ï¿½ï¿½ß½ï¿½ï¿½Ï´ï¿½!" + "damage1 = " + damage1);
                     if (other.gameObject.GetComponent<MonsterBehavior>() != null)
                         other.gameObject.GetComponent<MonsterBehavior>().TakeDamage(damage1);
                     if (other.gameObject.GetComponent<SealStoneManager>() != null)
@@ -135,6 +144,8 @@ public class BowAttackManager : MonoBehaviour
                     if (other.gameObject.GetComponent<SealedStone>() != null)
                         other.gameObject.GetComponent<SealedStone>().TakeDamage(damage1);
                 }
+                if (playerProfile.BloodHeal)
+                    playerProfile.BloodHealHp(10, damage1);
                 Vector3 hitPoint = other.ClosestPoint(transform.position);
                 Instantiate(hitPrefab, hitPoint, Quaternion.identity);
                 Destroy(gameObject);

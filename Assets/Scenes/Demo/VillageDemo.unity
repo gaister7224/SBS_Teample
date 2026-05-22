@@ -855,6 +855,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   largeMapPanel: {fileID: 8800100020}
+  mapBoardPanel: {fileID: 0}
+  mapStagePrefab: {fileID: 0}
+  markSpriteSet: {fileID: 0}
 --- !u!1 &8800100020
 GameObject:
   m_ObjectHideFlags: 0

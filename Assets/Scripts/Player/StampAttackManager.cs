@@ -79,10 +79,7 @@ public class StampAttackManager : MonoBehaviour
         }
     }
 
-    public void IncreasedColliderSize(float size)
-    {
-        bombScale = bombStartScale + size;
-    }
+    
 
     private Collider _other;
     private void OnTriggerEnter(Collider other)
@@ -91,12 +88,12 @@ public class StampAttackManager : MonoBehaviour
         {
             if (other.CompareTag("Boss"))
             {
-                Debug.Log("½ºÅÆÇÁ ±âº» Á÷°Ý °ø°Ý" + other.gameObject.name + "À»(¸¦) °ø°ÝÇß½À´Ï´Ù!" + "damage1 = " + damage1);
+                Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½âº» ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½" + other.gameObject.name + "ï¿½ï¿½(ï¿½ï¿½) ï¿½ï¿½ï¿½ï¿½ï¿½ß½ï¿½ï¿½Ï´ï¿½!" + "damage1 = " + damage1);
                 other.gameObject.GetComponent<BossStatus>().GetDamage(damage1);
             }
             else if (other.CompareTag("Enemy"))
             {
-                Debug.Log("½ºÅÆÇÁ ±âº» Á÷°Ý °ø°Ý" + other.gameObject.name + "À»(¸¦) °ø°ÝÇß½À´Ï´Ù!" + "damage1 = " + damage1);
+                Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½âº» ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½" + other.gameObject.name + "ï¿½ï¿½(ï¿½ï¿½) ï¿½ï¿½ï¿½ï¿½ï¿½ß½ï¿½ï¿½Ï´ï¿½!" + "damage1 = " + damage1);
                 if (other.gameObject.GetComponent<MonsterBehavior>() != null)
                     other.gameObject.GetComponent<MonsterBehavior>().TakeDamage(damage1);
                 if (other.gameObject.GetComponent<SealStoneManager>() != null)
@@ -129,25 +126,17 @@ public class StampAttackManager : MonoBehaviour
         yield return new WaitForSeconds(0.2f);
         //Color32 orange = new Color32(255, 160, 0, 255);
         //GetComponent<SpriteRenderer>().color = orange;
-        if ((playerAttack.stampSkill6 && !playerAttack.stampPassiveSkill1)
-        || (!playerAttack.stampSkill6 && playerAttack.stampPassiveSkill1))
-        {
-            IncreasedColliderSize(0.5f);
-        }
-        else if (playerAttack.stampSkill6 && playerAttack.stampPassiveSkill1)
-        {
-            IncreasedColliderSize(1.0f);
-        }
+        
         //transform.localScale = new Vector3(bombScale, bombScale, bombScale);
 
         if (other.CompareTag("Boss"))
         {
-            Debug.Log("½ºÅÆÇÁ ±âº» Æø¹ß °ø°Ý" + other.gameObject.name + "À»(¸¦) °ø°ÝÇß½À´Ï´Ù!" + "damage2 = " + damage2);
+            Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½âº» ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½" + other.gameObject.name + "ï¿½ï¿½(ï¿½ï¿½) ï¿½ï¿½ï¿½ï¿½ï¿½ß½ï¿½ï¿½Ï´ï¿½!" + "damage2 = " + damage2);
             other.gameObject.GetComponent<BossStatus>().GetDamage(damage2);
         }
         else if (other.CompareTag("Enemy"))
         {
-            Debug.Log("½ºÅÆÇÁ ±âº» Æø¹ß °ø°Ý" + other.gameObject.name + "À»(¸¦) °ø°ÝÇß½À´Ï´Ù!" + "damage2 = " + damage2);
+            Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½âº» ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½" + other.gameObject.name + "ï¿½ï¿½(ï¿½ï¿½) ï¿½ï¿½ï¿½ï¿½ï¿½ß½ï¿½ï¿½Ï´ï¿½!" + "damage2 = " + damage2);
             if (other.gameObject.GetComponent<MonsterBehavior>() != null)
                 other.gameObject.GetComponent<MonsterBehavior>().TakeDamage(damage2);
             if (other.gameObject.GetComponent<SealStoneManager>() != null)

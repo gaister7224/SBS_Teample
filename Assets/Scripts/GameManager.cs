@@ -48,7 +48,7 @@ public class GameManager : MonoBehaviour
     public int dayCount;
     public int artifactInstallImpossibleDay;
     public bool dayEnd; //일차 종료 확인
-    public bool[] possibleDungeon;
+    public bool[] possibleDungeon = new bool[11];
     public bool itemGetAll;
     public int curDungeonNumber;
     public bool installImpossibleStart;
@@ -57,6 +57,7 @@ public class GameManager : MonoBehaviour
     public float recoveryMultiplier;
     public bool shelterActCountBan;
     public bool shelterHpBan;
+    public DungeonEntryManager spawnedDungeon;
 
     [Header("유물 Action")]
     public Action OnShelterEnter;

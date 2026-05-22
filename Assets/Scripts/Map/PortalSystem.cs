@@ -9,7 +9,6 @@ public class PortalSystem : MonoBehaviour
     StageManager stageManager;
 
     GameObject player;
-    PlayerProfile playerProfile;
 
     [SerializeField] PortalDirection direction;
 
@@ -23,7 +22,9 @@ public class PortalSystem : MonoBehaviour
     void Update()
     {
         if (portalManager == null)
+        {
             portalManager = GetComponentInParent<PortalManager>();
+        }
 
         if (stageManager == null && StageManager.instance != null)
         {
@@ -42,7 +43,6 @@ public class PortalSystem : MonoBehaviour
             }
             else if (portalManager.PlayerObject.GetComponent<PlayerProfile>().ActCount <= 0)
             {
-
             }
         }
 
@@ -90,11 +90,11 @@ public class PortalSystem : MonoBehaviour
                 } while (randomPos.x == 0 && randomPos.y == 0);
 
                 player.transform.position = new Vector3(randomPos.x * stageManager.spacing, 1.9f, randomPos.y * stageManager.spacing - distance);
-                //·£´ýÆ÷Å»
+                //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å»
                 break;
             case PortalDirection.Clear:
                 stageManager.curFloorCleared = true;
-                //Å¬¸®¾îÆ÷Å»
+                //Å¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å»
                 if (!stageManager.Tutorial)
                 {
                     int countHalf = (stageManager.StageCount % 2 == 1) ? stageManager.StageCount / 2 + 1 : stageManager.StageCount / 2;

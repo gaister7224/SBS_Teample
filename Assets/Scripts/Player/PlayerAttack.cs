@@ -251,6 +251,12 @@ public class PlayerAttack : MonoBehaviour
             GameManager.instance.curAnimation = animation;
         }
 
+        playerProfile.SetPassiveATK(setATK);
+
+        GameManager.instance.hpPoint = (int)setHp;
+        GameManager.instance.atkPoint = (int)setATK;
+        GameManager.instance.defPoint = (int)setDEF;
+
         if (playerProfile != null)
         {
             playerProfile.SetMaxHp(setHp, 0, 0);
@@ -283,7 +289,7 @@ public class PlayerAttack : MonoBehaviour
     {
         Debug.Log("stampskill");
 
-        StateDecision(2.5f, 10.0f, 5.0f, false, Job.Stamp, 7, 4, 0, 2, stampAnimation);
+        StateDecision(2.5f, 10.0f, 5.0f, false, Job.Stamp, 7, 3, 0, 2, stampAnimation);
         JobSelect();
         //playerProfile.ChangeMoveSpeed(0);
     }
@@ -319,7 +325,7 @@ public class PlayerAttack : MonoBehaviour
                 = UIManager.Instance.villageCollider;
         }
 
-        Invoke("StoreExplainDialogue", 0.5f);
+        //Invoke("StoreExplainDialogue", 0.5f);
     }
 
     private void StoreExplainDialogue()

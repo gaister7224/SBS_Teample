@@ -128,7 +128,7 @@ public class PlayerProfile : PlayerState
         defTestText.text = maxDEF.ToString();
         moveSpeedTestText.text = moveSpeed.ToString();
         criticalTestText.text = critical.ToString();
-        nameText.text = GameManager.instance.name;
+        nameText.text = GameManager.instance.nickName;
         levelText.text = GameManager.instance.level.ToString();
         jobText.text = GameManager.instance.job.ToString();
     }
@@ -304,6 +304,11 @@ public class PlayerProfile : PlayerState
         curDEF = maxDEF;
     }
 
+    public void SetPassiveATK(float atk)
+    {
+        passiveATK = atk * 2;
+    }
+
     public void ArtifactDEFDebuff(float debuff)
     {
         curDEF += debuff;
@@ -343,7 +348,8 @@ public class PlayerProfile : PlayerState
     }
     public void PassiveDEF(float increasedPercent)
     {
-        passiveDEF = maxDEF * (1f + (increasedPercent / 100f));
+        //passiveDEF = maxDEF * (1f + (increasedPercent / 100f));
+        passiveDEF = maxDEF + (increasedPercent / 100f);
         curDEF = passiveDEF;
     }
 
@@ -355,15 +361,18 @@ public class PlayerProfile : PlayerState
 
     public void GetDamage(int damage)
     {
-        if (!noDamage)
+        if (!barrier)
         {
-            curHp -= damage * (1 - curDEF);
-            noDamage = true;
-        }
+            if (!noDamage)
+            {
+                curHp -= damage * (1 - curDEF);
+                noDamage = true;
+            }
 
-        if(noDamage)
-        {
-            StartCoroutine(NoDamageReMove());
+            if (noDamage)
+            {
+                StartCoroutine(NoDamageReMove());
+            }
         }
 
         curHp = Mathf.Clamp(curHp, 0, maxHp);

@@ -152,7 +152,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hitTag: Enemy
-  bowExplosionObj: {fileID: 6378561587437264206, guid: 6341333bb913cbc49985d0632f1eafda, type: 3}
+  bowExplosionObj: {fileID: 5213351144008095142, guid: 4c8fc51583868d940a0eb7d192ab5de6, type: 3}
   hitPrefab: {fileID: 8139272403635837732, guid: e917015a90f65a642bb17ffa116a43ad, type: 3}
 --- !u!1 &4349790924350991262
 GameObject:
