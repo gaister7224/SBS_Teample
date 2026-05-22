@@ -299,6 +299,7 @@ public class PlayerAttack : MonoBehaviour
         if (UIManager.Instance == null)
             return;
 
+        Debug.Log("jobSelect");
         jobChoiceUI = UIManager.Instance.jobChoiceUI;
         jobChoice = UIManager.Instance.jobChoice;
         Time.timeScale = 1;
@@ -325,7 +326,7 @@ public class PlayerAttack : MonoBehaviour
                 = UIManager.Instance.villageCollider;
         }
 
-        //Invoke("StoreExplainDialogue", 0.5f);
+        Invoke("StoreExplainDialogue", 0.5f);
     }
 
     private void StoreExplainDialogue()

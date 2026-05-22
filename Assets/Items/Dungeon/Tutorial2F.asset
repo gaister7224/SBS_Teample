@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dungeonNumber: 1
   dungeonName: Tutorial2F
-  mapPrefab: {fileID: 4487347817375982608, guid: 3fb8d9a14ac688245b908c24d2fd765c, type: 3}
+  mapPrefab: {fileID: 2027069352563740379, guid: 80b95b25fe286354b887f35bf6a57c89, type: 3}
   spawnOffset: {x: 300, y: 0, z: 0}

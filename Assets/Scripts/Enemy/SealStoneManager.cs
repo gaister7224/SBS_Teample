@@ -18,6 +18,16 @@ public class SealStoneManager : MonoBehaviour
 
     private BoxCollider boxCollider;
 
+    StageManager stageManager;
+    PortalManager portalManager;
+
+    private void Awake()
+    {
+        stageManager = GameObject.Find("StageManager").GetComponent<StageManager>();
+        portalManager = GetComponentInParent<PortalManager>();
+
+        stageManager.SealedStoneLeft++;
+    }
     private void Start()
     {
         boxCollider = GetComponent<BoxCollider>();
@@ -45,14 +55,15 @@ public class SealStoneManager : MonoBehaviour
                         rb.AddForce(jumpDir * 5f, ForceMode.Impulse);
                     }
 
-                    //쉴터 대용 임시
-                    GameManager.instance.OnShelterEnter?.Invoke();
                 }
                 itemSpawn = true;
                 this.enabled = false;
                 boxCollider.enabled = false;
                 //Destroy(gameObject);
             }
+            stageManager.SealedStoneLeft--;
+            this.enabled = false;
+            boxCollider.enabled = false;
         }
         if (curHp <= maxHp * 0.8f && curHp >= maxHp * 0.4f)
         {
