@@ -41,6 +41,7 @@ public class StageClearManager : MonoBehaviour
 
             GameObject.FindGameObjectWithTag("Player").transform.position = UIManager.Instance.villagePos.position;
             GameManager.instance.mapState = MapState.Village;
+            DungeonMapService.Instance?.FlushSave();
             UIManager.Instance.virtualCamera.GetComponent<CinemachineConfiner3D>().BoundingVolume
                 = UIManager.Instance.villageCollider;
             DayManager.instance.sunLight.transform.rotation

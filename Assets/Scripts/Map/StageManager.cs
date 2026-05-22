@@ -24,6 +24,8 @@ public enum StageType
     Treasure,
     Boss,
     Bonfire,
+    Shop,
+    BuffStatue,
     RandomPortal,
     ReturnPortal,
     Store,

@@ -2,17 +2,17 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 /// <summary>
-/// 씬 내의 아이템(또는 정적 물체)에 다가가면 해당 아이템을 줍거나, 상호작용 할 수 있도록 해주는 스크립트
+/// ?? ???? ??????(??? ???? ???)?? ??????? ??? ???????? ????, ?????? ?? ?? ????? ????? ??????
 /// </summary>
 
 public class ItemRaycast : MonoBehaviour
 {
-    [SerializeField] private bool isStorageActive = false; //상자를 열수 있나?
+    [SerializeField] private bool isStorageActive = false; //????? ???? ????
     [SerializeField] private bool isStoreActive = false;
     [SerializeField] private bool isVillageStoreActive = false;
-    private ItemPickUp currentItem; //활성화시 현재 등록된 아이템
+    private ItemPickUp currentItem; //?????? ???? ???? ??????
 
-    [Header("상자 인벤토리")]
+    [Header("???? ?κ???")]
     private GameObject storageInventory;
 
     private InventoryMain inventory;
@@ -26,7 +26,8 @@ public class ItemRaycast : MonoBehaviour
 
     private void Start()
     {
-        inventory = UIManager.Instance.inventory;
+        if (UIManager.Instance != null)
+            inventory = UIManager.Instance.inventory;
 
         playerAttack = GetComponent<PlayerAttack>();
         if (inventory == null)
@@ -49,7 +50,7 @@ public class ItemRaycast : MonoBehaviour
 
         if (UIManager.Instance == null)
         {
-            Debug.Log("instance없음");
+            Debug.Log("instance????");
         }
     }
 
@@ -71,17 +72,17 @@ public class ItemRaycast : MonoBehaviour
             int count = 0;
             for (; count < allitems.Length; ++count)
             {
-                //현재 아이템 칸이 null 이면 주울 수 있음
+                //???? ?????? ??? null ??? ??? ?? ????
                 if (allitems[count].Item == null) { TryPickUp(); break; }
 
-                //현제 아이템이 null이 아니지만 중첩 가능하면 주울 수 있음
+                //???? ???????? null?? ??????? ??ø ??????? ??? ?? ????
                 if (allitems[count].Item.ItemID == currentItem.Item.ItemID && allitems[count].Item.CanOverlap) { TryPickUp(); break; }
             }
 
-            //다 차고 중첩 아니면 못 주움
+            //?? ???? ??ø ???? ?? ???
             if (count == allitems.Length) { return; }
 
-            //줍는 효과음
+            //??? ?????
         }
     }
 
@@ -225,7 +226,7 @@ public class ItemRaycast : MonoBehaviour
     }
 
     /// <summary>
-    /// 아이템 습득
+    /// ?????? ????
     /// </summary>
     private void TryPickUp()
     {
