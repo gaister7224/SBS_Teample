@@ -105,18 +105,7 @@ public class DungeonMapData
             dto.playerY = PlayerPosition.Value.y;
         }
 
-        foreach (var cell in Revealed)
-            dto.revealed.Add(new DungeonMapCellEntry { x = cell.x, y = cell.y });
-
-        foreach (var pair in Marks)
-        {
-            dto.marks.Add(new DungeonMapMarkEntry
-            {
-                x = pair.Key.x,
-                y = pair.Key.y,
-                markType = pair.Value
-            });
-        }
+        // Revealed·마크는 이번 플레이 세션만 (PlayerPrefs에 저장하지 않음).
 
         return dto;
     }
@@ -130,17 +119,7 @@ public class DungeonMapData
         Revealed.Clear();
         Marks.Clear();
 
-        if (dto.revealed != null)
-        {
-            foreach (var cell in dto.revealed)
-                Revealed.Add(new Vector2Int(cell.x, cell.y));
-        }
-
-        if (dto.marks != null)
-        {
-            foreach (var mark in dto.marks)
-                Marks[new Vector2Int(mark.x, mark.y)] = mark.markType;
-        }
+        // Revealed·마크는 복원하지 않음 (이전 저장의 marks 필드는 무시).
 
         PlayerPosition = dto.hasPlayerPosition
             ? new Vector2Int(dto.playerX, dto.playerY)

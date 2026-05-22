@@ -10,11 +10,34 @@ public class DungeonMapUI : MonoBehaviour
 
     void Awake()
     {
-        if (mapBoardPanel == null)
-            mapBoardPanel = GetComponent<MapBoardPanelView>();
+        if (mapBoardPanel != null)
+            return;
 
+        mapBoardPanel = GetComponent<MapBoardPanelView>();
         if (mapBoardPanel == null)
             mapBoardPanel = GetComponentInChildren<MapBoardPanelView>(true);
+        if (mapBoardPanel == null)
+            mapBoardPanel = ResolveMapBoardPanel();
+    }
+
+    static MapBoardPanelView ResolveMapBoardPanel()
+    {
+        var panels = Object.FindObjectsByType<MapBoardPanelView>(FindObjectsSortMode.None);
+        MapBoardPanelView fallback = null;
+
+        foreach (var panel in panels)
+        {
+            fallback ??= panel;
+
+            if (panel.gameObject.name.Contains("DungeonMapBoard"))
+                return panel;
+
+            if (panel.markingToolbar != null
+                || panel.transform.Find("MarkingToolbar") != null)
+                return panel;
+        }
+
+        return fallback;
     }
 
     void Update()

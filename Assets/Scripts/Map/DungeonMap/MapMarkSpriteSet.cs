@@ -30,15 +30,25 @@ public class MapMarkSpriteSet : ScriptableObject
 
     public static MapMarkSpriteSet LoadFromResources()
     {
+        var asset = Resources.Load<MapMarkSpriteSet>("MapMarkSpriteSet");
+        if (asset != null && asset.HasAnySprite())
+            return asset;
+
+        MapMarkSpriteCache.EnsureLoaded();
+
         var set = CreateInstance<MapMarkSpriteSet>();
-        set.trap = Resources.Load<Sprite>("MapMarks/mark_trap");
-        set.treasure = Resources.Load<Sprite>("MapMarks/mark_treasure");
-        set.sealedStone = Resources.Load<Sprite>("MapMarks/mark_sealed_stone");
-        set.shop = Resources.Load<Sprite>("MapMarks/mark_shop");
-        set.bonfire = Resources.Load<Sprite>("MapMarks/mark_bonfire");
-        set.buffStatue = Resources.Load<Sprite>("MapMarks/mark_buff_statue");
-        set.backPortal = Resources.Load<Sprite>("MapMarks/mark_portal");
-        set.randomPortal = Resources.Load<Sprite>("MapMarks/mark_portal");
+        set.trap = MapMarkSpriteCache.Get("mark_trap");
+        set.treasure = MapMarkSpriteCache.Get("mark_treasure");
+        set.sealedStone = MapMarkSpriteCache.Get("mark_sealed_stone");
+        set.shop = MapMarkSpriteCache.Get("mark_shop");
+        set.bonfire = MapMarkSpriteCache.Get("mark_bonfire");
+        set.buffStatue = MapMarkSpriteCache.Get("mark_buff_statue");
+        set.backPortal = MapMarkSpriteCache.Get("mark_portal");
+        set.randomPortal = MapMarkSpriteCache.Get("mark_portal");
         return set;
     }
+
+    bool HasAnySprite() =>
+        trap != null || treasure != null || sealedStone != null || shop != null
+        || bonfire != null || buffStatue != null || backPortal != null || randomPortal != null;
 }

@@ -54,9 +54,13 @@ public class DungeonMapBootstrap : MonoBehaviour
 
         EnsureCornerMinimapOnCanvas(canvas.transform);
 
-        if (Object.FindAnyObjectByType<MapBoardPanelView>() != null
-            && Object.FindAnyObjectByType<DungeonMapUI>() != null)
+        var existingUi = Object.FindAnyObjectByType<DungeonMapUI>();
+        var existingPanel = ResolveMapBoardPanel();
+        if (existingUi != null && existingPanel != null)
+        {
+            existingUi.SetMapBoardPanel(existingPanel);
             return;
+        }
 
         var mapBoard = MapBoardPanelFactory.Create(
             canvas.transform,
@@ -87,5 +91,25 @@ public class DungeonMapBootstrap : MonoBehaviour
         var installerObject = new GameObject("CornerMinimapInstaller");
         installerObject.transform.SetParent(canvasTransform, false);
         installerObject.AddComponent<CornerMinimapInstaller>();
+    }
+
+    static MapBoardPanelView ResolveMapBoardPanel()
+    {
+        var panels = Object.FindObjectsByType<MapBoardPanelView>(FindObjectsSortMode.None);
+        MapBoardPanelView fallback = null;
+
+        foreach (var panel in panels)
+        {
+            fallback ??= panel;
+
+            if (panel.gameObject.name.Contains("DungeonMapBoard"))
+                return panel;
+
+            if (panel.markingToolbar != null
+                || panel.transform.Find("MarkingToolbar") != null)
+                return panel;
+        }
+
+        return fallback;
     }
 }
