@@ -6,7 +6,7 @@ public class DungeonEntryPortal : MonoBehaviour
     [SerializeField] private GameObject ui;
     private void OnTriggerEnter(Collider other)
     {
-        if(other.CompareTag("Player"))
+        if(other.CompareTag("Player") && DayManager.instance.curDay == Day.day)
         {
             Time.timeScale = 0f;
             UIManager.Instance.inventory.currentUI = UIType.DungeonEntry;

@@ -84,6 +84,9 @@ public class StageDetector : MonoBehaviour
                     stageManager.surroundStagePositions.Add(pos);
                 }
             }
+
+            PlayerLocomotion.GetProfile(other)?.ResetLocomotion();
+            NotifyDungeonMap(stageManager);
         }
     }
 
