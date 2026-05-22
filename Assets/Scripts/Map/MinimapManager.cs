@@ -1,16 +1,18 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
 
 public class MinimapManager : MonoBehaviour
 {
     public static MinimapManager instance;
 
-    [SerializeField] GameObject MapStageImage;
-    [SerializeField] GameObject MiniMapStageImage;
-    [SerializeField] Canvas cv;
+    public GameObject MinimapImage;
+    public Camera MinimapCamera;
+    public Canvas cv;
 
-    public List<Vector2Int> MapStagePositions = new List<Vector2Int>();
+    public HashSet<Vector2Int> MapStagePositions = new HashSet<Vector2Int>();
     public Vector2Int curSelectedStage;
+    private Transform player;
 
     StageManager stageManager;
 
@@ -21,64 +23,31 @@ public class MinimapManager : MonoBehaviour
 
     void Start()
     {
-        MainmapCreate();
+        stageManager = GameObject.Find("StageManager").GetComponent<StageManager>();
     }
 
     void Update()
     {
+        if (player == null)
+        {
+            player = GameObject.FindGameObjectWithTag("Player").transform;
+        }
+
         if (Input.GetKey(KeyCode.Tab))
         {
-            for (int i = 0; i < transform.childCount; i++)
-            {
-                transform.GetChild(i).gameObject.SetActive(true);
-            }
+            MinimapCamera.orthographicSize = 200f;
+            MinimapCamera.transform.position = new Vector3(0, 30, 0);
+
+            MinimapImage.transform.localScale = new Vector3(3.5f, 3.5f, 1);
+            MinimapImage.transform.localPosition = new Vector3(0, 0, 0);
         }
         else
         {
-            for (int i = 0; i < transform.childCount; i++)
-            {
-                transform.GetChild(i).gameObject.SetActive(false);
-            }
-        }
+            MinimapCamera.orthographicSize = 50f;
+            MinimapCamera.transform.position = new Vector3(player.position.x, transform.position.y, player.position.z);
 
-        MinimapCreate();
-    }
-
-    void MinimapUpdate()
-    {
-
-    }
-
-    void MainmapCreate()
-    {      
-        int StageCount = StageManager.instance.StageCount;
-
-        int countHalf = (StageCount % 2 == 1) ? StageCount / 2 + 1 : StageCount / 2;
-
-        for (int x = -countHalf; x < StageCount - countHalf + 2; x++)
-        {
-            for (int y = -countHalf; y < StageCount - countHalf + 2; y++)
-            {
-                if (x >= -1 && x <= 1 && y >= -1 && y <= 1)
-                {
-
-                }
-                else
-                {
-                    GameObject stageImage = Instantiate(MapStageImage, gameObject.transform);
-                    stageImage.GetComponent<MinimapStage>().index = new Vector2Int(x, y);
-                }
-
-            }
-        }
-    }
-
-    void MinimapCreate()
-    {
-        for (int i = 0; i < MapStagePositions.Count; i++)
-        {
-            GameObject minimapStageImage = Instantiate(MiniMapStageImage, cv.transform);
-            minimapStageImage.transform.localPosition = new Vector3(MapStagePositions[i].x * 0.5f + 800, MapStagePositions[i].y * 0.5f + 400, 0);
+            MinimapImage.transform.localScale = new Vector3(1, 1, 1);
+            MinimapImage.transform.localPosition = new Vector3(800, 400, 0);
         }
     }
 }

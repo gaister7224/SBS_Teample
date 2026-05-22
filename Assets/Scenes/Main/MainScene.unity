@@ -699,6 +699,7 @@ GameObject:
   - component: {fileID: 157297569}
   - component: {fileID: 157297571}
   - component: {fileID: 157297570}
+  - component: {fileID: 157297573}
   m_Layer: 5
   m_Name: MinimapImage
   m_TagString: Untagged
@@ -760,6 +761,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 157297568}
   m_CullTransparentMesh: 1
+--- !u!114 &157297573
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 157297568}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d89dae548dec0bc488e51b5e79668d6c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MinimapImage: {fileID: 157297568}
+  MinimapCamera: {fileID: 1453759046}
+  cv: {fileID: 479123950}
+  curSelectedStage: {x: 0, y: 0}
 --- !u!4 &170673007 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7560381821120080026, guid: e616edc21ac447144baad3ba5f60526e, type: 3}
@@ -1692,6 +1709,7 @@ RectTransform:
   - {fileID: 157297569}
   - {fileID: 465997036}
   - {fileID: 870344077}
+  - {fileID: 1286105740}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -2583,8 +2601,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 760423773}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.35491192, y: -0.000000039980215, z: 0.00000001573741, w: 0.93489975}
-  m_LocalPosition: {x: 14.201627, y: 65.354385, z: 310.60162}
+  m_LocalRotation: {x: 0.2282722, y: 0.00000000915975, z: -0.0000000021476194, w: 0.97359735}
+  m_LocalPosition: {x: 20.820387, y: 59.98439, z: -92.48938}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3306,7 +3324,7 @@ MonoBehaviour:
   nightSunRotation: {x: 0, y: 0, z: 0}
   curDay: 0
   dayIcon: {fileID: 42390848}
-  nightIcon: {fileID: 1902296860}
+  nightIcon: {fileID: 0}
 --- !u!114 &870344079
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7078,6 +7096,81 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ui: {fileID: 181751130}
+--- !u!1 &1286105739
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1286105740}
+  - component: {fileID: 1286105742}
+  - component: {fileID: 1286105741}
+  m_Layer: 5
+  m_Name: Ping
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1286105740
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1286105739}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 479123951}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1286105741
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1286105739}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1286105742
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1286105739}
+  m_CullTransparentMesh: 1
 --- !u!114 &1290462680 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3809560422600107664, guid: e616edc21ac447144baad3ba5f60526e, type: 3}
@@ -7338,7 +7431,6 @@ GameObject:
   - component: {fileID: 1453759047}
   - component: {fileID: 1453759046}
   - component: {fileID: 1453759044}
-  - component: {fileID: 1453759043}
   m_Layer: 0
   m_Name: MinimapCamera
   m_TagString: Untagged
@@ -7346,18 +7438,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1453759043
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1453759042}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fb9151e15f9c140479b3d9630074648a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1453759044
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7540,7 +7620,6 @@ RectTransform:
   - {fileID: 1803929447}
   - {fileID: 4932975}
   - {fileID: 42390849}
-  - {fileID: 1902296861}
   m_Father: {fileID: 870344077}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
@@ -10356,6 +10435,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: StageManager
       objectReference: {fileID: 0}
+    - target: {fileID: 9219160503716778401, guid: 86ebae51297451d4ca8ec3ac3e3df582, type: 3}
+      propertyPath: Tutorial
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9219160503716778401, guid: 86ebae51297451d4ca8ec3ac3e3df582, type: 3}
+      propertyPath: 'stage.Array.data[2]'
+      value: 
+      objectReference: {fileID: 2619334703123621966, guid: 353ea65809b425841a05bdfb1f94b72f, type: 3}
+    - target: {fileID: 9219160503716778401, guid: 86ebae51297451d4ca8ec3ac3e3df582, type: 3}
+      propertyPath: 'stage.Array.data[3]'
+      value: 
+      objectReference: {fileID: 2619334703123621966, guid: e616edc21ac447144baad3ba5f60526e, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

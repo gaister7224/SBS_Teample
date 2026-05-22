@@ -10,7 +10,7 @@ public class PortalSystem : MonoBehaviour
 
     GameObject player;
 
-    //0:¾Õ, 1:µÚ, 2:¿Ş, 3:¿À
+    //0:ì•, 1:ë’¤, 2:ì™¼, 3:ì˜¤
     [SerializeField] PortalDirection direction;
 
     public float distance = 9f;
@@ -48,9 +48,10 @@ public class PortalSystem : MonoBehaviour
             }
             else if (portalManager.PlayerObject.GetComponent<PlayerProfile>().ActCount <= 0)
             {
-                //»ç¸ÁÆ®¸®°Å
+                //ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ï¿½ï¿½
             }
         }
+        
     }
 
     IEnumerator Teleport()
@@ -65,18 +66,23 @@ public class PortalSystem : MonoBehaviour
         {
             case PortalDirection.Front:
                 player.transform.position += new Vector3(0f, 0f, StageManager.instance.spacing - distance);
+                player.GetComponent<PlayerProfile>().UseActCount(1);
                 break;
             case PortalDirection.Back:
                 player.transform.position += new Vector3(0f, 0f, -StageManager.instance.spacing + distance);
+                player.GetComponent<PlayerProfile>().UseActCount(1);
                 break;
             case PortalDirection.Left:
                 player.transform.position += new Vector3(-StageManager.instance.spacing + distance, 0f, 0f);
+                player.GetComponent<PlayerProfile>().UseActCount(1);
                 break;
             case PortalDirection.Right:
                 player.transform.position += new Vector3(StageManager.instance.spacing - distance, 0f, 0f);
+                player.GetComponent<PlayerProfile>().UseActCount(1);
                 break;
             case PortalDirection.toBoss :
                 player.transform.position = GameObject.FindWithTag("BossRoom").transform.position + new Vector3(0f, 1.9f, -distance);
+                player.GetComponent<PlayerProfile>().UseActCount(1);
                 break;
             case PortalDirection.Random:
                 int randomIndex;
@@ -90,12 +96,12 @@ public class PortalSystem : MonoBehaviour
                 } while (randomPos.x == 0 && randomPos.y == 0);
 
                 player.transform.position = new Vector3(randomPos.x * stageManager.spacing, 1.9f, randomPos.y * stageManager.spacing - distance);
-                //·£´ıÆ÷Å»
+                //ëœë¤í¬íƒˆ
                 break;
             case PortalDirection.Clear:
                 Debug.Log(stageManager);
                 stageManager.curFloorCleared = true;
-                //Å¬¸®¾îÆ÷Å»
+                //í´ë¦¬ì–´í¬íƒˆ
                 if (!stageManager.Tutorial)
                 {
                     int countHalf = (stageManager.StageCount % 2 == 1) ? stageManager.StageCount / 2 + 1 : stageManager.StageCount / 2;
@@ -106,9 +112,13 @@ public class PortalSystem : MonoBehaviour
                     player.transform.position = new Vector3(0f, 1.9f, -distance);
                 }
                 break;
+            case PortalDirection.Return:
+                Vector3 returnPos = new Vector3 (stageManager.StagePositions.ElementAt(0).x * stageManager.spacing, 1.9f, stageManager.StagePositions.ElementAt(0).y * stageManager.spacing);
+                player.transform.position = returnPos;
+                break;
         }
 
-        player.GetComponent<PlayerProfile>().UseActCount(1);
+        GameManager.instance.OnPortalEnter?.Invoke();
         yield return null;
     }
 }
