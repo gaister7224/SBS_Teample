@@ -59,6 +59,8 @@ public class StrongFireSkill : MonoBehaviour
                     other.gameObject.GetComponent<MonsterBehavior>().TakeDamage(damage);
                 if (other.gameObject.GetComponent<SealStoneManager>() != null)
                     other.gameObject.GetComponent<SealStoneManager>().Damage(damage);
+                if (other.gameObject.GetComponent<SealedStone>() != null)
+                    other.gameObject.GetComponent<SealedStone>().TakeDamage(damage);
             }
             if (playerProfile.BloodHeal)
             {

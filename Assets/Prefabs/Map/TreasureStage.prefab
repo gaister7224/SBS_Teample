@@ -274,7 +274,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7560381821120080026}
   m_Layer: 0
-  m_Name: BaseStage
+  m_Name: TreasureStage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1760,8 +1760,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19cae063ddb5321468dbc2283c53b95a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stageType: 0
-  SpawnPrefabs: []
+  stageType: 5
+  SpawnPrefabs:
+  - {fileID: 1764453145428906004, guid: ab6e8989dfe9bdb44b8ece59a35befc8, type: 3}
   isCleared: 0
   isPortalActive: 0
   PortalObject:

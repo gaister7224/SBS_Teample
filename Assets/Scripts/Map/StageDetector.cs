@@ -9,18 +9,12 @@ public class StageDetector : MonoBehaviour
 
     private void Awake()
     {
+        stageManager = GameObject.Find("StageManager").GetComponent<StageManager>();
         portalManager = GetComponentInParent<PortalManager>();
-        stageManager = StageManager.instance;
-        if (stageManager == null)
-        {
-            Debug.Log("awake : stageManager ����");
-        }
     }
 
     void Start()
     {
-        
-        
 
         //StartCoroutine(StageChangeCoroutine());
     }
@@ -33,16 +27,7 @@ public class StageDetector : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            Debug.Log(stageManager);
-            //StartCoroutine(StageChangeCoroutine());
-            if (portalManager == null)
-            {
-                Debug.Log("potalManager ����");
-            }
-            if(portalManager.CinemachineCamera == null)
-            {
-                Debug.Log("potalManager.CinemachineCamera ����");
-            }
+            StartCoroutine(StageChangeCoroutine());
             var confinder = portalManager.CinemachineCamera.GetComponent<CinemachineConfiner3D>();
             
             confinder.BoundingVolume = gameObject.GetComponent<Collider>();

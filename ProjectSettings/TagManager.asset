@@ -28,8 +28,7 @@ TagManager:
   - SealStone
   - PlayerCamera
   - Chest
-  - FKey
-  - StorageCollider
+  - BossRoom
   layers:
   - Default
   - TransparentFX
