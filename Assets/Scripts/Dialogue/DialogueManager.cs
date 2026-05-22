@@ -136,7 +136,7 @@ public class DialogueManager : MonoBehaviour
 
             curSentence = data.sentence;
             if (string.IsNullOrEmpty(data.name))
-                curName = GameManager.instance.name;
+                curName = GameManager.instance.nickName;
             else
                 curName = data.name;
             Sprite curFaceImage = data.faceImage;

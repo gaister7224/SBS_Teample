@@ -187,7 +187,7 @@ public class BossAttack : MonoBehaviour
     {
         isAttacking = true;
         GameObject newattackRange;
-        newattackRange = Instantiate(attackRange, transform.position, Quaternion.identity);
+        newattackRange = Instantiate(attackRange, transform.position, Quaternion.identity, transform);
         float timer = 0;
         float trackDuration = 2f;
 
