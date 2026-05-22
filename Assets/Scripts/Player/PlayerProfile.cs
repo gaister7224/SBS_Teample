@@ -17,21 +17,21 @@ public enum PlayerSituation
 
 public class PlayerProfile : PlayerState
 {
-    [Header("HP°ü·Ã ¿ÀºêÁ§Æ®")]
+    [Header("HP???? ???????")]
     private Image hpBackground;
     private Image hpMask;
     private TextMeshProUGUI hpText;
 
-    [Header("Mp°ü·Ã ¿ÀºêÁ§Æ®")]
+    [Header("Mp???? ???????")]
     private Image mpBackground;
     private Image mpMask;
     private TextMeshProUGUI mpText;
 
-    [Header("Çàµ¿·Â°ü·Ã ¿ÀºêÁ§Æ®")]
+    [Header("???????? ???????")]
     private Slider acSlider;
     private TextMeshProUGUI acText;
 
-    [Header("½ºÅ×ÀÌÅÍ½º Ç¥½Ã")]
+    [Header("????????? ???")]
     private TextMeshProUGUI hpTestText;
     private TextMeshProUGUI mpTestText;
     private TextMeshProUGUI atkTestText;
@@ -42,7 +42,7 @@ public class PlayerProfile : PlayerState
     private TextMeshProUGUI nameText;
     private TextMeshProUGUI levelText;
     private TextMeshProUGUI jobText;
-    [Header("Hit ÇÁ¸®Æé")]
+    [Header("Hit ??????")]
     [SerializeField] private GameObject swordSkillHitPrefab;
     [SerializeField] private GameObject bowSkillHitPrefab;
     [SerializeField] private GameObject stampSkillHitPrefab;
@@ -58,9 +58,20 @@ public class PlayerProfile : PlayerState
 
     private void Start()
     {
-        GameManager.instance.maxActCount = 10;
-        maxActCount = GameManager.instance.maxActCount;
+        if (GameManager.instance != null)
+        {
+            GameManager.instance.maxActCount = 10;
+            maxActCount = GameManager.instance.maxActCount;
+        }
+        else
+        {
+            maxActCount = 10;
+        }
+
         curActCount = maxActCount;
+
+        if (UIManager.Instance == null)
+            return;
 
         hpBackground = UIManager.Instance.hpBackground;
         hpMask = UIManager.Instance.hpMask;
@@ -81,8 +92,13 @@ public class PlayerProfile : PlayerState
         levelText = UIManager.Instance.levelText;
         jobText = UIManager.Instance.jobText;
 
-        UIManager.Instance.profileNameText.text = GameManager.instance.name.ToString();
-        UIManager.Instance.profileLevelText.text = "LV." + GameManager.instance.level.ToString(); 
+        if (GameManager.instance != null)
+        {
+            if (UIManager.Instance.profileNameText != null)
+                UIManager.Instance.profileNameText.text = GameManager.instance.nickName;
+            if (UIManager.Instance.profileLevelText != null)
+                UIManager.Instance.profileLevelText.text = "LV." + GameManager.instance.level;
+        }
 
         if (UIManager.Instance.virtualCamera != null)
         {
@@ -92,10 +108,13 @@ public class PlayerProfile : PlayerState
 
     private void Update()
     {
-        UpdateStateBarStatue(curHp, maxHp, hpText, hpMask, hpBackground);
-        UpdateStateBarStatue(curMp, maxMp, mpText, mpMask, mpBackground);
+        if (hpText != null && hpMask != null && hpBackground != null)
+            UpdateStateBarStatue(curHp, maxHp, hpText, hpMask, hpBackground);
+        if (mpText != null && mpMask != null && mpBackground != null)
+            UpdateStateBarStatue(curMp, maxMp, mpText, mpMask, mpBackground);
 
-        UpdateActCountBar();
+        if (acSlider != null)
+            UpdateActCountBar();
 
         //StateTestText();
     }
@@ -114,14 +133,37 @@ public class PlayerProfile : PlayerState
         jobText.text = GameManager.instance.job.ToString();
     }
 
-    public void AnimationReset()
+    public void AnimationReset() => ResetLocomotion();
+
+    /// <summary>
+    /// ?? ?????UI ???? ?????? ???? ??????? ?????? ???? ?? moveSpeed?? 0???? ???? ??®œ ????????.
+    /// </summary>
+    public void ResetLocomotion()
     {
+        GameplayInputUtility.ReleaseUiFocus();
+
+        currentState = PlayerSituation.Idle;
+        skillStart = false;
+
+        RestoreMoveSpeed();
+
+        var body = GetComponent<Rigidbody>();
+        if (body != null)
+        {
+            body.linearVelocity = Vector3.zero;
+            body.angularVelocity = Vector3.zero;
+            body.WakeUp();
+        }
+
+        if (ani == null)
+            return;
+
         ani.SetBool("isWalk", false);
         ani.ResetTrigger("Attack1");
         ani.ResetTrigger("Attack2");
     }
 
-    //Hit ÇÁ¸®Æé ¼ÒÈ¯
+    //Hit ?????? ???
     public void SwordSkillHit(Vector3 hitPoint)
     {
         Instantiate(swordSkillHitPrefab, hitPoint, Quaternion.identity);
@@ -135,7 +177,7 @@ public class PlayerProfile : PlayerState
         Instantiate(bowSkillHitPrefab, hitPoint, Quaternion.identity);
     }
 
-    //Ä«¸Þ¶ó Èçµé¸²
+    //???? ???
     public void ShakeCamera(float duration, float intensity, float frequency)
     {
         if (noiseComponent != null)
@@ -154,7 +196,7 @@ public class PlayerProfile : PlayerState
         noiseComponent.FrequencyGain = 0f;
     }
 
-    //Ä«¸Þ¶ó ÁÜ ÀÎ
+    //???? ?? ??
     public void CameraZoom(float duration, float zoomSpeed, float zoomInFOV)
     {
         StartCoroutine(ZoomRoutine(duration, zoomSpeed, zoomInFOV));
@@ -240,7 +282,7 @@ public class PlayerProfile : PlayerState
         set { emergencyEscape = value; }
     }
 
-    //max½ºÅ×ÀÌÅÍ½º ¼³Á¤
+    //max????????? ????
     public void SetMaxHp(float hpPoint, float a_hp, float e_hp)
     {
         maxHp = Mathf.Round((hpPoint * 10) * (1 + a_hp) + e_hp);
@@ -287,7 +329,7 @@ public class PlayerProfile : PlayerState
         maxMp = (int)(maxMp * (increasedPercent / 100f));
     }
 
-    //ÆÐ½Ãºê È¿°ú
+    //????? ???
     public void PassiveATK(float increasedPercent)
     {
         passiveATK = maxATK * (1f + (increasedPercent / 100f));
@@ -329,7 +371,7 @@ public class PlayerProfile : PlayerState
 
     IEnumerator NoDamageReMove()
     {
-        Debug.Log("¹«Àû Áß");
+        Debug.Log("???? ??");
         yield return new WaitForSeconds(0.4f);
         noDamage = false;
     }
@@ -352,7 +394,7 @@ public class PlayerProfile : PlayerState
             curActCount -= 5;
             int GoldDown = Mathf.RoundToInt(GameManager.instance.gold * 0.1f);
             GameManager.instance.gold -= GoldDown;
-            //°¡Àå °¡±î¿î ´ë±â Àå¼Ò Ã£±â
+            //???? ????? ??? ??? ???
             DieMove();
 
             curHp = maxHp;
@@ -493,18 +535,39 @@ public class PlayerProfile : PlayerState
         moveSpeed = passiveMoveSpeed * (1f + (changePercent / 100f));
     }
 
+    public void RestoreMoveSpeed()
+    {
+        if (originMoveSpeed < 0.01f)
+            originMoveSpeed = 5.5f;
+
+        if (passiveMoveSpeed < 0.01f)
+            passiveMoveSpeed = originMoveSpeed;
+
+        moveSpeed = passiveMoveSpeed;
+    }
+
+    /// <summary>WASD ÀÔ·ÂÀÌ ÀÖ´Âµ¥ ÀÌµ¿ ¼Óµµ/»óÅÂ°¡ ¸·Çô ÀÖÀ» ¶§ È£ÃâÇÕ´Ï´Ù.</summary>
+    public void EnsureCanMove()
+    {
+        if (currentState == PlayerSituation.Attack && !skillStart)
+            currentState = PlayerSituation.Idle;
+
+        if (moveSpeed < 0.01f)
+            RestoreMoveSpeed();
+    }
+
     public void BloodHealHp(float bloodPercent, float damage)
     {
         float bloodValue;
         bloodValue = damage * (bloodPercent / 100f);
         float limitValue = maxHp * 0.01f;
 
-        float finalHealAmount = Mathf.Min(bloodValue, limitValue); //´õ ÀÛÀº °ª ¹ÝÈ¯
+        float finalHealAmount = Mathf.Min(bloodValue, limitValue); //?? ???? ?? ???
         curHp += finalHealAmount;
 
         curHp = Mathf.Clamp(curHp, 0, maxHp);
 
-        Debug.Log($"µ¥¹ÌÁö: {damage} | °è»êµÈ ÈíÇ÷: {bloodValue} | ½ÇÁ¦ ÈíÇ÷(Á¦ÇÑÀû¿ë): {finalHealAmount}");
+        Debug.Log($"??????: {damage} | ???? ????: {bloodValue} | ???? ????(????????): {finalHealAmount}");
     }
 
     public void GetBuffStone()
@@ -632,6 +695,9 @@ public class PlayerProfile : PlayerState
 
     private void UpdateStateBarStatue(float curState, float maxState, TextMeshProUGUI stateText, Image _mask, Image _background)
     {
+        if (stateText == null || _mask == null || _background == null)
+            return;
+
         float _curState = curState;
         float _maxState = maxState;
 
@@ -640,13 +706,13 @@ public class PlayerProfile : PlayerState
         float height = _mask.GetComponent<RectTransform>().sizeDelta.y;
         float fullWidth = _background.GetComponent<RectTransform>().sizeDelta.x;
 
-        //¸ñÇ¥ °ª
+        //??? ??
         float targetWidth = (_curState / _maxState) * fullWidth;
 
-        //ÇöÀç °ª
+        //???? ??
         float curWidth = _mask.GetComponent<RectTransform>().sizeDelta.x;
 
-        //°ÔÀÌÁö ºÎµå·´°Ô ÀÌµ¿
+        //?????? ??????? ???
         float newWidth = Mathf.Lerp(curWidth, targetWidth, Time.deltaTime * lerpSpeed);
         _mask.GetComponent<RectTransform>().sizeDelta = new Vector2(newWidth, height);
     }

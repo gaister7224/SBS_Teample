@@ -35,6 +35,15 @@ public class DungeonEntryManager : MonoBehaviour, IPointerClickHandler
             GameManager.instance.dayEnd = false;
             GameManager.instance.itemGetAll = false;
             GameManager.instance.mapState = MapState.Stage;
+
+            if (DungeonMapService.Instance == null)
+            {
+                var serviceObject = new GameObject("DungeonMapService");
+                serviceObject.AddComponent<DungeonMapService>();
+            }
+            DungeonMapService.Instance.LoadDungeon(dungeonNumber);
+            DungeonMapUiInstaller.EnsureMapBoardUi();
+
             Invoke("PlayerMove", 0.5f);
         }
     }

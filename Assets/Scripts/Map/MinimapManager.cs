@@ -1,53 +1,62 @@
 using UnityEngine;
-using System.Collections.Generic;
-using System.Linq;
 
+/// <summary>
+/// 레거시 미니맵 매니저. 그리드 셀 프리팹 참조와 던전 지도 부트스트랩을 담당합니다.
+/// </summary>
 public class MinimapManager : MonoBehaviour
 {
     public static MinimapManager instance;
 
-    public GameObject MinimapImage;
-    public Camera MinimapCamera;
-    public Canvas cv;
+    [SerializeField] GameObject MapStageImage;
+    [SerializeField] MapMarkSpriteSet markSpriteSet;
 
-    public HashSet<Vector2Int> MapStagePositions = new HashSet<Vector2Int>();
-    public Vector2Int curSelectedStage;
-    private Transform player;
-
-    StageManager stageManager;
+    public GameObject MapStagePrefab => MapStageImage;
+    public MapMarkSpriteSet MarkSpriteSet => markSpriteSet;
 
     void Awake()
     {
         instance = this;
+
+        if (markSpriteSet == null)
+            markSpriteSet = MapMarkSpriteSet.LoadFromResources();
+
+        if (markSpriteSet == null)
+            markSpriteSet = Resources.Load<MapMarkSpriteSet>("MapMarkSpriteSet");
+
+        EnsureDungeonMapSystems();
+        EnsureMainSceneCornerMinimap();
     }
 
-    void Start()
+    void EnsureMainSceneCornerMinimap()
     {
-        stageManager = GameObject.Find("StageManager").GetComponent<StageManager>();
+        var miniMapCanvas = GameObject.Find("MiniMapCanvas");
+        if (miniMapCanvas == null || miniMapCanvas.GetComponent<CornerMinimapInstaller>() != null)
+            return;
+
+        miniMapCanvas.AddComponent<CornerMinimapInstaller>();
     }
 
-    void Update()
+    void OnDestroy()
     {
-        if (player == null)
+        if (instance == this)
+            instance = null;
+    }
+
+    void EnsureDungeonMapSystems()
+    {
+        if (Object.FindAnyObjectByType<DungeonMapService>() == null)
         {
-            player = GameObject.FindGameObjectWithTag("Player").transform;
+            var serviceObject = new GameObject("DungeonMapService");
+            serviceObject.AddComponent<DungeonMapService>();
         }
 
-        if (Input.GetKey(KeyCode.Tab))
+        if (Object.FindAnyObjectByType<DungeonMapBootstrap>() == null)
         {
-            MinimapCamera.orthographicSize = 200f;
-            MinimapCamera.transform.position = new Vector3(0, 30, 0);
-
-            MinimapImage.transform.localScale = new Vector3(3.5f, 3.5f, 1);
-            MinimapImage.transform.localPosition = new Vector3(0, 0, 0);
+            var bootstrapObject = new GameObject("DungeonMapBootstrap");
+            var bootstrap = bootstrapObject.AddComponent<DungeonMapBootstrap>();
+            bootstrap.Initialize(MapStageImage, markSpriteSet);
         }
-        else
-        {
-            MinimapCamera.orthographicSize = 50f;
-            MinimapCamera.transform.position = new Vector3(player.position.x, transform.position.y, player.position.z);
 
-            MinimapImage.transform.localScale = new Vector3(1, 1, 1);
-            MinimapImage.transform.localPosition = new Vector3(800, 400, 0);
-        }
+        DungeonMapUiInstaller.EnsureMapBoardUi();
     }
 }
