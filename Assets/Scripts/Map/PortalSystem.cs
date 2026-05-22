@@ -9,7 +9,6 @@ public class PortalSystem : MonoBehaviour
     StageManager stageManager;
 
     GameObject player;
-    PlayerProfile playerProfile;
 
     [SerializeField] PortalDirection direction;
 
@@ -23,7 +22,9 @@ public class PortalSystem : MonoBehaviour
     void Update()
     {
         if (portalManager == null)
+        {
             portalManager = GetComponentInParent<PortalManager>();
+        }
 
         if (stageManager == null && StageManager.instance != null)
         {
@@ -42,7 +43,6 @@ public class PortalSystem : MonoBehaviour
             }
             else if (portalManager.PlayerObject.GetComponent<PlayerProfile>().ActCount <= 0)
             {
-
             }
         }
 
@@ -90,21 +90,21 @@ public class PortalSystem : MonoBehaviour
                 } while (randomPos.x == 0 && randomPos.y == 0);
 
                 player.transform.position = new Vector3(randomPos.x * stageManager.spacing, 1.9f, randomPos.y * stageManager.spacing - distance);
-                //·£´ýÆ÷Å»
+                //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å»
                 break;
             case PortalDirection.Clear:
-                Debug.Log(stageManager);
-                stageManager.curFloorCleared = true;
-                //Å¬¸®¾îÆ÷Å»
-                if (!stageManager.Tutorial)
-                {
-                    int countHalf = (stageManager.StageCount % 2 == 1) ? stageManager.StageCount / 2 + 1 : stageManager.StageCount / 2;
-                    player.transform.position = new Vector3(-countHalf * stageManager.spacing, 1.9f, -countHalf * stageManager.spacing);
-                }
-                else
-                {
-                    player.transform.position = new Vector3(0f, 1.9f, -distance);
-                }
+                //Debug.Log(stageManager);
+                //stageManager.curFloorCleared = true;
+                ////Å¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å»
+                //if (!stageManager.Tutorial)
+                //{
+                //    int countHalf = (stageManager.StageCount % 2 == 1) ? stageManager.StageCount / 2 + 1 : stageManager.StageCount / 2;
+                //    player.transform.position = new Vector3(-countHalf * stageManager.spacing, 1.9f, -countHalf * stageManager.spacing);
+                //}
+                //else
+                //{
+                //    player.transform.position = new Vector3(0f, 1.9f, -distance);
+                //}
                 break;
             case PortalDirection.Return:
                 Vector3 returnPos = new Vector3(stageManager.StagePositions.ElementAt(0).x * stageManager.spacing, 1.9f, stageManager.StagePositions.ElementAt(0).y * stageManager.spacing);

@@ -21,9 +21,9 @@ public class ConcentrationOfBattleSkill : MonoBehaviour
         {
             bool critical = playerProfile.CriticalProbability();
             if (critical)
-                damage = playerProfile.CriticalBuff(playerProfile.ATK(55f));
+                damage = playerProfile.CriticalBuff(playerProfile.BasicATK(55f));
             else
-                damage = playerProfile.ATK(55f);
+                damage = playerProfile.BasicATK(55f);
         }
     }
 

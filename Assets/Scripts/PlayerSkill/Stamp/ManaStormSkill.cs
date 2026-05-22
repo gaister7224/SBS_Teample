@@ -35,7 +35,7 @@ public class ManaStormSkill : MonoBehaviour
 
     void CheckAttack()
     {
-        playerProfile.ShakeCamera(0.2f, 3.0f, 15.0f);
+        playerProfile.ShakeCamera(0.2f, 1.0f, 15.0f);
         Vector3 finalCenter = (transform.position)
                           + (transform.forward * center.z)
                           + (transform.up * center.y) + (transform.right * center.x);

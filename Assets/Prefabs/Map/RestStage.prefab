@@ -1762,7 +1762,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stageType: 7
   SpawnPrefabs:
-  - {fileID: 0}
+  - {fileID: 1074854292403814, guid: c768072ffa1531945b297d97ec55f771, type: 3}
   isCleared: 0
   isPortalActive: 0
   PortalObject:

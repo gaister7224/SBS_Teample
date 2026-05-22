@@ -21,11 +21,15 @@ public class ConcentrationOfBattleSkillParent : MonoBehaviour
         {
             swordAttackManager.IncreasedColliderSize(30);
         }
+        else
+        {
+            Debug.Log("swordAttackManager : null");
+        }
 
         if (playerProfile != null)
         {
             playerProfile.UseMP(1);
-            playerProfile.ChangeATK(25f);
+            playerProfile.ChangeBasicATK(25f);
         }
         Invoke("CameraShake", 1.0f);
     }

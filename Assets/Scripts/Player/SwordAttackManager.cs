@@ -15,6 +15,7 @@ public class SwordAttackManager : MonoBehaviour
     [SerializeField] private GameObject hitPrefab;
 
     private float damage;
+    private bool skill6Start = false;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
     private void Awake()
@@ -32,7 +33,9 @@ public class SwordAttackManager : MonoBehaviour
             damage = playerProfile.CriticalBuff(playerProfile.BasicATK(100));
         }
         else
+        {
             damage = playerProfile.BasicATK(100);
+        }
 
         StartCoroutine(CheckAttackRoutine());
     }
@@ -49,11 +52,13 @@ public class SwordAttackManager : MonoBehaviour
 
     public void IncreasedColliderSize(float size)
     {
+        skill6Start = true;
         if (originalSize == Vector3.zero)
         {
             originalSize = new Vector3(3f, 2f, 0.5f);
         }
         boxSize = originalSize * (1f + (size / 100f));
+        skill6Start = true;
     }
     void CheckAttack()
     {

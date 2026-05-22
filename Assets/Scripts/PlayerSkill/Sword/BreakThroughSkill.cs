@@ -11,7 +11,7 @@ public class BreakThroughSkill : MonoBehaviour
     private PlayerAttack playerAttack;
     private PlayerProfile playerProfile;
 
-    private float rushSpeed = 10.0f;
+    private float rushSpeed = 300.0f;
     private float stopDist = 7.0f;
 
     private float damage;

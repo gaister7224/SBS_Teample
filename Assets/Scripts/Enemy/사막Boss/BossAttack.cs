@@ -118,10 +118,10 @@ public class BossAttack : MonoBehaviour
     {
         isAttacking = true;
         GameObject[] newattackRange = new GameObject[4];
-        newattackRange[0] = Instantiate(attackRange, transform.position, Quaternion.Euler(0, transform.position.y, 0));
-        newattackRange[1] = Instantiate(attackRange, transform.position, Quaternion.Euler(0, transform.position.y + 90, 0));
-        newattackRange[2] = Instantiate(attackRange, transform.position, Quaternion.Euler(0, transform.position.y + 180, 0));
-        newattackRange[3] = Instantiate(attackRange, transform.position, Quaternion.Euler(0, transform.position.y + 270, 0));
+        newattackRange[0] = Instantiate(attackRange, transform.position, Quaternion.Euler(0, transform.position.y, 0), transform);
+        newattackRange[1] = Instantiate(attackRange, transform.position, Quaternion.Euler(0, transform.position.y + 90, 0), transform);
+        newattackRange[2] = Instantiate(attackRange, transform.position, Quaternion.Euler(0, transform.position.y + 180, 0), transform);
+        newattackRange[3] = Instantiate(attackRange, transform.position, Quaternion.Euler(0, transform.position.y + 270, 0), transform);
         yield return new WaitForSeconds(1f);
         for (int i = 0; i < newattackRange.Length; i++)
         {
@@ -226,14 +226,14 @@ public class BossAttack : MonoBehaviour
     {
         isAttacking = true;
         GameObject[] newattackRange = new GameObject[8];
-        newattackRange[0] = Instantiate(attackRange, transform.position, Quaternion.Euler(0, transform.position.y + 45, 0));
-        newattackRange[1] = Instantiate(attackRange, transform.position, Quaternion.Euler(0, transform.position.y + 135, 0));
-        newattackRange[2] = Instantiate(attackRange, transform.position, Quaternion.Euler(0, transform.position.y + 225, 0));
-        newattackRange[3] = Instantiate(attackRange, transform.position, Quaternion.Euler(0, transform.position.y + 315, 0));
-        newattackRange[4] = Instantiate(attackRange, transform.position, Quaternion.Euler(0, transform.position.y, 0));
-        newattackRange[5] = Instantiate(attackRange, transform.position, Quaternion.Euler(0, transform.position.y + 90, 0));
-        newattackRange[6] = Instantiate(attackRange, transform.position, Quaternion.Euler(0, transform.position.y + 180, 0));
-        newattackRange[7] = Instantiate(attackRange, transform.position, Quaternion.Euler(0, transform.position.y + 270, 0));
+        newattackRange[0] = Instantiate(attackRange, transform.position, Quaternion.Euler(0, transform.position.y + 45, 0), transform);
+        newattackRange[1] = Instantiate(attackRange, transform.position, Quaternion.Euler(0, transform.position.y + 135, 0), transform);
+        newattackRange[2] = Instantiate(attackRange, transform.position, Quaternion.Euler(0, transform.position.y + 225, 0), transform);
+        newattackRange[3] = Instantiate(attackRange, transform.position, Quaternion.Euler(0, transform.position.y + 315, 0), transform);
+        newattackRange[4] = Instantiate(attackRange, transform.position, Quaternion.Euler(0, transform.position.y, 0), transform);
+        newattackRange[5] = Instantiate(attackRange, transform.position, Quaternion.Euler(0, transform.position.y + 90, 0), transform);
+        newattackRange[6] = Instantiate(attackRange, transform.position, Quaternion.Euler(0, transform.position.y + 180, 0), transform);
+        newattackRange[7] = Instantiate(attackRange, transform.position, Quaternion.Euler(0, transform.position.y + 270, 0), transform);
         yield return new WaitForSeconds(1f);
         for (int i = 0; i < newattackRange.Length; i++)
         {
@@ -264,9 +264,9 @@ public class BossAttack : MonoBehaviour
     {
         isAttacking = true;
         GameObject[] newattackRange = new GameObject[3];
-        newattackRange[0] = Instantiate(attackRange, transform.position, Quaternion.Euler(0, transform.position.y, 0));
-        newattackRange[1] = Instantiate(attackRange, transform.position, Quaternion.Euler(0, transform.position.y + 120, 0));
-        newattackRange[2] = Instantiate(attackRange, transform.position, Quaternion.Euler(0, transform.position.y + 240, 0));
+        newattackRange[0] = Instantiate(attackRange, transform.position, Quaternion.Euler(0, transform.position.y, 0), transform);
+        newattackRange[1] = Instantiate(attackRange, transform.position, Quaternion.Euler(0, transform.position.y + 120, 0), transform);
+        newattackRange[2] = Instantiate(attackRange, transform.position, Quaternion.Euler(0, transform.position.y + 240, 0), transform);
         yield return new WaitForSeconds(1f);
         for (int i = 0; i < newattackRange.Length; i++)
         {

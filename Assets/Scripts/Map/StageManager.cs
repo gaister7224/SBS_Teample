@@ -86,59 +86,59 @@ public class StageManager : MonoBehaviour
     void Update()
     {
         //StartCoroutine(SurroundStage());
-        if (curFloorCleared && !Tutorial)
-        {
-            curFloorCleared = false;
-            StagePositions.Clear();
+        //if (curFloorCleared && !Tutorial)
+        //{
+        //    curFloorCleared = false;
+        //    StagePositions.Clear();
 
-            for (int i = transform.childCount - 1; i >= 0; i--)
-            {
-                if (transform.GetChild(i).name.Contains("Stage"))
-                {
-                    Destroy(transform.GetChild(i).gameObject);
-                }
-            }
+        //    for (int i = transform.childCount - 1; i >= 0; i--)
+        //    {
+        //        if (transform.GetChild(i).name.Contains("Stage"))
+        //        {
+        //            Destroy(transform.GetChild(i).gameObject);
+        //        }
+        //    }
 
-            if (LeftFloorCount > 0)
-            {
-                curFloor++;
-                LeftFloorCount--;
-                StartCoroutine(StageCreate());
-            }
-            else
-            {
-                //던전 클리어
-            }
-        }
-        else if (curFloorCleared && Tutorial && TutorialStage.Count > 0)
-        {
-            curFloorCleared = false; 
+        //    if (LeftFloorCount > 0)
+        //    {
+        //        curFloor++;
+        //        LeftFloorCount--;
+        //        StartCoroutine(StageCreate());
+        //    }
+        //    else
+        //    {
+        //        //던전 클리어
+        //    }
+        //}
+        //else if (curFloorCleared && Tutorial && TutorialStage.Count > 0)
+        //{
+        //    curFloorCleared = false; 
             
-            for (int i = transform.childCount - 1; i >= 0; i--)
-            {
-                if (transform.GetChild(i).name.Contains("Stage"))
-                {
-                    Destroy(transform.GetChild(i).gameObject);
-                }
-            }
+        //    for (int i = transform.childCount - 1; i >= 0; i--)
+        //    {
+        //        if (transform.GetChild(i).name.Contains("Stage"))
+        //        {
+        //            Destroy(transform.GetChild(i).gameObject);
+        //        }
+        //    }
 
-            if (LeftFloorCount == 2f)
-            {
-                curFloor++;
-                LeftFloorCount--;
-                Instantiate(TutorialStage[0], transform.position, Quaternion.identity, transform);
-            }
-            else if (LeftFloorCount == 1f)
-            {
-                curFloor++;
-                LeftFloorCount--;
-                Instantiate(TutorialStage[1], transform.position, Quaternion.identity, transform);
-            }
-            else if (LeftFloorCount == 0f)
-            {
-                //튜토리얼 클리어
-            }
-        }
+        //    if (LeftFloorCount == 2f)
+        //    {
+        //        curFloor++;
+        //        LeftFloorCount--;
+        //        Instantiate(TutorialStage[0], transform.position, Quaternion.identity, transform);
+        //    }
+        //    else if (LeftFloorCount == 1f)
+        //    {
+        //        curFloor++;
+        //        LeftFloorCount--;
+        //        Instantiate(TutorialStage[1], transform.position, Quaternion.identity, transform);
+        //    }
+        //    else if (LeftFloorCount == 0f)
+        //    {
+        //        //튜토리얼 클리어
+        //    }
+        //}
 
         //IEnumerator SurroundStage()
         //{
