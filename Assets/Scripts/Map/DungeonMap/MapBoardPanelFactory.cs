@@ -62,7 +62,7 @@ public static class MapBoardPanelFactory
             DungeonMapMarkType.Shop,
             DungeonMapMarkType.Bonfire,
             DungeonMapMarkType.BuffStatue,
-            DungeonMapMarkType.BackPortal,
+            DungeonMapMarkType.ReturnPortal,
             DungeonMapMarkType.RandomPortal
         };
 
