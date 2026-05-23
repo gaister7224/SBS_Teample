@@ -91,6 +91,7 @@ public class DemoSceneBootstrap : MonoBehaviour
 
         EnsureInventorySystem();
         EnsureUIManager();
+        MinimapManager.EnsureVillageCornerMinimap();
         VillageDungeonEntryUi.ApplyVillageExplorationHud();
         RefreshDungeonEntryPortals();
     }

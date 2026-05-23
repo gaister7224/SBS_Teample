@@ -13,6 +13,7 @@ public class DungeonMapGridBuilder : MonoBehaviour
     [SerializeField] bool showPlayerPin = true;
     [SerializeField] bool allowCellInteraction = true;
     [SerializeField] bool centerOnPlayer = false;
+    [SerializeField] bool centerOnGridBounds = false;
 
     readonly Dictionary<Vector2Int, DungeonMapCellView> cells = new();
 
@@ -87,6 +88,7 @@ public class DungeonMapGridBuilder : MonoBehaviour
         showPlayerPin = CornerMinimapSettings.ShowPlayerPin;
         allowCellInteraction = CornerMinimapSettings.AllowCellInteraction;
         centerOnPlayer = true;
+        centerOnGridBounds = false;
         if (built)
             ApplyCellLayout();
     }
@@ -98,6 +100,15 @@ public class DungeonMapGridBuilder : MonoBehaviour
         showPlayerPin = MapBoardPanelSettings.ShowPlayerPin;
         allowCellInteraction = allowMarking;
         centerOnPlayer = false;
+        centerOnGridBounds = true;
+
+        if (rectTransform != null)
+        {
+            rectTransform.anchorMin = new Vector2(0.5f, 0.5f);
+            rectTransform.anchorMax = new Vector2(0.5f, 0.5f);
+            rectTransform.pivot = new Vector2(0.5f, 0.5f);
+        }
+
         if (built)
             ApplyCellLayout();
     }
@@ -146,6 +157,9 @@ public class DungeonMapGridBuilder : MonoBehaviour
         built = cells.Count > 0;
         ApplyCellLayout();
         RefreshAll();
+
+        if (centerOnGridBounds)
+            CenterOnGridBounds();
     }
 
     static void SanitizeCellHierarchy(GameObject cellObject)
@@ -252,6 +266,8 @@ public class DungeonMapGridBuilder : MonoBehaviour
 
         if (centerOnPlayer)
             CenterOnPlayer();
+        else if (centerOnGridBounds)
+            CenterOnGridBounds();
     }
 
     public void CenterOnPlayer()
@@ -260,10 +276,42 @@ public class DungeonMapGridBuilder : MonoBehaviour
             return;
 
         if (!DungeonMapService.Instance.Current.PlayerPosition.HasValue)
+        {
+            CenterOnGridBounds();
             return;
+        }
 
         var playerPos = DungeonMapService.Instance.Current.PlayerPosition.Value;
         rectTransform.anchoredPosition = new Vector2(-playerPos.x * cellSpacing, -playerPos.y * cellSpacing);
+    }
+
+    void CenterOnGridBounds()
+    {
+        if (rectTransform == null || cells.Count == 0)
+            return;
+
+        if (cells.ContainsKey(Vector2Int.zero))
+        {
+            rectTransform.anchoredPosition = Vector2.zero;
+            return;
+        }
+
+        var minX = int.MaxValue;
+        var maxX = int.MinValue;
+        var minY = int.MaxValue;
+        var maxY = int.MinValue;
+
+        foreach (var pos in cells.Keys)
+        {
+            minX = Mathf.Min(minX, pos.x);
+            maxX = Mathf.Max(maxX, pos.x);
+            minY = Mathf.Min(minY, pos.y);
+            maxY = Mathf.Max(maxY, pos.y);
+        }
+
+        var centerX = (minX + maxX) * 0.5f;
+        var centerY = (minY + maxY) * 0.5f;
+        rectTransform.anchoredPosition = new Vector2(-centerX * cellSpacing, -centerY * cellSpacing);
     }
 
     public DungeonMapCellView GetCell(Vector2Int index)

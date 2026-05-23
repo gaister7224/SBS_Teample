@@ -10,8 +10,6 @@ using UnityEngine.UI;
 public class CornerMinimapInstaller : MonoBehaviour
 {
     const string CornerMinimapName = "DungeonCornerMinimap";
-    static readonly Vector2 DefaultCornerAnchoredPosition = new(800f, 400f);
-    static readonly Vector2 DefaultCornerSize = new(200f, 200f);
 
     [SerializeField] RectTransform legacyMinimapImage;
     [SerializeField] bool replaceLegacyMinimap = true;
@@ -23,6 +21,7 @@ public class CornerMinimapInstaller : MonoBehaviour
 
     void Awake()
     {
+        MinimapHudLayout.EnsureMiniMapCanvas();
         CacheLegacyLayoutReference();
         EnsureCornerMinimap();
         BringCornerMinimapToFront();
@@ -80,6 +79,9 @@ public class CornerMinimapInstaller : MonoBehaviour
 
     void RemoveLegacyMinimapObjects()
     {
+        if (ShouldKeepLegacyMinimap())
+            return;
+
         CacheLegacyLayoutReference();
 
         if (legacyMinimapImage != null)
@@ -93,7 +95,15 @@ public class CornerMinimapInstaller : MonoBehaviour
 
         var minimapCamera = GameObject.Find("MinimapCamera");
         if (minimapCamera != null)
-            Destroy(minimapCamera);
+            minimapCamera.SetActive(false);
+    }
+
+    static bool ShouldKeepLegacyMinimap()
+    {
+        if (GameManager.instance == null)
+            return true;
+
+        return GameManager.instance.mapState == MapState.Village;
     }
 
     void BringCornerMinimapToFront()
@@ -106,6 +116,9 @@ public class CornerMinimapInstaller : MonoBehaviour
 
     void EnsureCornerMinimap()
     {
+        if (ShouldKeepLegacyMinimap())
+            return;
+
         var existing = transform.Find(CornerMinimapName);
         if (existing != null)
         {
@@ -131,6 +144,7 @@ public class CornerMinimapInstaller : MonoBehaviour
             if (CornerMinimapSettings.ShowMarkingToolbar)
                 EnsureMarkingToolbar(existing, ResolveMarkSpriteSet());
 
+            ApplyCornerLayout();
             ApplyCornerPanelSize();
             BringCornerMinimapToFront();
             return;
@@ -188,25 +202,6 @@ public class CornerMinimapInstaller : MonoBehaviour
 
     void ApplyCornerLayout()
     {
-        if (legacyMinimapImage != null)
-        {
-            cornerRect.anchorMin = legacyMinimapImage.anchorMin;
-            cornerRect.anchorMax = legacyMinimapImage.anchorMax;
-            cornerRect.pivot = legacyMinimapImage.pivot;
-            cornerRect.anchoredPosition = legacyMinimapImage.anchoredPosition;
-            cornerRect.sizeDelta = legacyMinimapImage.sizeDelta;
-            return;
-        }
-
-        cornerRect.anchorMin = new Vector2(0.5f, 0.5f);
-        cornerRect.anchorMax = new Vector2(0.5f, 0.5f);
-        cornerRect.pivot = new Vector2(0.5f, 0.5f);
-        cornerRect.anchoredPosition = DefaultCornerAnchoredPosition;
-        cornerRect.sizeDelta = DefaultCornerSize;
-    }
-
-    void ApplyCornerPanelSize()
-    {
         if (cornerRect == null)
             return;
 
@@ -214,8 +209,10 @@ public class CornerMinimapInstaller : MonoBehaviour
         if (CornerMinimapSettings.ShowMarkingToolbar)
             height += CornerMinimapSettings.ToolbarHeight;
 
-        cornerRect.sizeDelta = new Vector2(CornerMinimapSettings.PanelSize, height);
+        MinimapHudLayout.ApplyTopRight(cornerRect, CornerMinimapSettings.PanelSize, height);
     }
+
+    void ApplyCornerPanelSize() => ApplyCornerLayout();
 
     static void RemoveMarkingToolbarIfDisabled(Transform cornerRoot)
     {
@@ -259,5 +256,44 @@ public class CornerMinimapInstaller : MonoBehaviour
             return;
 
         canvas.AddComponent<CornerMinimapInstaller>();
+    }
+
+    public static void RefreshForCurrentMapState()
+    {
+        var installer = Object.FindAnyObjectByType<CornerMinimapInstaller>();
+        if (installer == null)
+            return;
+
+        if (ShouldKeepLegacyMinimap())
+            installer.RestoreLegacyMinimap();
+        else
+            installer.EnsureGridMinimapForDungeon();
+    }
+
+    void RestoreLegacyMinimap()
+    {
+        var cornerRoot = transform.Find(CornerMinimapName);
+        if (cornerRoot != null)
+            Destroy(cornerRoot.gameObject);
+
+        cornerRect = null;
+        gridBuilder = null;
+
+        CacheLegacyLayoutReference();
+        if (legacyMinimapImage != null)
+        {
+            legacyMinimapImage.gameObject.SetActive(true);
+            MinimapHudLayout.ApplyTopRight(
+                legacyMinimapImage,
+                MinimapHudLayout.VillageMinimapSize,
+                MinimapHudLayout.VillageMinimapSize);
+        }
+    }
+
+    void EnsureGridMinimapForDungeon()
+    {
+        RemoveLegacyMinimapObjects();
+        EnsureCornerMinimap();
+        BringCornerMinimapToFront();
     }
 }

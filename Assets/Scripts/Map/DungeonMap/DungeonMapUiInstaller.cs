@@ -56,6 +56,8 @@ public class DungeonMapUiInstaller : MonoBehaviour
         if (dungeonMapUi != null && mapBoardPanel != null)
         {
             dungeonMapUi.SetMapBoardPanel(mapBoardPanel);
+            EnsureDungeonMapBoardLayout(mapBoardPanel);
+            EnsureDungeonMapUiRoot(dungeonMapUi, MinimapHudLayout.FindMainOverlayCanvas());
             return;
         }
 
@@ -64,6 +66,8 @@ public class DungeonMapUiInstaller : MonoBehaviour
         if (dungeonMapUi != null && mapBoardPanel != null)
         {
             dungeonMapUi.SetMapBoardPanel(mapBoardPanel);
+            EnsureDungeonMapBoardLayout(mapBoardPanel);
+            EnsureDungeonMapUiRoot(dungeonMapUi, MinimapHudLayout.FindMainOverlayCanvas());
             return;
         }
 
@@ -73,7 +77,7 @@ public class DungeonMapUiInstaller : MonoBehaviour
         if (mapStagePrefab == null)
             mapStagePrefab = MinimapManager.ResolveMapStagePrefab();
 
-        var canvas = FindMapBoardCanvas();
+        var canvas = MinimapHudLayout.FindMainOverlayCanvas();
         if (canvas == null)
             return;
 
@@ -84,13 +88,32 @@ public class DungeonMapUiInstaller : MonoBehaviour
             includeMarkingToolbar: true,
             panelName: "DungeonMapBoardPanel");
 
+        MinimapHudLayout.ApplyFullscreenPanel(mapBoardPanel.panelRoot.GetComponent<RectTransform>());
         mapBoardPanel.transform.SetAsLastSibling();
 
-        dungeonMapUi = DungeonMapUI.EnsureSingleInstance(canvas.transform);
+        dungeonMapUi = DungeonMapUI.EnsureSingleInstance(null);
+        EnsureDungeonMapUiRoot(dungeonMapUi, canvas);
         dungeonMapUi.SetMapBoardPanel(mapBoardPanel);
 
         if (DungeonMapService.Instance != null)
             DungeonMapService.Instance.EnsureLoadedForCurrentDungeon();
+    }
+
+    static void EnsureDungeonMapBoardLayout(MapBoardPanelView panel)
+    {
+        if (panel?.panelRoot == null)
+            return;
+
+        MinimapHudLayout.ApplyFullscreenPanel(panel.panelRoot.GetComponent<RectTransform>());
+    }
+
+    static void EnsureDungeonMapUiRoot(DungeonMapUI mapUi, Canvas rootCanvas)
+    {
+        if (mapUi == null)
+            return;
+
+        if (mapUi.transform.parent != null)
+            mapUi.transform.SetParent(null, false);
     }
 
     static void CleanupDuplicateMapUi()
@@ -111,6 +134,9 @@ public class DungeonMapUiInstaller : MonoBehaviour
         foreach (var panel in Object.FindObjectsByType<MapBoardPanelView>(FindObjectsSortMode.None))
         {
             if (panel == null || panel == keepPanel)
+                continue;
+
+            if (!panel.gameObject.name.Contains("DungeonMapBoard"))
                 continue;
 
             var root = panel.panelRoot != null ? panel.panelRoot : panel.gameObject;
@@ -140,37 +166,5 @@ public class DungeonMapUiInstaller : MonoBehaviour
         }
 
         return null;
-    }
-
-    static Canvas FindMapBoardCanvas()
-    {
-        var allCanvases = Object.FindObjectsByType<Canvas>(FindObjectsSortMode.None);
-        Canvas best = null;
-
-        foreach (var canvas in allCanvases)
-        {
-            if (canvas == null || canvas.renderMode != RenderMode.ScreenSpaceOverlay)
-                continue;
-
-            if (canvas.gameObject.name.Contains("MiniMap"))
-                continue;
-
-            if (best == null || canvas.sortingOrder >= best.sortingOrder)
-                best = canvas;
-        }
-
-        if (best != null)
-            return best;
-
-        foreach (var canvas in allCanvases)
-        {
-            if (canvas == null || canvas.renderMode != RenderMode.ScreenSpaceOverlay)
-                continue;
-
-            if (best == null || canvas.sortingOrder >= best.sortingOrder)
-                best = canvas;
-        }
-
-        return best ?? Object.FindAnyObjectByType<Canvas>();
     }
 }

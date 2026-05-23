@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 /// <summary>
 /// 그리드 미니맵 셀 프리팹 참조와 MainScene 던전 지도 UI 부트스트랩.
@@ -66,10 +67,55 @@ public class MinimapManager : MonoBehaviour
 
     void BootstrapMainScene()
     {
-        DisableMainSceneVillageMapUi();
         EnsureDungeonMapService();
-        EnsureMainSceneCornerMinimap();
+        ApplyMainSceneMinimapMode();
         DungeonMapUiInstaller.EnsureMapBoardUi();
+    }
+
+    public static void ApplyMainSceneMinimapMode()
+    {
+        if (SceneManager.GetActiveScene().name != "MainScene")
+            return;
+
+        MinimapHudLayout.EnsureMiniMapCanvas();
+
+        if (IsVillageMapState())
+        {
+            EnableMainSceneVillageMapUi();
+            EnsureVillageCornerMinimap();
+            CornerMinimapInstaller.RefreshForCurrentMapState();
+            return;
+        }
+
+        DisableMainSceneVillageMapUi();
+        EnsureMainSceneCornerMinimap();
+        CornerMinimapInstaller.RefreshForCurrentMapState();
+    }
+
+    static bool IsVillageMapState()
+    {
+        if (GameManager.instance == null)
+            return true;
+
+        return GameManager.instance.mapState == MapState.Village;
+    }
+
+    public static void EnsureVillageCornerMinimap()
+    {
+        MinimapHudLayout.EnsureMiniMapCanvas();
+
+        var canvas = GameObject.Find("MiniMapCanvas");
+        if (canvas == null)
+            return;
+
+        EnsureVillageMinimapCamera();
+        EnsureMinimapImageDisplay(canvas.transform);
+    }
+
+    static void EnableMainSceneVillageMapUi()
+    {
+        foreach (var villageUi in Object.FindObjectsByType<VillageMinimapUI>(FindObjectsSortMode.None))
+            villageUi.enabled = true;
     }
 
     static void DisableMainSceneVillageMapUi()
@@ -82,7 +128,49 @@ public class MinimapManager : MonoBehaviour
             Destroy(largeMapPanel);
     }
 
-    void EnsureMainSceneCornerMinimap()
+    static void EnsureVillageMinimapCamera()
+    {
+        var minimapCamera = GameObject.Find("MinimapCamera");
+        if (minimapCamera == null)
+            return;
+
+        minimapCamera.SetActive(true);
+
+        if (minimapCamera.GetComponent<VillageMinimapSync>() == null)
+            minimapCamera.AddComponent<VillageMinimapSync>();
+    }
+
+    static void EnsureMinimapImageDisplay(Transform canvasTransform)
+    {
+        var existing = canvasTransform.Find("MinimapImage");
+        if (existing != null)
+        {
+            existing.gameObject.SetActive(true);
+            MinimapHudLayout.ApplyTopRight(
+                existing as RectTransform,
+                MinimapHudLayout.VillageMinimapSize,
+                MinimapHudLayout.VillageMinimapSize);
+            return;
+        }
+
+        var minimapCamera = GameObject.Find("MinimapCamera")?.GetComponent<Camera>();
+        if (minimapCamera == null || minimapCamera.targetTexture == null)
+            return;
+
+        var imageObject = new GameObject("MinimapImage", typeof(RectTransform), typeof(CanvasRenderer), typeof(RawImage));
+        imageObject.transform.SetParent(canvasTransform, false);
+
+        var rect = imageObject.GetComponent<RectTransform>();
+        MinimapHudLayout.ApplyTopRight(rect, MinimapHudLayout.VillageMinimapSize, MinimapHudLayout.VillageMinimapSize);
+
+        var rawImage = imageObject.GetComponent<RawImage>();
+        rawImage.texture = minimapCamera.targetTexture;
+        rawImage.raycastTarget = false;
+
+        imageObject.transform.SetAsLastSibling();
+    }
+
+    static void EnsureMainSceneCornerMinimap()
     {
         var miniMapCanvas = GameObject.Find("MiniMapCanvas");
         if (miniMapCanvas == null || miniMapCanvas.GetComponent<CornerMinimapInstaller>() != null)

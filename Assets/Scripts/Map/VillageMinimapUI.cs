@@ -15,13 +15,16 @@ public class VillageMinimapUI : MonoBehaviour
 
     private void Awake()
     {
-        if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "MainScene")
+        if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "MainScene"
+            && (GameManager.instance == null || GameManager.instance.mapState != MapState.Village))
         {
             enabled = false;
             return;
         }
 
-        DemoSceneBootstrap.EnsureGameManager();
+        if (GameManager.instance == null)
+            DemoSceneBootstrap.EnsureGameManager();
+
         Instance = this;
 
         if (largeMapPanel != null)
@@ -59,10 +62,15 @@ public class VillageMinimapUI : MonoBehaviour
     void EnsureMapBoardPanel()
     {
         if (mapBoardPanel != null)
+        {
+            EnsureLargeMapPanelLayout();
             return;
+        }
 
         if (largeMapPanel == null)
             return;
+
+        EnsureLargeMapPanelLayout();
 
         mapBoardPanel = largeMapPanel.GetComponent<MapBoardPanelView>();
 
@@ -80,6 +88,7 @@ public class VillageMinimapUI : MonoBehaviour
         contentRect.anchorMin = new Vector2(0.5f, 0.5f);
         contentRect.anchorMax = new Vector2(0.5f, 0.5f);
         contentRect.pivot = new Vector2(0.5f, 0.5f);
+        contentRect.anchoredPosition = Vector2.zero;
         contentRect.sizeDelta = new Vector2(MapBoardPanelSettings.PanelSize, MapBoardPanelSettings.PanelSize);
 
         var grid = content.GetComponent<DungeonMapGridBuilder>();
@@ -101,6 +110,18 @@ public class VillageMinimapUI : MonoBehaviour
             ResolveMapStagePrefab(), ResolveMarkSpriteSet());
     }
 
+    void EnsureLargeMapPanelLayout()
+    {
+        if (largeMapPanel == null)
+            return;
+
+        var panelRect = largeMapPanel.GetComponent<RectTransform>();
+        if (panelRect == null)
+            return;
+
+        MinimapHudLayout.ApplyFullscreenPanel(panelRect);
+    }
+
     GameObject ResolveMapStagePrefab()
     {
         if (mapStagePrefab != null)
@@ -118,6 +139,7 @@ public class VillageMinimapUI : MonoBehaviour
     public void ToggleLargeMap()
     {
         EnsureMapBoardPanel();
+        EnsureLargeMapPanelLayout();
         EnsureDungeonMapService();
 
         if (mapBoardPanel == null)

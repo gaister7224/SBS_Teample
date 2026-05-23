@@ -46,6 +46,7 @@ public class DungeonEntryManager : MonoBehaviour, IPointerClickHandler
             GameManager.instance.dayEnd = false;
             GameManager.instance.itemGetAll = false;
             GameManager.instance.mapState = MapState.Stage;
+            MinimapManager.ApplyMainSceneMinimapMode();
 
             if (DungeonMapService.Instance == null)
             {

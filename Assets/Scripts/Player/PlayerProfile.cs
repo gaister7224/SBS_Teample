@@ -455,6 +455,7 @@ public class PlayerProfile : PlayerState
             GameManager.instance.gold -= GoldDown;
             transform.position = UIManager.Instance.villagePos.position;
             GameManager.instance.mapState = MapState.Village;
+            MinimapManager.ApplyMainSceneMinimapMode();
             UIManager.Instance.virtualCamera.GetComponent<CinemachineConfiner3D>().BoundingVolume
                 = UIManager.Instance.villageCollider;
         }

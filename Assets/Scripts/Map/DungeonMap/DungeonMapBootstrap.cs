@@ -53,7 +53,7 @@ public class DungeonMapBootstrap : MonoBehaviour
 
     void BuildUi()
     {
-        var canvas = Object.FindAnyObjectByType<Canvas>();
+        var canvas = MinimapHudLayout.FindMainOverlayCanvas();
         if (canvas == null)
             return;
 
@@ -69,7 +69,9 @@ public class DungeonMapBootstrap : MonoBehaviour
             includeMarkingToolbar: true,
             panelName: "DungeonMapBoardPanel");
 
-        var mapUi = DungeonMapUI.EnsureSingleInstance(canvas.transform);
+        MinimapHudLayout.ApplyFullscreenPanel(mapBoard.panelRoot.GetComponent<RectTransform>());
+
+        var mapUi = DungeonMapUI.EnsureSingleInstance(null);
         mapUi.SetMapBoardPanel(mapBoard);
     }
 
