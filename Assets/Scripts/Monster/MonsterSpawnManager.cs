@@ -161,7 +161,7 @@ public class MonsterSpawnManager : MonoBehaviour
                 stageManager.curStageCleared = true;
                 stageManager.activePortal = true;
             }
-            else
+            else if (stageManager.curStageType == StageType.BuffStone)
             {
                 stageManager.curStageCleared = true;
                 stageManager.activePortal = true;
