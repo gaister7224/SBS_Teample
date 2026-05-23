@@ -50,6 +50,7 @@ public class DayManager : MonoBehaviour
     {
         if (UIManager.Instance.inventory.currentUI == UIType.None && GameManager.instance.itemGetAll)
         {
+            Debug.Log("DayEnd");
             dayEndButton.interactable = false;
             sunLight.transform.rotation = Quaternion.Euler(daySunRotation);
             curDay = Day.day;
