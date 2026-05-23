@@ -8,10 +8,13 @@ public class StageDetector : MonoBehaviour
     [SerializeField] PortalManager portalManager;
     [SerializeField] StageManager stageManager;
 
+    private MonsterSpawnManager monsterSpawnManager;
+
     private void Awake()
     {
         stageManager = GameObject.Find("StageManager").GetComponent<StageManager>();
         portalManager = GetComponentInParent<PortalManager>();
+        monsterSpawnManager = stageManager.GetComponentInChildren<MonsterSpawnManager>();
     }
 
     void Start()
@@ -63,7 +66,15 @@ public class StageDetector : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            StartCoroutine(StageChangeCoroutine());
+            if(monsterSpawnManager != null)
+            {
+                monsterSpawnManager.spawnPos = new Vector3(transform.position.x, 2f, transform.position.z);
+            }
+            else
+            {
+                Debug.LogError("MonsterSpawnManager null");
+            }
+                StartCoroutine(StageChangeCoroutine());
             var confinder = portalManager.CinemachineCamera.GetComponent<CinemachineConfiner3D>();
             confinder.BoundingVolume = gameObject.GetComponent<Collider>();
 

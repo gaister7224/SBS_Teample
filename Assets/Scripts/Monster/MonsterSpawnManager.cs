@@ -26,6 +26,9 @@ public class MonsterSpawnManager : MonoBehaviour
 
     [SerializeField] private GameObject[] dropItems;
 
+    [HideInInspector]
+    public Vector3 spawnPos;
+
     void Awake()
     {
         instance = this;
@@ -329,11 +332,12 @@ public class MonsterSpawnManager : MonoBehaviour
                     if (count >= stageManager.curStageSpawnPrefabs.Count)
                         return;
 
-                    var spawnPos = new Vector3(
-                        stageManager.curStagePos.x * stageManager.spacing,
-                        2f,
-                        stageManager.curStagePos.y * stageManager.spacing);
+                    //var spawnPos = new Vector3(
+                    //    stageManager.curStagePos.x * stageManager.spacing,
+                    //    2f,
+                    //    stageManager.curStagePos.y * stageManager.spacing);
 
+                    Debug.Log(spawnPos);
                     var monster = Instantiate(prefab, spawnPos, Quaternion.identity);
                     CurrentAliveMonsters.Add(monster);
 

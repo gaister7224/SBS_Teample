@@ -37,6 +37,16 @@ public class SkillUIManager : MonoBehaviour
         inventory.uiActionMap.FindAction("OpenInfoUI").performed += OnOpenInfoUI;
     }
 
+    private void Update()
+    {
+        if (GameManager.instance.mapState == MapState.Village)
+        {
+            if (slots[0].SkillItem != null || slots[1].SkillItem != null || slots[2].SkillItem != null)
+            {
+                GameManager.instance.skillInstall = true;
+            }
+        }
+    }
     public void SkillPointUse()
     {
         GameManager.instance.skillPoint--;
@@ -89,7 +99,7 @@ public class SkillUIManager : MonoBehaviour
             if (checkSkillSlot.IsMask(skillSlot.SkillItem))
             {
                 checkSkillSlot.AddItem(skillSlot.SkillItem);
-                DayManager.instance.dayEndButton.interactable = true;
+                GameManager.instance.skillInstall = true;
             }
             else
             {

@@ -76,12 +76,6 @@ public class PortalManager : MonoBehaviour
 
         isPortalActive = stageManager.activePortal;
 
-        //if (stageManager.curStagePos.x != gameObject.transform.position.x / stageManager.spacing 
-        //    || stageManager.curStagePos.y != gameObject.transform.position.z / stageManager.spacing)
-        //{
-        //    isPortalActive = false;
-        //}
-
         if (!stageManager.Tutorial)
         {
             SurroundStageCheck();

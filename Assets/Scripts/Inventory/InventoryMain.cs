@@ -83,7 +83,7 @@ public class InventoryMain : InventoryBase
             {
                 CloseInventory();
 
-                if (!GameManager.instance.inventoryTutorial)
+                if (!GameManager.instance.inventoryTutorial) //튜토리얼 설명
                 {
                     if (!DialogueManager.instance.start)
                     {

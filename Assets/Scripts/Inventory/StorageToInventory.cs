@@ -44,7 +44,7 @@ public class StorageToInventory : MonoBehaviour
     /// </summary>
     public void GetAll()
     {
-        InventorySlot[] allSlots = inventory.GetAllItems();
+        InventorySlot[] allSlots = inventory.GetAllItems(); //상자 안에 슬롯들
         int eCount = 0;
         int aCount = 0;
         int pCount = 0;
@@ -148,6 +148,20 @@ public class StorageToInventory : MonoBehaviour
             }
         }
         
+    }
+
+    public void ItemGetAllCheck()
+    {
+        InventorySlot[] allSlots = inventory.GetAllItems();
+
+        for (int i = 0; i < allSlots.Length; i++)
+        {
+            if(allSlots[i].Item != null)
+            {
+                return;
+            }
+        }
+        GameManager.instance.itemGetAll = true;
     }
 
     /// <summary>

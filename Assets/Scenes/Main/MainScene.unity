@@ -2710,6 +2710,7 @@ MonoBehaviour:
   dayEnd: 0
   possibleDungeon: 0000000000000000000000
   itemGetAll: 0
+  skillInstall: 0
   curDungeonNumber: 0
   installImpossibleStart: 0
   goldMultiplier: 0
@@ -5539,6 +5540,7 @@ MonoBehaviour:
   slots:
   - {fileID: 1848170946}
   - {fileID: 1848170945}
+  - {fileID: 1365823689}
 --- !u!114 &1208749652
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6205,6 +6207,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e616edc21ac447144baad3ba5f60526e, type: 3}
+--- !u!114 &1365823689 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8808991228830288103, guid: 8887c03577ef6854fa13ac4b3c662cdf, type: 3}
+  m_PrefabInstance: {fileID: 1176665544}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56abdb816a149d242a6764ed941c5128, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1399348551
 GameObject:
   m_ObjectHideFlags: 0
@@ -8833,6 +8846,7 @@ MonoBehaviour:
   dayEnd: 0
   possibleDungeon: 
   itemGetAll: 0
+  skillInstall: 0
   curDungeonNumber: 0
   installImpossibleStart: 0
   goldMultiplier: 0
