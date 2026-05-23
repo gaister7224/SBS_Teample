@@ -78,14 +78,19 @@ public class SkillUIManager : MonoBehaviour
             }
             else if (inventory.currentUI == UIType.SkillWindow && playerInfo.activeSelf)
             {
-                Time.timeScale = 1f;
-                playerInfo.SetActive(false);
-                inventory.playerProfile.SetActive(true);
-                inventory.playerAttack.uiClicking = false;
-                slotClickSlot = 0;
-                inventory.currentUI = UIType.None;
+                InfoUIClose();
             }
         }
+    }
+
+    public void InfoUIClose()
+    {
+        Time.timeScale = 1f;
+        playerInfo.SetActive(false);
+        inventory.playerProfile.SetActive(true);
+        inventory.playerAttack.uiClicking = false;
+        slotClickSlot = 0;
+        inventory.currentUI = UIType.None;
     }
 
     /// <summary>

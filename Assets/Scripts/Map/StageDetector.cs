@@ -90,6 +90,7 @@ public class StageDetector : MonoBehaviour
             stageManager.curStageCleared = portalManager.isCleared;
             stageManager.curStageSpawnPrefabs = portalManager.SpawnPrefabs;
             stageManager.surroundStagePositions.Clear();
+            stageManager.curStageType = portalManager.stageType;
             for (int i = 0; i < 9; i++)
             {
                 int x = stageManager.curStagePos.x + (i % 3 - 1);

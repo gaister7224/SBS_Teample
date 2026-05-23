@@ -1556,6 +1556,17 @@ Transform:
   - {fileID: 1955783402}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+--- !u!114 &644203879 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8808991228830288103, guid: 8887c03577ef6854fa13ac4b3c662cdf, type: 3}
+  m_PrefabInstance: {fileID: 4011188036222705545}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56abdb816a149d242a6764ed941c5128, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &644638798 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5504796616839031174, guid: 8887c03577ef6854fa13ac4b3c662cdf, type: 3}
@@ -1966,6 +1977,7 @@ MonoBehaviour:
   dayEnd: 0
   possibleDungeon: 00000000
   itemGetAll: 0
+  skillInstall: 0
   curDungeonNumber: 0
   installImpossibleStart: 0
   goldMultiplier: 0
@@ -3937,6 +3949,7 @@ MonoBehaviour:
   slots:
   - {fileID: 1414388925}
   - {fileID: 167531418}
+  - {fileID: 644203879}
 --- !u!114 &1858061606
 MonoBehaviour:
   m_ObjectHideFlags: 0

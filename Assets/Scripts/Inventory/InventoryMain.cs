@@ -129,7 +129,7 @@ public class InventoryMain : InventoryBase
         }
     }
 
-    private void CloseInventory()
+    public void CloseInventory()
     {
         if (inventoryBase != null)
         {

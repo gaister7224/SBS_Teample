@@ -98,7 +98,7 @@ public class ItemRaycast : MonoBehaviour
             else if (inventory.currentUI == UIType.Chest)
             {
 
-                Window(1f, storageInventory, false, true, false, UIType.None, isStorageActive, false);
+                StorageClose();
                 if (!GameManager.instance.storageTutorial)
                 {
                     if (!DialogueManager.instance.start)
@@ -118,7 +118,7 @@ public class ItemRaycast : MonoBehaviour
             }
             else if (inventory.currentUI == UIType.Store)
             {
-                Window(1f, UIManager.Instance.storeWindow, false, true, false, UIType.None, isStoreActive, false);
+                StoreClose();
             }
         }
 
@@ -130,9 +130,22 @@ public class ItemRaycast : MonoBehaviour
             }
             else if (inventory.currentUI == UIType.VillageStore)
             {
-                Window(1f, UIManager.Instance.villageStoreWindow, false, true, false, UIType.None, isVillageStoreActive, false);
+                VillageStoreClose();
             }
         }
+    }
+
+    public void StorageClose()
+    {
+        Window(1f, storageInventory, false, true, false, UIType.None, isStorageActive, false);
+    }
+    public void StoreClose()
+    {
+        Window(1f, UIManager.Instance.storeWindow, false, true, false, UIType.None, isStoreActive, false);
+    }
+    public void VillageStoreClose()
+    {
+        Window(1f, UIManager.Instance.villageStoreWindow, false, true, false, UIType.None, isVillageStoreActive, false);
     }
 
     private void Window(float timeScale, GameObject obj, bool objSetActive, bool setActive, bool uiClicking,

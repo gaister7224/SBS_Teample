@@ -53,13 +53,16 @@ public class DayManager : MonoBehaviour
 
     private void Update()
     {
-        if(GameManager.instance.itemGetAll && GameManager.instance.skillInstall && curDay == Day.night)
+        if (dayEndButton != null)
         {
-            dayEndButton.interactable = true;
-        }
-        else
-        {
-            dayEndButton.interactable = false;
+            if (GameManager.instance.itemGetAll && GameManager.instance.skillInstall && curDay == Day.night)
+            {
+                dayEndButton.interactable = true;
+            }
+            else
+            {
+                dayEndButton.interactable = false;
+            }
         }
     }
 
