@@ -93,17 +93,18 @@ public class PortalSystem : MonoBehaviour
                 //������Ż
                 break;
             case PortalDirection.Clear:
-                stageManager.curFloorCleared = true;
-                //Ŭ������Ż
-                if (!stageManager.Tutorial)
-                {
-                    int countHalf = (stageManager.StageCount % 2 == 1) ? stageManager.StageCount / 2 + 1 : stageManager.StageCount / 2;
-                    player.transform.position = new Vector3(-countHalf * stageManager.spacing, 1.9f, -countHalf * stageManager.spacing);
-                }
-                else
-                {
-                    player.transform.position = new Vector3(0f, 1.9f, -distance);
-                }
+                //Debug.Log(stageManager);
+                //stageManager.curFloorCleared = true;
+                ////Ŭ������Ż
+                //if (!stageManager.Tutorial)
+                //{
+                //    int countHalf = (stageManager.StageCount % 2 == 1) ? stageManager.StageCount / 2 + 1 : stageManager.StageCount / 2;
+                //    player.transform.position = new Vector3(-countHalf * stageManager.spacing, 1.9f, -countHalf * stageManager.spacing);
+                //}
+                //else
+                //{
+                //    player.transform.position = new Vector3(0f, 1.9f, -distance);
+                //}
                 break;
             case PortalDirection.Return:
                 Vector3 returnPos = new Vector3(stageManager.StagePositions.ElementAt(0).x * stageManager.spacing, 1.9f, stageManager.StagePositions.ElementAt(0).y * stageManager.spacing);

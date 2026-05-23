@@ -13,7 +13,7 @@ public class GameState : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
-        GameObject newPlayer = Instantiate(player, playerSpawnPoint.transform.position, Quaternion.identity);
+        GameObject newPlayer = Instantiate(player, new Vector3(0, 1.9f, 0), Quaternion.identity);
         if (newPlayer != null)
         {
             playerCamera.Follow = newPlayer.transform;

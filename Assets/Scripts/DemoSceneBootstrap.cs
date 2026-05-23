@@ -30,10 +30,10 @@ public class DemoSceneBootstrap : MonoBehaviour
         var gm = go.AddComponent<GameManager>();
         gm.nickName = "Player";
         gm.level = 1;
-        gm.curLevel = 1;
+        gm.curLevel = 0;
         gm.mapState = MapState.Village;
         gm.maxActCount = 10;
         gm.curActCount = 10;
-        gm.possibleDungeon = new bool[4];
+        gm.possibleDungeon = new bool[11];
     }
 }

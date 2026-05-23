@@ -32,7 +32,6 @@ public class DungeonEntryManager : MonoBehaviour, IPointerClickHandler
     }
     public void OnPointerClick(PointerEventData eventData)
     {
-        Debug.Log("click");
         if (GameManager.instance.possibleDungeon[data.dungeonNumber - 1] && GameManager.instance.dayEnd)
         {
             if(spawnedDungeonInstance == null)
