@@ -15,6 +15,12 @@ public class VillageMinimapUI : MonoBehaviour
 
     private void Awake()
     {
+        if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "MainScene")
+        {
+            enabled = false;
+            return;
+        }
+
         DemoSceneBootstrap.EnsureGameManager();
         Instance = this;
 
@@ -99,9 +105,7 @@ public class VillageMinimapUI : MonoBehaviour
     {
         if (mapStagePrefab != null)
             return mapStagePrefab;
-        if (MinimapManager.instance != null)
-            return MinimapManager.instance.MapStagePrefab;
-        return null;
+        return MinimapManager.ResolveMapStagePrefab();
     }
 
     MapMarkSpriteSet ResolveMarkSpriteSet()

@@ -1,11 +1,14 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /// <summary>
-/// 레거시 미니맵 매니저. 그리드 셀 프리팹 참조와 던전 지도 부트스트랩을 담당합니다.
+/// 그리드 미니맵 셀 프리팹 참조와 MainScene 던전 지도 UI 부트스트랩.
 /// </summary>
 public class MinimapManager : MonoBehaviour
 {
     public static MinimapManager instance;
+
+    const string MapStageResourcePath = "MapStage";
 
     [SerializeField] GameObject MapStageImage;
     [SerializeField] MapMarkSpriteSet markSpriteSet;
@@ -13,9 +16,43 @@ public class MinimapManager : MonoBehaviour
     public GameObject MapStagePrefab => MapStageImage;
     public MapMarkSpriteSet MarkSpriteSet => markSpriteSet;
 
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+    static void BootstrapForMainScene()
+    {
+        if (SceneManager.GetActiveScene().name != "MainScene")
+            return;
+
+        EnsureRuntimeInstance();
+        instance?.BootstrapMainScene();
+    }
+
+    public static void EnsureRuntimeInstance()
+    {
+        if (instance != null)
+            return;
+
+        var existing = Object.FindAnyObjectByType<MinimapManager>();
+        if (existing != null)
+            return;
+
+        var managerObject = new GameObject("MinimapManager");
+        Object.DontDestroyOnLoad(managerObject);
+        managerObject.AddComponent<MinimapManager>();
+    }
+
     void Awake()
     {
+        if (instance != null && instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
         instance = this;
+        DontDestroyOnLoad(gameObject);
+
+        if (MapStageImage == null)
+            MapStageImage = Resources.Load<GameObject>(MapStageResourcePath);
 
         if (markSpriteSet == null)
             markSpriteSet = MapMarkSpriteSet.LoadFromResources();
@@ -23,8 +60,26 @@ public class MinimapManager : MonoBehaviour
         if (markSpriteSet == null)
             markSpriteSet = Resources.Load<MapMarkSpriteSet>("MapMarkSpriteSet");
 
-        EnsureDungeonMapSystems();
+        if (SceneManager.GetActiveScene().name == "MainScene")
+            BootstrapMainScene();
+    }
+
+    void BootstrapMainScene()
+    {
+        DisableMainSceneVillageMapUi();
+        EnsureDungeonMapService();
         EnsureMainSceneCornerMinimap();
+        DungeonMapUiInstaller.EnsureMapBoardUi();
+    }
+
+    static void DisableMainSceneVillageMapUi()
+    {
+        foreach (var villageUi in Object.FindObjectsByType<VillageMinimapUI>(FindObjectsSortMode.None))
+            villageUi.enabled = false;
+
+        var largeMapPanel = GameObject.Find("LargeMapPanel");
+        if (largeMapPanel != null)
+            Destroy(largeMapPanel);
     }
 
     void EnsureMainSceneCornerMinimap()
@@ -36,27 +91,26 @@ public class MinimapManager : MonoBehaviour
         miniMapCanvas.AddComponent<CornerMinimapInstaller>();
     }
 
+    static void EnsureDungeonMapService()
+    {
+        if (Object.FindAnyObjectByType<DungeonMapService>() != null)
+            return;
+
+        var serviceObject = new GameObject("DungeonMapService");
+        serviceObject.AddComponent<DungeonMapService>();
+    }
+
     void OnDestroy()
     {
         if (instance == this)
             instance = null;
     }
 
-    void EnsureDungeonMapSystems()
+    public static GameObject ResolveMapStagePrefab()
     {
-        if (Object.FindAnyObjectByType<DungeonMapService>() == null)
-        {
-            var serviceObject = new GameObject("DungeonMapService");
-            serviceObject.AddComponent<DungeonMapService>();
-        }
+        if (instance != null && instance.MapStagePrefab != null)
+            return instance.MapStagePrefab;
 
-        if (Object.FindAnyObjectByType<DungeonMapBootstrap>() == null)
-        {
-            var bootstrapObject = new GameObject("DungeonMapBootstrap");
-            var bootstrap = bootstrapObject.AddComponent<DungeonMapBootstrap>();
-            bootstrap.Initialize(MapStageImage, markSpriteSet);
-        }
-
-        DungeonMapUiInstaller.EnsureMapBoardUi();
+        return Resources.Load<GameObject>(MapStageResourcePath);
     }
 }

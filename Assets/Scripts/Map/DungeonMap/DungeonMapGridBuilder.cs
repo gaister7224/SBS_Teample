@@ -191,9 +191,6 @@ public class DungeonMapGridBuilder : MonoBehaviour
             StageManager.instance.EnsureStagePositions();
             if (StageManager.instance.StagePositions.Count > 0)
                 return new HashSet<Vector2Int>(StageManager.instance.StagePositions);
-
-            if (StageManager.instance.Tutorial)
-                return new HashSet<Vector2Int>();
         }
 
         var fallback = new HashSet<Vector2Int>();
