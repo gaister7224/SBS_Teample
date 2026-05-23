@@ -93,6 +93,10 @@ public class PortalSystem : MonoBehaviour
                 //������Ż
                 break;
             case PortalDirection.Clear:
+                if (stageManager.Tutorial)
+                    stageManager.AdvanceTutorialFloor();
+                else
+                    stageManager.curFloorCleared = true;
                 //Debug.Log(stageManager);
                 //stageManager.curFloorCleared = true;
                 ////Ŭ������Ż
@@ -113,6 +117,12 @@ public class PortalSystem : MonoBehaviour
         }
 
         GameManager.instance.OnPortalEnter?.Invoke();
+
+        if (stageManager == null)
+            stageManager = StageManager.instance;
+        if (stageManager != null)
+            stageManager.SyncPlayerToMinimap();
+
         yield return null;
     }
 }

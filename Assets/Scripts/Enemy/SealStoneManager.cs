@@ -19,12 +19,10 @@ public class SealStoneManager : MonoBehaviour
     private BoxCollider boxCollider;
 
     StageManager stageManager;
-    PortalManager portalManager;
 
     private void Awake()
     {
         stageManager = GameObject.Find("StageManager").GetComponent<StageManager>();
-        portalManager = GetComponentInParent<PortalManager>();
 
         stageManager.SealedStoneLeft++;
     }
@@ -57,13 +55,14 @@ public class SealStoneManager : MonoBehaviour
 
                 }
                 itemSpawn = true;
-                this.enabled = false;
-                boxCollider.enabled = false;
-                //Destroy(gameObject);
             }
-            stageManager.SealedStoneLeft--;
+            if (!fakeSealStone)
+            {
+                stageManager.SealedStoneLeft--;
+            }
             this.enabled = false;
             boxCollider.enabled = false;
+            stageManager.curStageCleared = true;
         }
         if (curHp <= maxHp * 0.8f && curHp >= maxHp * 0.4f)
         {

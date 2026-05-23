@@ -68,9 +68,12 @@ public class DungeonMapUiInstaller : MonoBehaviour
             return;
 
         dungeonMapUi = Object.FindAnyObjectByType<DungeonMapUI>();
-        mapBoardPanel = Object.FindAnyObjectByType<MapBoardPanelView>();
+        mapBoardPanel = ResolveMapBoardPanel();
         if (dungeonMapUi != null && mapBoardPanel != null)
+        {
+            dungeonMapUi.SetMapBoardPanel(mapBoardPanel);
             return;
+        }
 
         if (markSpriteSet == null)
             markSpriteSet = MapMarkSpriteSet.LoadFromResources();
@@ -126,5 +129,25 @@ public class DungeonMapUiInstaller : MonoBehaviour
         }
 
         return best ?? Object.FindAnyObjectByType<Canvas>();
+    }
+
+    static MapBoardPanelView ResolveMapBoardPanel()
+    {
+        var panels = Object.FindObjectsByType<MapBoardPanelView>(FindObjectsSortMode.None);
+        MapBoardPanelView fallback = null;
+
+        foreach (var panel in panels)
+        {
+            fallback ??= panel;
+
+            if (panel.gameObject.name.Contains("DungeonMapBoard"))
+                return panel;
+
+            if (panel.markingToolbar != null
+                || panel.transform.Find("MarkingToolbar") != null)
+                return panel;
+        }
+
+        return fallback;
     }
 }

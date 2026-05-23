@@ -17,7 +17,7 @@ public class PortalManager : MonoBehaviour
     public StageType stageType;
     public List<GameObject> SpawnPrefabs = new List<GameObject>();
     public bool isCleared;
-    [Space(10f)]
+    [Space(10f), HideInInspector]
     public bool isPortalActive;
     [Space(10f)]
     public List<GameObject> PortalObject = new List<GameObject>();
@@ -38,7 +38,7 @@ public class PortalManager : MonoBehaviour
 
     void Awake()
     {
-        ThisStage = gameObject;
+        ThisStage = transform.parent != null ? transform.parent.gameObject : gameObject;
         PlayerObject = GameObject.FindGameObjectWithTag("Player");
         MainCameraObject = GameObject.FindGameObjectWithTag("MainCamera");
         CinemachineCamera = GameObject.Find("PlayerCamera").GetComponent<CinemachineCamera>();
@@ -58,6 +58,16 @@ public class PortalManager : MonoBehaviour
         {
             MainCameraObject = GameObject.FindGameObjectWithTag("MainCamera");
         }
+
+        if (stageType == StageType.Normal || stageType == StageType.Boss || stageType == StageType.SealedStone)
+        {
+            isPortalActive = false;
+            isCleared = false;
+        }
+        else
+        {
+            isPortalActive = true;
+        }
     }
 
     void Update()
@@ -66,11 +76,11 @@ public class PortalManager : MonoBehaviour
 
         isPortalActive = stageManager.activePortal;
 
-        if (stageManager.curStagePos.x != gameObject.transform.position.x / stageManager.spacing 
-            || stageManager.curStagePos.y != gameObject.transform.position.z / stageManager.spacing)
-        {
-            isPortalActive = false;
-        }
+        //if (stageManager.curStagePos.x != gameObject.transform.position.x / stageManager.spacing 
+        //    || stageManager.curStagePos.y != gameObject.transform.position.z / stageManager.spacing)
+        //{
+        //    isPortalActive = false;
+        //}
 
         if (!stageManager.Tutorial)
         {

@@ -5,6 +5,8 @@ using UnityEngine;
 /// </summary>
 public class MapBoardPanelView : MonoBehaviour
 {
+    public static MapBoardPanelView ActiveMarkingPanel { get; private set; }
+
     [SerializeField] public GameObject panelRoot;
     [SerializeField] public GameObject mapContentRoot;
     [SerializeField] public GameObject markingToolbar;
@@ -45,29 +47,46 @@ public class MapBoardPanelView : MonoBehaviour
         var dungeonId = dungeonIdOverride > 0
             ? dungeonIdOverride
             : DungeonMapService.Instance.GetCurrentDungeonId();
-        DungeonMapService.Instance.LoadDungeon(dungeonId);
+        DungeonMapService.Instance.EnsureLoaded(dungeonId);
+
+        if (readOnly)
+            DungeonMapService.Instance.SetPendingMark(null);
 
         if (panelRoot != null)
             panelRoot.SetActive(true);
 
-        if (markingToolbar != null)
-            markingToolbar.SetActive(!readOnly);
+        EnsureMarkingToolbar(!readOnly);
 
         EnsureGrid(readOnly);
-        gridBuilder?.RefreshAll();
+        if (!readOnly)
+            ActiveMarkingPanel = this;
+
+        if (gridBuilder != null)
+        {
+            gridBuilder.BindServiceEventsForPanel();
+            gridBuilder.ForceRebuild();
+            built = gridBuilder.HasCells;
+            gridBuilder.RefreshAll();
+            EnsureMarkingInput();
+        }
+
         isOpen = true;
     }
 
     public void Close()
     {
         isOpen = false;
+
+        if (ActiveMarkingPanel == this)
+            ActiveMarkingPanel = null;
+
+        DungeonMapService.Instance?.SetPendingMark(null);
         GameplayInputUtility.ReleaseUiFocus();
 
         if (panelRoot != null)
             panelRoot.SetActive(false);
 
-        if (markingToolbar != null)
-            markingToolbar.SetActive(false);
+        EnsureMarkingToolbar(false);
 
         DungeonMapService.Instance?.FlushSave();
     }
@@ -93,17 +112,81 @@ public class MapBoardPanelView : MonoBehaviour
             return;
 
         gridBuilder.ConfigureForMapBoard(allowMarking);
+        gridBuilder.SetCellPrefab(null);
 
-        if (mapStagePrefab != null)
-            gridBuilder.SetCellPrefab(mapStagePrefab);
+        if (markSpriteSet == null)
+            markSpriteSet = MapMarkSpriteSet.LoadFromResources();
 
-        if (markSpriteSet != null)
-            gridBuilder.SetMarkSpriteSet(markSpriteSet);
+        gridBuilder.SetMarkSpriteSet(markSpriteSet);
+    }
 
-        if (!built)
+    void EnsureMarkingInput()
+    {
+        if (mapContentRoot == null || gridBuilder == null)
+            return;
+
+        var input = mapContentRoot.GetComponent<MapBoardMarkingInput>();
+        if (input == null)
+            input = mapContentRoot.AddComponent<MapBoardMarkingInput>();
+
+        input.BindGrid(gridBuilder);
+    }
+
+    void EnsureMarkingToolbar(bool visible)
+    {
+        if (panelRoot == null)
+            return;
+
+        if (mapContentRoot != null)
         {
-            gridBuilder.BuildGrid();
-            built = true;
+            var misplaced = mapContentRoot.transform.Find("MarkingToolbar");
+            if (misplaced != null)
+                Destroy(misplaced.gameObject);
         }
+
+        var existingToolbar = panelRoot.transform.Find("MarkingToolbar");
+        if (existingToolbar != null)
+        {
+            if (!visible)
+            {
+                markingToolbar = existingToolbar.gameObject;
+                markingToolbar.SetActive(false);
+                return;
+            }
+
+            Destroy(existingToolbar.gameObject);
+            markingToolbar = null;
+        }
+
+        if (visible)
+        {
+            var sprites = markSpriteSet != null
+                ? markSpriteSet
+                : MapMarkSpriteSet.LoadFromResources();
+            markingToolbar = MapBoardPanelFactory.CreateMarkingToolbar(
+                panelRoot.transform, sprites, MarkToolbarLayout.MapBoard);
+        }
+
+        if (markingToolbar == null)
+            return;
+
+        markingToolbar.transform.SetAsLastSibling();
+        markingToolbar.SetActive(visible);
+
+        if (visible)
+            RefreshToolbarSprites();
+    }
+
+    void RefreshToolbarSprites()
+    {
+        if (markingToolbar == null)
+            return;
+
+        var sprites = markSpriteSet != null
+            ? markSpriteSet
+            : MapMarkSpriteSet.LoadFromResources();
+
+        foreach (var markButton in markingToolbar.GetComponentsInChildren<MapMarkButton>(true))
+            markButton.Configure(markButton.MarkType, sprites.GetSprite(markButton.MarkType));
     }
 }
