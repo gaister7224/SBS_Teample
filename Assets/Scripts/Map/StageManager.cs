@@ -78,7 +78,7 @@ public class StageManager : MonoBehaviour
         Player = GameObject.FindGameObjectWithTag("Player");
         instance = this;
 
-        StageParent = gameObject;
+        //StageParent = gameObject;
     }
 
     void Start()
