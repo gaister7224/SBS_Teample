@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// 마을 지도 게시판(F) / 던전 지도 제작 UI(M) 공통 대형 지도 패널.
@@ -52,8 +53,13 @@ public class MapBoardPanelView : MonoBehaviour
         if (readOnly)
             DungeonMapService.Instance.SetPendingMark(null);
 
+        EnsurePanelLayout();
+
         if (panelRoot != null)
+        {
             panelRoot.SetActive(true);
+            panelRoot.transform.SetAsLastSibling();
+        }
 
         EnsureMarkingToolbar(!readOnly);
 
@@ -66,6 +72,7 @@ public class MapBoardPanelView : MonoBehaviour
             gridBuilder.BindServiceEventsForPanel();
             gridBuilder.ForceRebuild();
             built = gridBuilder.HasCells;
+            EnsurePanelLayout();
             gridBuilder.RefreshAll();
             EnsureMarkingInput();
         }
@@ -112,12 +119,40 @@ public class MapBoardPanelView : MonoBehaviour
             return;
 
         gridBuilder.ConfigureForMapBoard(allowMarking);
-        gridBuilder.SetCellPrefab(null);
+
+        if (mapStagePrefab == null)
+            mapStagePrefab = MinimapManager.ResolveMapStagePrefab();
+
+        gridBuilder.SetCellPrefab(mapStagePrefab);
 
         if (markSpriteSet == null)
             markSpriteSet = MapMarkSpriteSet.LoadFromResources();
 
         gridBuilder.SetMarkSpriteSet(markSpriteSet);
+    }
+
+    void EnsurePanelLayout()
+    {
+        if (panelRoot == null)
+            return;
+
+        var panelRect = panelRoot.GetComponent<RectTransform>();
+        if (panelRect != null)
+            MinimapHudLayout.ApplyFullscreenPanel(panelRect);
+
+        if (mapContentRoot == null)
+            return;
+
+        var contentRect = mapContentRoot.GetComponent<RectTransform>();
+        if (contentRect != null)
+        {
+            MinimapHudLayout.ApplyCenteredMapContent(
+                contentRect,
+                MapBoardPanelSettings.PanelSize);
+
+            if (mapContentRoot.GetComponent<RectMask2D>() == null)
+                mapContentRoot.AddComponent<RectMask2D>();
+        }
     }
 
     void EnsureMarkingInput()

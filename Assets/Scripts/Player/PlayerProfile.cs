@@ -466,6 +466,7 @@ public class PlayerProfile : PlayerState
             GameManager.instance.gold -= GoldDown;
             transform.position = UIManager.Instance.villagePos.position;
             GameManager.instance.mapState = MapState.Village;
+            MinimapManager.ApplyMainSceneMinimapMode();
             DayManager.instance.curDay = Day.night;
             DayManager.instance.NightIconAppear();
             DayManager.instance.sunLight.transform.rotation

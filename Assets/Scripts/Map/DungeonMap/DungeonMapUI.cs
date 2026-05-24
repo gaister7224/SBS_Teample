@@ -6,38 +6,58 @@ using UnityEngine.InputSystem;
 /// </summary>
 public class DungeonMapUI : MonoBehaviour
 {
+    public static DungeonMapUI Instance { get; private set; }
+
     [SerializeField] MapBoardPanelView mapBoardPanel;
+
+    public static DungeonMapUI EnsureSingleInstance(Transform parent)
+    {
+        if (Instance != null)
+            return Instance;
+
+        var existing = Object.FindAnyObjectByType<DungeonMapUI>();
+        if (existing != null)
+        {
+            Instance = existing;
+            return existing;
+        }
+
+        var mapUiObject = new GameObject("DungeonMapUI");
+        if (parent != null)
+            mapUiObject.transform.SetParent(parent, false);
+
+        return mapUiObject.AddComponent<DungeonMapUI>();
+    }
 
     void Awake()
     {
-        if (mapBoardPanel != null)
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
             return;
+        }
 
-        mapBoardPanel = GetComponent<MapBoardPanelView>();
+        Instance = this;
+
         if (mapBoardPanel == null)
-            mapBoardPanel = GetComponentInChildren<MapBoardPanelView>(true);
-        if (mapBoardPanel == null)
-            mapBoardPanel = ResolveMapBoardPanel();
+            mapBoardPanel = ResolveDungeonMapBoardPanel();
     }
 
-    static MapBoardPanelView ResolveMapBoardPanel()
+    void OnDestroy()
     {
-        var panels = Object.FindObjectsByType<MapBoardPanelView>(FindObjectsSortMode.None);
-        MapBoardPanelView fallback = null;
+        if (Instance == this)
+            Instance = null;
+    }
 
-        foreach (var panel in panels)
+    static MapBoardPanelView ResolveDungeonMapBoardPanel()
+    {
+        foreach (var panel in Object.FindObjectsByType<MapBoardPanelView>(FindObjectsSortMode.None))
         {
-            fallback ??= panel;
-
-            if (panel.gameObject.name.Contains("DungeonMapBoard"))
-                return panel;
-
-            if (panel.markingToolbar != null
-                || panel.transform.Find("MarkingToolbar") != null)
+            if (panel != null && panel.gameObject.name.Contains("DungeonMapBoard"))
                 return panel;
         }
 
-        return fallback;
+        return null;
     }
 
     void Update()
