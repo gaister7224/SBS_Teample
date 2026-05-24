@@ -50,6 +50,7 @@ public class GameManager : MonoBehaviour
     public bool dayEnd; //일차 종료 확인
     public bool[] possibleDungeon = new bool[11];
     public bool itemGetAll;
+    public bool skillInstall;
     public int curDungeonNumber;
     public bool installImpossibleStart;
     public float goldMultiplier;

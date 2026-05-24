@@ -69,8 +69,6 @@ public class StageManager : MonoBehaviour
     public GameObject Player;
 
     public bool activePortal;
-
-
     private void Awake()
     {
         monsterSpawnManager = GetComponentInChildren<MonsterSpawnManager>();
