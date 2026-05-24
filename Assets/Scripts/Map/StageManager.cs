@@ -69,11 +69,16 @@ public class StageManager : MonoBehaviour
     public GameObject Player;
 
     public bool activePortal;
+
+    public GameObject StageParent;
+
     private void Awake()
     {
         monsterSpawnManager = GetComponentInChildren<MonsterSpawnManager>();
         Player = GameObject.FindGameObjectWithTag("Player");
         instance = this;
+
+        StageParent = gameObject;
     }
 
     void Start()
