@@ -26,6 +26,9 @@ public class MonsterSpawnManager : MonoBehaviour
 
     [SerializeField] private GameObject[] dropItems;
 
+    [HideInInspector]
+    public Vector3 spawnPos;
+
     void Awake()
     {
         instance = this;
@@ -77,7 +80,8 @@ public class MonsterSpawnManager : MonoBehaviour
 
                 if (isMonsterSpawn && stageManager.curStageSpawnPrefabs[0] != null)
                 {
-                    Vector3 spawnPos = new Vector3(stageManager.curStagePos.x * stageManager.spacing, 2f, stageManager.curStagePos.y * stageManager.spacing);
+                    //Vector3 spawnPos = new Vector3(stageManager.curStagePos.x * stageManager.spacing, 2f, stageManager.curStagePos.y * stageManager.spacing);
+                    spawnPos.y = 1;
                     Instantiate(stageManager.curStageSpawnPrefabs[0], spawnPos, Quaternion.identity, stageManager.transform);
 
                     isMonsterSpawn = false;
@@ -104,9 +108,10 @@ public class MonsterSpawnManager : MonoBehaviour
 
                 if (isMonsterSpawn)
                 {
-                    Vector3 spawnPos = new Vector3(stageManager.curStagePos.x * stageManager.spacing, 0f, stageManager.curStagePos.y * stageManager.spacing);
+                    //Vector3 spawnPos = new Vector3(stageManager.curStagePos.x * stageManager.spacing, 0f, stageManager.curStagePos.y * stageManager.spacing);
+                    spawnPos.y = 0;
                     Instantiate(stageManager.curStageSpawnPrefabs[Random.Range(0, stageManager.curStageSpawnPrefabs.Count)], spawnPos, Quaternion.identity, stageManager.transform);
-
+                    Debug.Log("trap spawn");
                     isMonsterSpawn = false;
                 }
             }
@@ -125,7 +130,8 @@ public class MonsterSpawnManager : MonoBehaviour
 
                 if (isMonsterSpawn)
                 {
-                    Vector3 spawnPos = new Vector3(stageManager.curStagePos.x * stageManager.spacing, 2f, stageManager.curStagePos.y * stageManager.spacing);
+                    //Vector3 spawnPos = new Vector3(stageManager.curStagePos.x * stageManager.spacing, 2f, stageManager.curStagePos.y * stageManager.spacing);
+                    spawnPos.y = 2;
                     Instantiate(stageManager.curStageSpawnPrefabs[Random.Range(0, stageManager.curStageSpawnPrefabs.Count)], spawnPos, Quaternion.identity, stageManager.transform);
 
                     isMonsterSpawn = false;
@@ -161,7 +167,7 @@ public class MonsterSpawnManager : MonoBehaviour
                 stageManager.curStageCleared = true;
                 stageManager.activePortal = true;
             }
-            else
+            else if (stageManager.curStageType == StageType.BuffStone)
             {
                 stageManager.curStageCleared = true;
                 stageManager.activePortal = true;
@@ -329,10 +335,10 @@ public class MonsterSpawnManager : MonoBehaviour
                     if (count >= stageManager.curStageSpawnPrefabs.Count)
                         return;
 
-                    var spawnPos = new Vector3(
-                        stageManager.curStagePos.x * stageManager.spacing,
-                        2f,
-                        stageManager.curStagePos.y * stageManager.spacing);
+                    //var spawnPos = new Vector3(
+                    //    stageManager.curStagePos.x * stageManager.spacing,
+                    //    2f,
+                    //    stageManager.curStagePos.y * stageManager.spacing);
 
                     var monster = Instantiate(prefab, spawnPos, Quaternion.identity);
                     CurrentAliveMonsters.Add(monster);

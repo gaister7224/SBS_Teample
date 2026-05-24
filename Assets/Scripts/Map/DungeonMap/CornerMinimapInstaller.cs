@@ -13,6 +13,8 @@ public class CornerMinimapInstaller : MonoBehaviour
     [SerializeField] RectTransform legacyMinimapImage;
     [SerializeField] bool replaceLegacyMinimap = true;
 
+    const string MarkingToolbarName = "MarkingToolbar";
+
     RectTransform cornerRect;
     DungeonMapGridBuilder gridBuilder;
 
@@ -59,9 +61,14 @@ public class CornerMinimapInstaller : MonoBehaviour
             if (gridBuilder != null)
             {
                 gridBuilder.ConfigureForCornerMinimap();
-                gridBuilder.RefreshAll();
+                gridBuilder.ForceRebuild();
             }
 
+            RemoveMarkingToolbarIfDisabled(existing);
+            if (CornerMinimapSettings.ShowMarkingToolbar)
+                EnsureMarkingToolbar(existing, ResolveMarkSpriteSet());
+
+            ApplyCornerPanelSize();
             return;
         }
 
@@ -70,15 +77,16 @@ public class CornerMinimapInstaller : MonoBehaviour
         cornerRect = cornerRoot.GetComponent<RectTransform>();
 
         ApplyLayoutFromLegacyOrDefault();
+        ApplyCornerPanelSize();
 
         cornerRoot.AddComponent<RectMask2D>();
 
         var gridObject = new GameObject("Grid", typeof(RectTransform));
         gridObject.transform.SetParent(cornerRoot.transform, false);
         var gridRect = gridObject.GetComponent<RectTransform>();
-        gridRect.anchorMin = new Vector2(0.5f, 0.5f);
-        gridRect.anchorMax = new Vector2(0.5f, 0.5f);
-        gridRect.pivot = new Vector2(0.5f, 0.5f);
+        gridRect.anchorMin = new Vector2(0.5f, 1f);
+        gridRect.anchorMax = new Vector2(0.5f, 1f);
+        gridRect.pivot = new Vector2(0.5f, 1f);
         gridRect.anchoredPosition = Vector2.zero;
         gridRect.sizeDelta = new Vector2(CornerMinimapSettings.PanelSize, CornerMinimapSettings.PanelSize);
         gridRect.localScale = Vector3.one;
@@ -94,6 +102,10 @@ public class CornerMinimapInstaller : MonoBehaviour
         var cornerView = cornerRoot.AddComponent<CornerMinimapView>();
         cornerView.gridBuilder = gridBuilder;
 
+        RemoveMarkingToolbarIfDisabled(cornerRoot.transform);
+        if (CornerMinimapSettings.ShowMarkingToolbar)
+            EnsureMarkingToolbar(cornerRoot.transform, markSprites);
+
         if (DungeonMapService.Instance == null)
         {
             var serviceObject = new GameObject("DungeonMapService");
@@ -101,7 +113,11 @@ public class CornerMinimapInstaller : MonoBehaviour
         }
 
         DungeonMapService.Instance?.EnsureLoadedForCurrentDungeon();
-        gridBuilder.BuildGrid();
+
+        if (StageManager.instance != null)
+            StageManager.instance.SyncDungeonMapAfterLayout();
+        else
+            gridBuilder.BuildGrid();
     }
 
     void ApplyLayoutFromLegacyOrDefault()
@@ -112,7 +128,6 @@ public class CornerMinimapInstaller : MonoBehaviour
             cornerRect.anchorMax = legacyMinimapImage.anchorMax;
             cornerRect.pivot = legacyMinimapImage.pivot;
             cornerRect.anchoredPosition = legacyMinimapImage.anchoredPosition;
-            cornerRect.sizeDelta = legacyMinimapImage.sizeDelta;
             return;
         }
 
@@ -120,7 +135,37 @@ public class CornerMinimapInstaller : MonoBehaviour
         cornerRect.anchorMax = new Vector2(1f, 1f);
         cornerRect.pivot = new Vector2(1f, 1f);
         cornerRect.anchoredPosition = new Vector2(-20f, -20f);
-        cornerRect.sizeDelta = new Vector2(CornerMinimapSettings.PanelSize, CornerMinimapSettings.PanelSize);
+    }
+
+    void ApplyCornerPanelSize()
+    {
+        if (cornerRect == null)
+            return;
+
+        var height = CornerMinimapSettings.PanelSize;
+        if (CornerMinimapSettings.ShowMarkingToolbar)
+            height += CornerMinimapSettings.ToolbarHeight;
+
+        cornerRect.sizeDelta = new Vector2(CornerMinimapSettings.PanelSize, height);
+    }
+
+    static void RemoveMarkingToolbarIfDisabled(Transform cornerRoot)
+    {
+        if (CornerMinimapSettings.ShowMarkingToolbar)
+            return;
+
+        var existing = cornerRoot.Find(MarkingToolbarName);
+        if (existing != null)
+            Destroy(existing.gameObject);
+    }
+
+    void EnsureMarkingToolbar(Transform cornerRoot, MapMarkSpriteSet markSprites)
+    {
+        var existing = cornerRoot.Find(MarkingToolbarName);
+        if (existing != null)
+            return;
+
+        MapBoardPanelFactory.CreateMarkingToolbar(cornerRoot, markSprites, MarkToolbarLayout.CornerMinimap);
     }
 
     static GameObject ResolveMapStagePrefab()

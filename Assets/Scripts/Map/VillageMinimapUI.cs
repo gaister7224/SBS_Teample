@@ -114,11 +114,23 @@ public class VillageMinimapUI : MonoBehaviour
     public void ToggleLargeMap()
     {
         EnsureMapBoardPanel();
+        EnsureDungeonMapService();
 
         if (mapBoardPanel == null)
             return;
 
         mapBoardPanel.Toggle(readOnly: true);
+    }
+
+    void EnsureDungeonMapService()
+    {
+        if (DungeonMapService.Instance == null)
+        {
+            var serviceObject = new GameObject("DungeonMapService");
+            serviceObject.AddComponent<DungeonMapService>();
+        }
+
+        DungeonMapService.Instance.EnsureLoadedForCurrentDungeon();
     }
 
     public void CloseLargeMap()

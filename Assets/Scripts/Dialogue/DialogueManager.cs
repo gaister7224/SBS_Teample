@@ -105,7 +105,7 @@ public class DialogueManager : MonoBehaviour
 
         if (quit == true)
         {
-            EndDialogue();
+            
         }
 
         TextSpeed();
@@ -158,7 +158,7 @@ public class DialogueManager : MonoBehaviour
         {
             quit = true;
             start = false;
-
+            EndDialogue();
             OnDialogueComplete?.Invoke();
         }
     }

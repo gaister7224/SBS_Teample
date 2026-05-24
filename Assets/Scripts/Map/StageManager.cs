@@ -69,10 +69,6 @@ public class StageManager : MonoBehaviour
     public GameObject Player;
 
     public bool activePortal;
-
-    public GameObject StageParent;
-
-
     private void Awake()
     {
         monsterSpawnManager = GetComponentInChildren<MonsterSpawnManager>();
@@ -82,7 +78,198 @@ public class StageManager : MonoBehaviour
 
     void Start()
     {
-        curFloorCleared = true;
+        curFloorCleared = false;
+        if (Tutorial && HasTutorialStageInHierarchy())
+            curFloor = Mathf.Min(1, TutorialStage.Count);
+
+        StartCoroutine(InitializeDungeonMapWhenReady());
+    }
+
+    IEnumerator InitializeDungeonMapWhenReady()
+    {
+        const int maxFrames = 60;
+
+        for (var frame = 0; frame < maxFrames; frame++)
+        {
+            RebuildStagePositions();
+            if (StagePositions.Count > 0)
+                break;
+
+            if (Player == null)
+                Player = GameObject.FindGameObjectWithTag("Player");
+
+            yield return null;
+        }
+
+        SyncDungeonMapAfterLayout();
+    }
+
+    bool HasTutorialStageInHierarchy()
+    {
+        foreach (Transform child in transform)
+        {
+            if (child.name.Contains("TutorialStages"))
+                return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>????? ?? ????? ?? ???? TutorialStage ?????????? ???????.</summary>
+    public void AdvanceTutorialFloor()
+    {
+        if (!Tutorial || TutorialStage.Count == 0 || curFloor >= TutorialStage.Count)
+            return;
+
+        DestroyTutorialStageRoots();
+
+        var prefab = TutorialStage[curFloor];
+        if (prefab != null)
+        {
+            var instance = Instantiate(prefab, transform.position, Quaternion.identity, transform);
+            instance.name = prefab.name;
+        }
+
+        curFloor++;
+        LeftFloorCount = Mathf.Max(0, TutorialStage.Count - curFloor);
+        curFloorCleared = false;
+
+        RebuildStagePositions();
+        SyncDungeonMapAfterLayout();
+    }
+
+    void DestroyTutorialStageRoots()
+    {
+        for (var i = transform.childCount - 1; i >= 0; i--)
+        {
+            var child = transform.GetChild(i);
+            if (child.name.Contains("TutorialStages"))
+                Destroy(child.gameObject);
+        }
+    }
+
+    /// <summary>
+    /// ???? ????? ??(PortalManager) ???????? ????? ????? ?????. ???????? ??? ??????.
+    /// </summary>
+    public void EnsureStagePositions()
+    {
+        if (Tutorial || StagePositions.Count == 0)
+            RebuildStagePositions();
+    }
+
+    public void RebuildStagePositions()
+    {
+        StagePositions.Clear();
+
+        if (spacing <= 0.0001f)
+            return;
+
+        var portals = Object.FindObjectsByType<PortalManager>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        foreach (var portal in portals)
+        {
+            if (portal == null || !BelongsToManagedDungeon(portal))
+                continue;
+
+            var root = portal.ThisStage != null ? portal.ThisStage.transform : portal.transform;
+            StagePositions.Add(WorldToGrid(root.position));
+        }
+    }
+
+    bool BelongsToManagedDungeon(PortalManager portal)
+    {
+        if (instance == null)
+            return true;
+
+        return portal.transform.IsChildOf(instance.transform);
+    }
+
+    public Vector2Int WorldToGrid(Vector3 worldPosition)
+    {
+        return new Vector2Int(
+            Mathf.RoundToInt(worldPosition.x / spacing),
+            Mathf.RoundToInt(worldPosition.z / spacing));
+    }
+
+    public void SyncDungeonMapAfterLayout()
+    {
+        foreach (var grid in Object.FindObjectsByType<DungeonMapGridBuilder>(FindObjectsSortMode.None))
+            grid.ForceRebuild();
+
+        SyncPlayerToMinimap();
+    }
+
+    /// <summary>?? ???????? ?? ???? ?��???? ??????? ????.</summary>
+    public void SyncPlayerToMinimap(Vector2Int? cellOverride = null)
+    {
+        EnsureStagePositions();
+
+        if (DungeonMapService.Instance == null)
+        {
+            var serviceObject = new GameObject("DungeonMapService");
+            serviceObject.AddComponent<DungeonMapService>();
+        }
+
+        DungeonMapService.Instance.EnsureLoadedForCurrentDungeon();
+
+        if (StagePositions.Count == 0)
+            return;
+
+        var cell = cellOverride ?? ResolvePlayerMapCell();
+        if (!StagePositions.Contains(cell))
+            return;
+
+        curStagePos = cell;
+        DungeonMapService.Instance.SetPlayerPosition(cell);
+        DungeonMapService.Instance.RevealAround(cell, 1, StagePositions);
+    }
+
+    Vector2Int ResolvePlayerMapCell()
+    {
+        if (Player == null)
+            Player = GameObject.FindGameObjectWithTag("Player");
+
+        if (Player != null)
+        {
+            var fromPlayer = WorldToGrid(Player.transform.position);
+            if (StagePositions.Contains(fromPlayer))
+                return fromPlayer;
+        }
+
+        if (StagePositions.Contains(curStagePos))
+            return curStagePos;
+
+        foreach (var pos in StagePositions)
+            return pos;
+
+        return curStagePos;
+    }
+
+    bool TryResolveInitialMapCell(out Vector2Int cell)
+    {
+        if (StagePositions.Contains(curStagePos))
+        {
+            cell = curStagePos;
+            return true;
+        }
+
+        if (Player != null)
+        {
+            var fromPlayer = WorldToGrid(Player.transform.position);
+            if (StagePositions.Contains(fromPlayer))
+            {
+                cell = fromPlayer;
+                return true;
+            }
+        }
+
+        foreach (var pos in StagePositions)
+        {
+            cell = pos;
+            return true;
+        }
+
+        cell = default;
+        return false;
     }
 
     void Update()
@@ -109,7 +296,7 @@ public class StageManager : MonoBehaviour
         //    }
         //    else
         //    {
-        //        //���� Ŭ����
+        //        //???? ?????
         //    }
         //}
         //else if (curFloorCleared && Tutorial && TutorialStage.Count > 0)
@@ -138,7 +325,7 @@ public class StageManager : MonoBehaviour
         //    }
         //    else if (LeftFloorCount == 0f)
         //    {
-        //        //Ʃ�丮�� Ŭ����
+        //        //????? ?????
         //    }
         //}
 
