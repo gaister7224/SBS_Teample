@@ -580,7 +580,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3809560422600107664, guid: e616edc21ac447144baad3ba5f60526e, type: 3}
       propertyPath: stageType
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 3809560422600107664, guid: e616edc21ac447144baad3ba5f60526e, type: 3}
       propertyPath: isPortalActive

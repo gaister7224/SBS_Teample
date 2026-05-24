@@ -133,7 +133,7 @@ public class MonsterSpawnManager : MonoBehaviour
                     //Vector3 spawnPos = new Vector3(stageManager.curStagePos.x * stageManager.spacing, 2f, stageManager.curStagePos.y * stageManager.spacing);
                     spawnPos.y = 2;
                     Instantiate(stageManager.curStageSpawnPrefabs[Random.Range(0, stageManager.curStageSpawnPrefabs.Count)], spawnPos, Quaternion.identity, stageManager.transform);
-
+                    Debug.Log("chest spawn");
                     isMonsterSpawn = false;
                 }
             }

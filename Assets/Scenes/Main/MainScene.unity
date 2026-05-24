@@ -2701,10 +2701,10 @@ MonoBehaviour:
   curActCount: 0
   canBuyCount: 
   character1Spawn: 0
-  tutorialClear: 0
-  storageTutorial: 0
-  inventoryTutorial: 0
-  dayTutorial: 0
+  tutorialClear: 1
+  storageTutorial: 1
+  inventoryTutorial: 1
+  dayTutorial: 1
   dayCount: 0
   artifactInstallImpossibleDay: 0
   dayEnd: 0
