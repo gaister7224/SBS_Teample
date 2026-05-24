@@ -115,17 +115,20 @@ public class MinimapManager : MonoBehaviour
     static void EnableMainSceneVillageMapUi()
     {
         foreach (var villageUi in Object.FindObjectsByType<VillageMinimapUI>(FindObjectsSortMode.None))
-            villageUi.enabled = true;
+            villageUi.PrepareForVillageMode();
     }
 
     static void DisableMainSceneVillageMapUi()
     {
         foreach (var villageUi in Object.FindObjectsByType<VillageMinimapUI>(FindObjectsSortMode.None))
+        {
+            villageUi.CloseLargeMap();
             villageUi.enabled = false;
+        }
 
         var largeMapPanel = GameObject.Find("LargeMapPanel");
         if (largeMapPanel != null)
-            Destroy(largeMapPanel);
+            largeMapPanel.SetActive(false);
     }
 
     static void EnsureVillageMinimapCamera()

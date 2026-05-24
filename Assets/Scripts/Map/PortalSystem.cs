@@ -94,7 +94,7 @@ public class PortalSystem : MonoBehaviour
                 break;
             case PortalDirection.Clear:
                 if (stageManager.Tutorial)
-                    stageManager.AdvanceTutorialFloor();
+                    yield return stageManager.AdvanceTutorialFloorRoutine();
                 else
                     stageManager.curFloorCleared = true;
                 //Debug.Log(stageManager);

@@ -49,6 +49,51 @@ public class VillageMinimapUI : MonoBehaviour
             Instance = null;
     }
 
+    public void PrepareForVillageMode()
+    {
+        Instance = this;
+        enabled = true;
+
+        ResolveLargeMapPanelReference();
+        if (largeMapPanel == null)
+            largeMapPanel = CreateLargeMapPanel();
+
+        mapBoardPanel = null;
+
+        if (largeMapPanel != null)
+            largeMapPanel.SetActive(false);
+
+        DisableLegacyLargeMapDisplay();
+        EnsureMapBoardPanel();
+    }
+
+    void ResolveLargeMapPanelReference()
+    {
+        if (largeMapPanel != null)
+            return;
+
+        var miniMapCanvas = GameObject.Find("MiniMapCanvas");
+        if (miniMapCanvas != null)
+        {
+            var found = miniMapCanvas.transform.Find("LargeMapPanel");
+            if (found != null)
+                largeMapPanel = found.gameObject;
+        }
+
+        if (largeMapPanel == null)
+            largeMapPanel = GameObject.Find("LargeMapPanel");
+    }
+
+    GameObject CreateLargeMapPanel()
+    {
+        var panelObject = new GameObject("LargeMapPanel", typeof(RectTransform));
+        var miniMapCanvas = GameObject.Find("MiniMapCanvas");
+        if (miniMapCanvas != null)
+            panelObject.transform.SetParent(miniMapCanvas.transform, false);
+
+        return panelObject;
+    }
+
     void DisableLegacyLargeMapDisplay()
     {
         if (largeMapPanel == null)
@@ -61,7 +106,11 @@ public class VillageMinimapUI : MonoBehaviour
 
     void EnsureMapBoardPanel()
     {
-        if (mapBoardPanel != null)
+        ResolveLargeMapPanelReference();
+        if (largeMapPanel == null)
+            largeMapPanel = CreateLargeMapPanel();
+
+        if (mapBoardPanel != null && mapBoardPanel.panelRoot == largeMapPanel)
         {
             EnsureLargeMapPanelLayout();
             return;
@@ -138,7 +187,7 @@ public class VillageMinimapUI : MonoBehaviour
 
     public void ToggleLargeMap()
     {
-        EnsureMapBoardPanel();
+        PrepareForVillageMode();
         EnsureLargeMapPanelLayout();
         EnsureDungeonMapService();
 

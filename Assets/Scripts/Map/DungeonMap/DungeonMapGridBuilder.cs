@@ -74,6 +74,7 @@ public class DungeonMapGridBuilder : MonoBehaviour
     public void ForceRebuild()
     {
         built = false;
+        ClearGrid();
         BuildGrid();
     }
 
@@ -120,7 +121,10 @@ public class DungeonMapGridBuilder : MonoBehaviour
 
         var positions = GetStagePositions();
         if (positions.Count == 0)
+        {
+            built = false;
             return;
+        }
 
         if (built && cells.Count > 0 && SameCellLayout(cells.Keys, positions))
             return;
@@ -200,6 +204,10 @@ public class DungeonMapGridBuilder : MonoBehaviour
 
     HashSet<Vector2Int> GetStagePositions()
     {
+        var resolved = DungeonMapLayoutResolver.CollectStagePositions();
+        if (resolved.Count > 0)
+            return resolved;
+
         if (StageManager.instance != null)
         {
             StageManager.instance.EnsureStagePositions();

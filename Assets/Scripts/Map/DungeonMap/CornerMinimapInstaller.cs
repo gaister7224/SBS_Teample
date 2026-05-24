@@ -195,7 +195,7 @@ public class CornerMinimapInstaller : MonoBehaviour
         if (StageManager.instance != null)
             StageManager.instance.SyncDungeonMapAfterLayout();
         else
-            gridBuilder.BuildGrid();
+            DungeonMapLayoutResolver.SyncAfterLayoutChange();
 
         BringCornerMinimapToFront();
     }
