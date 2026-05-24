@@ -15,4 +15,4 @@ MonoBehaviour:
   dungeonNumber: 1
   dungeonName: Tutorial2F
   mapPrefab: {fileID: 2027069352563740379, guid: 80b95b25fe286354b887f35bf6a57c89, type: 3}
-  spawnOffset: {x: 300, y: 0, z: 0}
+  spawnOffset: {x: 0, y: 0, z: 0}

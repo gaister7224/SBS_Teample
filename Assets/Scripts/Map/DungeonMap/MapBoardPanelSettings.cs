@@ -3,7 +3,7 @@
 /// </summary>
 public static class MapBoardPanelSettings
 {
-    public const float PanelSize = 600f;
+    public const float PanelSize = 700f;
     /// <summary>셀 중심 간격(그리드 피치).</summary>
     public const float CellSize = 75f;
     /// <summary>방 타일 표시 크기. CellSize보다 작아야 셀 사이 여백이 생깁니다.</summary>

@@ -8,7 +8,7 @@ public class DungeonEntryManager : MonoBehaviour, IPointerClickHandler
 {
     public DungeonData data;
 
-    public GameObject spawnedDungeonInstance; //이미 생성된 던진이 있는지 체크
+    public GameObject spawnedDungeonInstance; //??? ?????? ?????? ????? ??
 
     //[SerializeField] private GameObject map;
     [SerializeField] private GameObject ui;
@@ -46,6 +46,7 @@ public class DungeonEntryManager : MonoBehaviour, IPointerClickHandler
             GameManager.instance.dayEnd = false;
             GameManager.instance.itemGetAll = false;
             GameManager.instance.mapState = MapState.Stage;
+            MinimapManager.ApplyMainSceneMinimapMode();
 
             if (DungeonMapService.Instance == null)
             {
@@ -85,8 +86,21 @@ public class DungeonEntryManager : MonoBehaviour, IPointerClickHandler
         }
         else
         {
-            Debug.Log("입구 없음");
+            Debug.Log("??? ????");
         }
+
+        yield return null;
+
+        const int maxFrames = 30;
+        for (var frame = 0; frame < maxFrames; frame++)
+        {
+            if (DungeonMapLayoutResolver.CollectStagePositions().Count > 0)
+                break;
+
+            yield return null;
+        }
+
+        DungeonMapLayoutResolver.SyncAfterLayoutChange(clearVisibility: true);
 
         UIManager.Instance.inventory.currentUI = UIType.None;
         UIManager.Instance.inventory.playerProfile.SetActive(true);

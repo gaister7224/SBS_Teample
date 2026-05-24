@@ -15,7 +15,16 @@ public class VillageMinimapUI : MonoBehaviour
 
     private void Awake()
     {
-        DemoSceneBootstrap.EnsureGameManager();
+        if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "MainScene"
+            && (GameManager.instance == null || GameManager.instance.mapState != MapState.Village))
+        {
+            enabled = false;
+            return;
+        }
+
+        if (GameManager.instance == null)
+            DemoSceneBootstrap.EnsureGameManager();
+
         Instance = this;
 
         if (largeMapPanel != null)
@@ -40,6 +49,51 @@ public class VillageMinimapUI : MonoBehaviour
             Instance = null;
     }
 
+    public void PrepareForVillageMode()
+    {
+        Instance = this;
+        enabled = true;
+
+        ResolveLargeMapPanelReference();
+        if (largeMapPanel == null)
+            largeMapPanel = CreateLargeMapPanel();
+
+        mapBoardPanel = null;
+
+        if (largeMapPanel != null)
+            largeMapPanel.SetActive(false);
+
+        DisableLegacyLargeMapDisplay();
+        EnsureMapBoardPanel();
+    }
+
+    void ResolveLargeMapPanelReference()
+    {
+        if (largeMapPanel != null)
+            return;
+
+        var miniMapCanvas = GameObject.Find("MiniMapCanvas");
+        if (miniMapCanvas != null)
+        {
+            var found = miniMapCanvas.transform.Find("LargeMapPanel");
+            if (found != null)
+                largeMapPanel = found.gameObject;
+        }
+
+        if (largeMapPanel == null)
+            largeMapPanel = GameObject.Find("LargeMapPanel");
+    }
+
+    GameObject CreateLargeMapPanel()
+    {
+        var panelObject = new GameObject("LargeMapPanel", typeof(RectTransform));
+        var miniMapCanvas = GameObject.Find("MiniMapCanvas");
+        if (miniMapCanvas != null)
+            panelObject.transform.SetParent(miniMapCanvas.transform, false);
+
+        return panelObject;
+    }
+
     void DisableLegacyLargeMapDisplay()
     {
         if (largeMapPanel == null)
@@ -52,11 +106,20 @@ public class VillageMinimapUI : MonoBehaviour
 
     void EnsureMapBoardPanel()
     {
-        if (mapBoardPanel != null)
+        ResolveLargeMapPanelReference();
+        if (largeMapPanel == null)
+            largeMapPanel = CreateLargeMapPanel();
+
+        if (mapBoardPanel != null && mapBoardPanel.panelRoot == largeMapPanel)
+        {
+            EnsureLargeMapPanelLayout();
             return;
+        }
 
         if (largeMapPanel == null)
             return;
+
+        EnsureLargeMapPanelLayout();
 
         mapBoardPanel = largeMapPanel.GetComponent<MapBoardPanelView>();
 
@@ -74,6 +137,7 @@ public class VillageMinimapUI : MonoBehaviour
         contentRect.anchorMin = new Vector2(0.5f, 0.5f);
         contentRect.anchorMax = new Vector2(0.5f, 0.5f);
         contentRect.pivot = new Vector2(0.5f, 0.5f);
+        contentRect.anchoredPosition = Vector2.zero;
         contentRect.sizeDelta = new Vector2(MapBoardPanelSettings.PanelSize, MapBoardPanelSettings.PanelSize);
 
         var grid = content.GetComponent<DungeonMapGridBuilder>();
@@ -95,13 +159,23 @@ public class VillageMinimapUI : MonoBehaviour
             ResolveMapStagePrefab(), ResolveMarkSpriteSet());
     }
 
+    void EnsureLargeMapPanelLayout()
+    {
+        if (largeMapPanel == null)
+            return;
+
+        var panelRect = largeMapPanel.GetComponent<RectTransform>();
+        if (panelRect == null)
+            return;
+
+        MinimapHudLayout.ApplyFullscreenPanel(panelRect);
+    }
+
     GameObject ResolveMapStagePrefab()
     {
         if (mapStagePrefab != null)
             return mapStagePrefab;
-        if (MinimapManager.instance != null)
-            return MinimapManager.instance.MapStagePrefab;
-        return null;
+        return MinimapManager.ResolveMapStagePrefab();
     }
 
     MapMarkSpriteSet ResolveMarkSpriteSet()
@@ -113,7 +187,8 @@ public class VillageMinimapUI : MonoBehaviour
 
     public void ToggleLargeMap()
     {
-        EnsureMapBoardPanel();
+        PrepareForVillageMode();
+        EnsureLargeMapPanelLayout();
         EnsureDungeonMapService();
 
         if (mapBoardPanel == null)

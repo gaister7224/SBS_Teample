@@ -26,8 +26,9 @@ public class MapBoardInteract : MonoBehaviour
 
         if (Keyboard.current != null && Keyboard.current.fKey.wasPressedThisFrame)
         {
-            if (VillageMinimapUI.Instance != null)
-                VillageMinimapUI.Instance.ToggleLargeMap();
+            var villageUi = VillageMinimapUI.Instance
+                ?? Object.FindAnyObjectByType<VillageMinimapUI>();
+            villageUi?.ToggleLargeMap();
         }
     }
 

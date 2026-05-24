@@ -69,11 +69,16 @@ public class StageManager : MonoBehaviour
     public GameObject Player;
 
     public bool activePortal;
+
+    public GameObject StageParent;
+
     private void Awake()
     {
         monsterSpawnManager = GetComponentInChildren<MonsterSpawnManager>();
         Player = GameObject.FindGameObjectWithTag("Player");
         instance = this;
+
+        //StageParent = gameObject;
     }
 
     void Start()
@@ -115,27 +120,64 @@ public class StageManager : MonoBehaviour
         return false;
     }
 
-    /// <summary>????? ?? ????? ?? ???? TutorialStage ?????????? ???????.</summary>
+    /// <summary>???? ?? ??? ???? TutorialStage ???? ?????.</summary>
     public void AdvanceTutorialFloor()
     {
+        StartCoroutine(AdvanceTutorialFloorRoutine());
+    }
+
+    public IEnumerator AdvanceTutorialFloorRoutine()
+    {
         if (!Tutorial || TutorialStage.Count == 0 || curFloor >= TutorialStage.Count)
-            return;
+            yield break;
 
         DestroyTutorialStageRoots();
+        yield return WaitUntilTutorialRootsDestroyed();
 
         var prefab = TutorialStage[curFloor];
         if (prefab != null)
         {
-            var instance = Instantiate(prefab, transform.position, Quaternion.identity, transform);
-            instance.name = prefab.name;
+            var stageInstance = Instantiate(prefab, transform.position, Quaternion.identity, transform);
+            stageInstance.name = prefab.name;
         }
 
         curFloor++;
         LeftFloorCount = Mathf.Max(0, TutorialStage.Count - curFloor);
         curFloorCleared = false;
+        surroundStagePositions.Clear();
+        curStagePos = Vector2Int.zero;
 
-        RebuildStagePositions();
+        yield return WaitForStageLayoutReady();
+
+        ResetMapVisibilityForLayoutChange();
         SyncDungeonMapAfterLayout();
+    }
+
+    IEnumerator WaitUntilTutorialRootsDestroyed()
+    {
+        const int maxFrames = 15;
+
+        for (var frame = 0; frame < maxFrames; frame++)
+        {
+            if (!HasTutorialStageInHierarchy())
+                yield break;
+
+            yield return null;
+        }
+    }
+
+    IEnumerator WaitForStageLayoutReady()
+    {
+        const int maxFrames = 30;
+
+        for (var frame = 0; frame < maxFrames; frame++)
+        {
+            RebuildStagePositions();
+            if (StagePositions.Count > 0)
+                yield break;
+
+            yield return null;
+        }
     }
 
     void DestroyTutorialStageRoots()
@@ -161,26 +203,19 @@ public class StageManager : MonoBehaviour
     {
         StagePositions.Clear();
 
-        if (spacing <= 0.0001f)
-            return;
-
-        var portals = Object.FindObjectsByType<PortalManager>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-        foreach (var portal in portals)
-        {
-            if (portal == null || !BelongsToManagedDungeon(portal))
-                continue;
-
-            var root = portal.ThisStage != null ? portal.ThisStage.transform : portal.transform;
-            StagePositions.Add(WorldToGrid(root.position));
-        }
+        foreach (var position in DungeonMapLayoutResolver.CollectStagePositions())
+            StagePositions.Add(position);
     }
 
-    bool BelongsToManagedDungeon(PortalManager portal)
+    void ResetMapVisibilityForLayoutChange()
     {
-        if (instance == null)
-            return true;
+        if (DungeonMapService.Instance == null)
+            return;
 
-        return portal.transform.IsChildOf(instance.transform);
+        var service = DungeonMapService.Instance;
+        var dungeonId = service.GetCurrentDungeonId();
+        service.Current.Clear();
+        service.Current.SetDungeonId(dungeonId);
     }
 
     public Vector2Int WorldToGrid(Vector3 worldPosition)
@@ -198,7 +233,7 @@ public class StageManager : MonoBehaviour
         SyncPlayerToMinimap();
     }
 
-    /// <summary>?? ???????? ?? ???? ?¡À???? ??????? ????.</summary>
+    /// <summary>?? ???????? ?? ???? ??????? ??????? ????.</summary>
     public void SyncPlayerToMinimap(Vector2Int? cellOverride = null)
     {
         EnsureStagePositions();
@@ -215,7 +250,7 @@ public class StageManager : MonoBehaviour
             return;
 
         var cell = cellOverride ?? ResolvePlayerMapCell();
-        if (!StagePositions.Contains(cell))
+        if (!StagePositions.Contains(cell) && !TryResolveInitialMapCell(out cell))
             return;
 
         curStagePos = cell;
@@ -387,7 +422,7 @@ public class StageManager : MonoBehaviour
                                 z * spacing
                             );
 
-                            Instantiate(BossStage, transform.localPosition, Quaternion.identity, transform);
+                            Instantiate(BossStage, transform.localPosition, Quaternion.identity, StageParent.transform);
                             StagePositions.Add(new Vector2Int(x, z));
                         }
                     }
@@ -400,7 +435,7 @@ public class StageManager : MonoBehaviour
                             z * spacing
                         );
 
-                        Instantiate(stage[0], spawnPos, Quaternion.identity, transform);
+                        Instantiate(stage[0], spawnPos, Quaternion.identity, StageParent.transform);
                         StagePositions.Add(new Vector2Int(x, z));
                     }
                     else if (sealedStonePositions.Contains(new Vector2Int(x, z)))
@@ -412,7 +447,7 @@ public class StageManager : MonoBehaviour
                             z * spacing
                         );
                         StagePositions.Add(new Vector2Int(x, z));
-                        Instantiate(stage[1], spawnPos, Quaternion.identity, transform);
+                        Instantiate(stage[1], spawnPos, Quaternion.identity, StageParent.transform);
                     }
                     else if (trapStagePositions.Contains(new Vector2Int(x, z)))
                     {

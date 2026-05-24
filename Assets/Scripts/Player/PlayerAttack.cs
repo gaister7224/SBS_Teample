@@ -318,7 +318,10 @@ public class PlayerAttack : MonoBehaviour
             UIManager.Instance.inventory.playerProfile.SetActive(true);
 
         if (GameManager.instance != null)
+        {
             GameManager.instance.mapState = MapState.Village;
+            MinimapManager.ApplyMainSceneMinimapMode();
+        }
 
         if (UIManager.Instance.virtualCamera != null && UIManager.Instance.villageCollider != null)
         {
