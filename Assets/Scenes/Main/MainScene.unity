@@ -1779,7 +1779,7 @@ PlayableDirector:
   m_PlayableAsset: {fileID: 11400000, guid: a303d4cb50fde7345a803b9f643184c0, type: 2}
   m_InitialState: 0
   m_WrapMode: 2
-  m_DirectorUpdateMode: 1
+  m_DirectorUpdateMode: 2
   m_InitialTime: 0
   m_SceneBindings:
   - key: {fileID: -3825874600019258882, guid: a303d4cb50fde7345a803b9f643184c0, type: 2}
@@ -2710,6 +2710,7 @@ MonoBehaviour:
   dayEnd: 0
   possibleDungeon: 0000000000000000000000
   itemGetAll: 0
+  skillInstall: 0
   curDungeonNumber: 0
   installImpossibleStart: 0
   goldMultiplier: 0
@@ -4756,7 +4757,11 @@ PrefabInstance:
     - target: {fileID: 6761203358333034202, guid: 8887c03577ef6854fa13ac4b3c662cdf, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1258969654}
+      objectReference: {fileID: 6750361378812590906}
+    - target: {fileID: 6761203358333034202, guid: 8887c03577ef6854fa13ac4b3c662cdf, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Back
+      objectReference: {fileID: 0}
     - target: {fileID: 6780578816380911916, guid: 8887c03577ef6854fa13ac4b3c662cdf, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -5539,6 +5544,7 @@ MonoBehaviour:
   slots:
   - {fileID: 1848170946}
   - {fileID: 1848170945}
+  - {fileID: 1365823689}
 --- !u!114 &1208749652
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5985,19 +5991,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1258969654
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a774c0a4229f17a4ca2c88cea5c90884, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ui: {fileID: 0}
 --- !u!4 &1302583944 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 407389857633774038, guid: 86ebae51297451d4ca8ec3ac3e3df582, type: 3}
@@ -6205,6 +6198,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e616edc21ac447144baad3ba5f60526e, type: 3}
+--- !u!114 &1365823689 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8808991228830288103, guid: 8887c03577ef6854fa13ac4b3c662cdf, type: 3}
+  m_PrefabInstance: {fileID: 1176665544}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56abdb816a149d242a6764ed941c5128, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1399348551
 GameObject:
   m_ObjectHideFlags: 0
@@ -7954,7 +7958,7 @@ PlayableDirector:
   m_PlayableAsset: {fileID: 11400000, guid: 6920ebdebaade3c4b850d372afe58478, type: 2}
   m_InitialState: 0
   m_WrapMode: 2
-  m_DirectorUpdateMode: 1
+  m_DirectorUpdateMode: 2
   m_InitialTime: 0
   m_SceneBindings:
   - key: {fileID: 0}
@@ -8833,6 +8837,7 @@ MonoBehaviour:
   dayEnd: 0
   possibleDungeon: 
   itemGetAll: 0
+  skillInstall: 0
   curDungeonNumber: 0
   installImpossibleStart: 0
   goldMultiplier: 0
@@ -9010,6 +9015,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6911535338885381225, guid: dc97e8ab88b884e4b8ea5fa9a96fb290, type: 3}
   m_PrefabInstance: {fileID: 6750361378812590903}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &6750361378812590906 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4654212568657683630, guid: dc97e8ab88b884e4b8ea5fa9a96fb290, type: 3}
+  m_PrefabInstance: {fileID: 6750361378812590903}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a774c0a4229f17a4ca2c88cea5c90884, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &8802487935564353476
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -432,6 +432,17 @@ public class PlayerProfile : PlayerState
         }
 
         curHp = maxHp;
+        
+    }
+
+    private void ItemsDestroy()
+    {
+        GameObject[] items = GameObject.FindGameObjectsWithTag("Item");
+
+        for(int i = 0; i < items.Length; i++)
+        {
+            Destroy(items[i]);
+        }
     }
 
     public bool PlayerDeadCheck()
@@ -456,8 +467,14 @@ public class PlayerProfile : PlayerState
             transform.position = UIManager.Instance.villagePos.position;
             GameManager.instance.mapState = MapState.Village;
             MinimapManager.ApplyMainSceneMinimapMode();
+            DayManager.instance.curDay = Day.night;
+            DayManager.instance.NightIconAppear();
+            DayManager.instance.sunLight.transform.rotation
+                = Quaternion.Euler(DayManager.instance.nightSunRotation);
+            DayManager.instance.ItemGetAllCheck();
             UIManager.Instance.virtualCamera.GetComponent<CinemachineConfiner3D>().BoundingVolume
                 = UIManager.Instance.villageCollider;
+            ItemsDestroy();
         }
         else if(emergencyEscape)
         {

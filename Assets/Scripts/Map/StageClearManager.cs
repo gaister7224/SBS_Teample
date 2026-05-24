@@ -48,10 +48,11 @@ public class StageClearManager : MonoBehaviour
                 = Quaternion.Euler(DayManager.instance.nightSunRotation);
             DayManager.instance.curDay = Day.night;
             DayManager.instance.NightIconAppear();
+            DayManager.instance.ItemGetAllCheck();
             //GameObject map = GameObject.FindGameObjectWithTag("Map");
             //Destroy(map);
-            GameManager.instance.spawnedDungeon = null;
             GameManager.instance.spawnedDungeon.spawnedDungeonInstance = null;
+            GameManager.instance.spawnedDungeon = null;
             MapDestroy();
             GameObject.FindGameObjectWithTag("Player").transform.position = UIManager.Instance.villagePos.position;
         }

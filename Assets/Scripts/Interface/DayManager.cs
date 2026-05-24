@@ -46,9 +46,29 @@ public class DayManager : MonoBehaviour
         nightSunRotation = new Vector3(-49, -195, -11);
     }
 
+    public void ItemGetAllCheck()
+    {
+        storageToInventory.ItemGetAllCheck();
+    }
+
+    private void Update()
+    {
+        if (dayEndButton != null)
+        {
+            if (GameManager.instance.itemGetAll && GameManager.instance.skillInstall && curDay == Day.night)
+            {
+                dayEndButton.interactable = true;
+            }
+            else
+            {
+                dayEndButton.interactable = false;
+            }
+        }
+    }
+
     public void DayEnd()
     {
-        if (UIManager.Instance.inventory.currentUI == UIType.None && GameManager.instance.itemGetAll)
+        if (UIManager.Instance.inventory.currentUI == UIType.None)
         {
             Debug.Log("DayEnd");
             dayEndButton.interactable = false;
