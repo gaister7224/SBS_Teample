@@ -40,6 +40,7 @@ public class StageClearManager : MonoBehaviour
             GameManager.instance.curLevel++;
             
             GameManager.instance.mapState = MapState.Village;
+            MinimapManager.ApplyMainSceneMinimapMode();
             DungeonMapService.Instance?.FlushSave();
             UIManager.Instance.virtualCamera.GetComponent<CinemachineConfiner3D>().BoundingVolume
                 = UIManager.Instance.villageCollider;
