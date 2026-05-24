@@ -2732,10 +2732,10 @@ MonoBehaviour:
   curActCount: 0
   canBuyCount: 
   character1Spawn: 0
-  tutorialClear: 1
-  storageTutorial: 1
-  inventoryTutorial: 1
-  dayTutorial: 1
+  tutorialClear: 0
+  storageTutorial: 0
+  inventoryTutorial: 0
+  dayTutorial: 0
   dayCount: 0
   artifactInstallImpossibleDay: 0
   dayEnd: 0
@@ -3979,7 +3979,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3529012236525750517, guid: 8887c03577ef6854fa13ac4b3c662cdf, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3626182934933574784, guid: 8887c03577ef6854fa13ac4b3c662cdf, type: 3}
       propertyPath: m_AnchorMax.y
@@ -4160,6 +4160,14 @@ PrefabInstance:
     - target: {fileID: 4445805667768275659, guid: 8887c03577ef6854fa13ac4b3c662cdf, type: 3}
       propertyPath: m_Material
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4454765890767875216, guid: 8887c03577ef6854fa13ac4b3c662cdf, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1208749652}
+    - target: {fileID: 4454765890767875216, guid: 8887c03577ef6854fa13ac4b3c662cdf, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: EquipmentBaseAppear
       objectReference: {fileID: 0}
     - target: {fileID: 4463638406800978361, guid: 8887c03577ef6854fa13ac4b3c662cdf, type: 3}
       propertyPath: m_AnchorMax.y
@@ -4444,6 +4452,14 @@ PrefabInstance:
     - target: {fileID: 5850485454779173656, guid: 8887c03577ef6854fa13ac4b3c662cdf, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5867903555799650005, guid: 8887c03577ef6854fa13ac4b3c662cdf, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1208749652}
+    - target: {fileID: 5867903555799650005, guid: 8887c03577ef6854fa13ac4b3c662cdf, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ArtiFactBaseAppear
       objectReference: {fileID: 0}
     - target: {fileID: 5927410876247998071, guid: 8887c03577ef6854fa13ac4b3c662cdf, type: 3}
       propertyPath: ui
@@ -5227,7 +5243,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7820900450151825384, guid: 8887c03577ef6854fa13ac4b3c662cdf, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7851502015676342590, guid: 8887c03577ef6854fa13ac4b3c662cdf, type: 3}
       propertyPath: m_AnchorMax.x
