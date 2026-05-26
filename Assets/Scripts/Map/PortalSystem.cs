@@ -15,41 +15,68 @@ public class PortalSystem : MonoBehaviour
     public bool toBoss;
     public float distance = 9f;
 
+    void Awake()
+    {
+        // Update 지연 할당 대신 Awake 에서 즉시 확보합니다.
+        if (portalManager == null)
+            portalManager = GetComponentInParent<PortalManager>();
+
+        if (stageManager == null)
+            stageManager = StageManager.instance;
+    }
+
     void Start()
     {
     }
 
     void Update()
     {
+        // Awake 시점에 못 찾았을 경우 재시도
         if (portalManager == null)
-        {
             portalManager = GetComponentInParent<PortalManager>();
-        }
 
         if (stageManager == null && StageManager.instance != null)
-        {
             stageManager = StageManager.instance;
-        }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (!other.CompareTag("Player"))
+            return;
+
+        // 진입 직전에 null 재확인
+        if (portalManager == null)
+            portalManager = GetComponentInParent<PortalManager>();
+        if (stageManager == null)
+            stageManager = StageManager.instance;
+
+        if (portalManager == null)
         {
-            player = other.gameObject;
-            if (other.GetComponent<PlayerProfile>().ActCount > 0)
-            {
-                StartCoroutine(Teleport());
-            }
-            else if (portalManager.PlayerObject.GetComponent<PlayerProfile>().ActCount <= 0)
-            {
-            }
+            Debug.LogError("[PortalSystem] OnTriggerEnter: PortalManager를 찾을 수 없습니다.");
+            return;
         }
 
+        player = other.gameObject;
+        if (other.GetComponent<PlayerProfile>().ActCount > 0)
+        {
+            StartCoroutine(Teleport());
+        }
     }
 
     IEnumerator Teleport()
     {
+        // Teleport 시작 시점에도 null 재확인
+        if (portalManager == null)
+            portalManager = GetComponentInParent<PortalManager>();
+        if (stageManager == null)
+            stageManager = StageManager.instance;
+
+        if (portalManager == null)
+        {
+            Debug.LogError("[PortalSystem] Teleport: PortalManager가 null입니다.");
+            yield break;
+        }
+
         Image img = UIManager.Instance.fade.GetComponent<Image>();
         img.gameObject.SetActive(true);
         player.transform.position = portalManager.PlayerTpSpotTransform.position;
@@ -59,19 +86,19 @@ public class PortalSystem : MonoBehaviour
         switch (direction)
         {
             case PortalDirection.Front:
-                player.transform.position += new Vector3(0f, 0f, StageManager.instance.spacing - distance);
+                player.transform.position += new Vector3(0f, 0f, stageManager.spacing - distance);
                 player.GetComponent<PlayerProfile>().UseActCount(1);
                 break;
             case PortalDirection.Back:
-                player.transform.position += new Vector3(0f, 0f, -StageManager.instance.spacing + distance);
+                player.transform.position += new Vector3(0f, 0f, -stageManager.spacing + distance);
                 player.GetComponent<PlayerProfile>().UseActCount(1);
                 break;
             case PortalDirection.Left:
-                player.transform.position += new Vector3(-StageManager.instance.spacing + distance, 0f, 0f);
+                player.transform.position += new Vector3(-stageManager.spacing + distance, 0f, 0f);
                 player.GetComponent<PlayerProfile>().UseActCount(1);
                 break;
             case PortalDirection.Right:
-                player.transform.position += new Vector3(StageManager.instance.spacing - distance, 0f, 0f);
+                player.transform.position += new Vector3(stageManager.spacing - distance, 0f, 0f);
                 player.GetComponent<PlayerProfile>().UseActCount(1);
                 break;
             case PortalDirection.toBoss:
@@ -81,47 +108,31 @@ public class PortalSystem : MonoBehaviour
             case PortalDirection.Random:
                 int randomIndex;
                 Vector2 randomPos;
-
                 do
                 {
                     randomIndex = Random.Range(0, stageManager.StagePositions.Count);
                     randomPos = stageManager.StagePositions.ElementAt(randomIndex);
-
                 } while (randomPos.x == 0 && randomPos.y == 0);
 
                 player.transform.position = new Vector3(randomPos.x * stageManager.spacing, 1.9f, randomPos.y * stageManager.spacing - distance);
-                //������Ż
                 break;
             case PortalDirection.Clear:
                 if (stageManager.Tutorial)
                     yield return stageManager.AdvanceTutorialFloorRoutine();
                 else
                     stageManager.curFloorCleared = true;
-                //Debug.Log(stageManager);
-                //stageManager.curFloorCleared = true;
-                ////Ŭ������Ż
-                //if (!stageManager.Tutorial)
-                //{
-                //    int countHalf = (stageManager.StageCount % 2 == 1) ? stageManager.StageCount / 2 + 1 : stageManager.StageCount / 2;
-                //    player.transform.position = new Vector3(-countHalf * stageManager.spacing, 1.9f, -countHalf * stageManager.spacing);
-                //}
-                //else
-                //{
-                //    player.transform.position = new Vector3(0f, 1.9f, -distance);
-                //}
                 break;
             case PortalDirection.Return:
-                Vector3 returnPos = new Vector3(stageManager.StagePositions.ElementAt(0).x * stageManager.spacing, 1.9f, stageManager.StagePositions.ElementAt(0).y * stageManager.spacing);
+                Vector3 returnPos = new Vector3(
+                    stageManager.StagePositions.ElementAt(0).x * stageManager.spacing,
+                    1.9f,
+                    stageManager.StagePositions.ElementAt(0).y * stageManager.spacing);
                 player.transform.position = returnPos;
                 break;
         }
 
         GameManager.instance.OnPortalEnter?.Invoke();
-
-        if (stageManager == null)
-            stageManager = StageManager.instance;
-        if (stageManager != null)
-            stageManager.SyncPlayerToMinimap();
+        stageManager.SyncPlayerToMinimap();
 
         yield return null;
     }
