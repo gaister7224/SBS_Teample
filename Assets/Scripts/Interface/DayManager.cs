@@ -55,13 +55,21 @@ public class DayManager : MonoBehaviour
     {
         if (dayEndButton != null)
         {
-            if (GameManager.instance.itemGetAll && GameManager.instance.skillInstall && curDay == Day.night)
+            if (GameManager.instance.mapState == MapState.Village)
             {
-                dayEndButton.interactable = true;
+                dayEndButton.gameObject.SetActive(true);
+                if (GameManager.instance.itemGetAll && GameManager.instance.skillInstall && curDay == Day.night)
+                {
+                    dayEndButton.interactable = true;
+                }
+                else
+                {
+                    dayEndButton.interactable = false;
+                }
             }
-            else
+            else if (GameManager.instance.mapState == MapState.Stage)
             {
-                dayEndButton.interactable = false;
+                dayEndButton.gameObject.SetActive(false);
             }
         }
     }

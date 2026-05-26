@@ -5773,6 +5773,7 @@ GameObject:
   - component: {fileID: 1208749656}
   - component: {fileID: 1208749657}
   - component: {fileID: 1208749658}
+  - component: {fileID: 1208749659}
   m_Layer: 0
   m_Name: InventorySystem
   m_TagString: Untagged
@@ -5948,6 +5949,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e594567eb90d3ba4eba7d7e4854cfc85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1208749659
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1208749650}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28abfd6840e2fc04dac4f1864337f1a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  artifactItems:
+  - {fileID: 11400000, guid: db43879f5b52cfd46b09bcad660e4c2f, type: 2}
+  - {fileID: 11400000, guid: af48593efce3d7746af12ccd9207652f, type: 2}
+  - {fileID: 11400000, guid: f63aa62f523ab0245b48498fa5ebddfb, type: 2}
+  - {fileID: 11400000, guid: 19f2cd9242ba20f489727e26c58a3de8, type: 2}
+  - {fileID: 11400000, guid: 7a2dd24785cd48141aaec1438f78e786, type: 2}
+  - {fileID: 11400000, guid: 6cc36b2a43a7e0b4ba2e8d34bce71354, type: 2}
+  - {fileID: 11400000, guid: dca9908f6967c70468dbb4cccc563998, type: 2}
+  - {fileID: 11400000, guid: a4750036d5dc8b64fa25df069ca14d80, type: 2}
+  - {fileID: 11400000, guid: 0747fb2f0861f9a45a369d768d4d86e4, type: 2}
+  - {fileID: 11400000, guid: d03dc24c60670cb4889eb49de9531373, type: 2}
+  - {fileID: 11400000, guid: 01e4e44cdfd2f5c4ebfeb19be4e93e09, type: 2}
+  - {fileID: 11400000, guid: 099d12b721ccb0744ae6a10b82ddfb9c, type: 2}
 --- !u!1 &1213746732 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5349202258706162213, guid: 8887c03577ef6854fa13ac4b3c662cdf, type: 3}

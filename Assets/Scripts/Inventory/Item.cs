@@ -278,4 +278,12 @@ public class Item : ScriptableObject
             return maxGold;
         }
     }
+
+    [Header("»πµÊ«— ¿Øπ∞¿Œ¡ˆ »Æ¿Œ")]
+    [SerializeField] private bool artifactGet;
+    public bool ArtifactGet
+    {
+        set {  artifactGet = value; }
+        get {  return artifactGet; }
+    }
 }

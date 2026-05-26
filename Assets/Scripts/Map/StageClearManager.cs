@@ -1,14 +1,16 @@
 using System.Collections;
 using Unity.Cinemachine;
+using UnityEditor.Experimental;
 using UnityEngine;
 
 public class StageClearManager : MonoBehaviour
 {
     [SerializeField] private GameObject jobChoiceUI;
-
+    private ArtiFactGet artifactGet;
     void Start()
     {
         jobChoiceUI = GameObject.Find("JobChoiceUI");
+        artifactGet = GameObject.Find("InventorySystem").GetComponent<ArtiFactGet>();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -34,6 +36,8 @@ public class StageClearManager : MonoBehaviour
                 DayManager.instance.NightIconAppear();
                 return;
             }
+            artifactGet.ArtiFactRandomGet();
+
             other.gameObject.GetComponent<PlayerProfile>().BuffStoneRelease();
             GameManager.instance.possibleDungeon[GameManager.instance.curDungeonNumber] = true;
             GameManager.instance.statusPoint++;

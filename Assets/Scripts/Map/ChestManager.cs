@@ -13,10 +13,13 @@ public class ChestManager : MonoBehaviour
     [SerializeField] private GameObject[] itemObjects;
     private bool itemSpawn;
     private GameObject fKey;
+
+    private MeshRenderer meshRenderer;
     private void Start()
     {
         inventory = UIManager.Instance.inventory;
         fKey = transform.GetChild(0).gameObject;
+        meshRenderer = transform.GetChild(1).GetComponent<MeshRenderer>();
 
         if (inventory == null)
         {
@@ -53,8 +56,9 @@ public class ChestManager : MonoBehaviour
                 }
 
                 //쉴터 대용 임시
-                GameManager.instance.OnShelterEnter?.Invoke();
+                //GameManager.instance.OnShelterEnter?.Invoke();
             }
+            meshRenderer.enabled = false;
             itemSpawn = true;
         }
     }

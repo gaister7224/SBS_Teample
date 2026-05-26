@@ -35,3 +35,4 @@ MonoBehaviour:
   skillCoolTimeBuff: 0
   minGold: 0
   maxGold: 0
+  artifactGet: 0
