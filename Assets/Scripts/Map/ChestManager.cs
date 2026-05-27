@@ -13,6 +13,8 @@ public class ChestManager : MonoBehaviour
     [SerializeField] private GameObject[] itemObjects;
     private bool itemSpawn;
     private GameObject fKey;
+
+    [SerializeField] private Animator ani;
     private void Start()
     {
         inventory = UIManager.Instance.inventory;
@@ -53,8 +55,9 @@ public class ChestManager : MonoBehaviour
                 }
 
                 //쉴터 대용 임시
-                GameManager.instance.OnShelterEnter?.Invoke();
+                //GameManager.instance.OnShelterEnter?.Invoke();
             }
+            ani.SetBool("Open", true);
             itemSpawn = true;
         }
     }
