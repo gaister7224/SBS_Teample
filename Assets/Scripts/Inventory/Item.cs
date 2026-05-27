@@ -50,6 +50,9 @@ public class Item : ScriptableObject
     //장신구 그룹
     public bool IsAccessory = (ItemType.Equipment_RING | ItemType.Equipment_PENDANT | ItemType.Equipment_Glove
         | ItemType.Equipment_AMULET) != 0;
+    //물약 그룹
+    public bool IsPotion = (ItemType.HealPotion_Small | ItemType.HealPotion_Middle | ItemType.HealPotion_Big
+        | ItemType.MPPotion_Small | ItemType.MPPotion_Middle | ItemType.MPPotion_Big) != 0;
 
     [Header("고유한 아이템의 ID(중복불가)")]
     [SerializeField] private int itemID;

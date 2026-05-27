@@ -16,6 +16,15 @@ public class UIBackButton : MonoBehaviour
     public void InventoryUIBack()
     {
         inventory.CloseInventory();
+
+        if (!GameManager.instance.inventoryTutorial) //튜토리얼 설명
+        {
+            if (!DialogueManager.instance.start)
+            {
+                DialogueManager.instance.OnDialogue(UIManager.Instance.statusExplainDialogue);
+                GameManager.instance.inventoryTutorial = true;
+            }
+        }
     }
 
     public void StorageUIBack()

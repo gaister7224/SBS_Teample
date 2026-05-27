@@ -46,20 +46,25 @@ public class StageClearManager : MonoBehaviour
             GameManager.instance.mapState = MapState.Village;
             MinimapManager.ApplyMainSceneMinimapMode();
             DungeonMapService.Instance?.FlushSave();
-            UIManager.Instance.virtualCamera.GetComponent<CinemachineConfiner3D>().BoundingVolume
-                = UIManager.Instance.villageCollider;
-            DayManager.instance.sunLight.transform.rotation
-                = Quaternion.Euler(DayManager.instance.nightSunRotation);
-            DayManager.instance.curDay = Day.night;
-            DayManager.instance.NightIconAppear();
-            DayManager.instance.ItemGetAllCheck();
             //GameObject map = GameObject.FindGameObjectWithTag("Map");
             //Destroy(map);
             GameManager.instance.spawnedDungeon.spawnedDungeonInstance = null;
             GameManager.instance.spawnedDungeon = null;
             MapDestroy();
-            GameObject.FindGameObjectWithTag("Player").transform.position = UIManager.Instance.villagePos.position;
+            PlayerMoveToVillage();
         }
+    }
+
+    private void PlayerMoveToVillage()
+    {
+        UIManager.Instance.virtualCamera.GetComponent<CinemachineConfiner3D>().BoundingVolume
+                = UIManager.Instance.villageCollider;
+        DayManager.instance.sunLight.transform.rotation
+            = Quaternion.Euler(DayManager.instance.nightSunRotation);
+        DayManager.instance.curDay = Day.night;
+        DayManager.instance.NightIconAppear();
+        DayManager.instance.ItemGetAllCheck();
+        GameObject.FindGameObjectWithTag("Player").transform.position = UIManager.Instance.villagePos.position;
     }
 
     private void MapDestroy()
