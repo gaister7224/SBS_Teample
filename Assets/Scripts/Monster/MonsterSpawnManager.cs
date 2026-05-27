@@ -185,7 +185,7 @@ public class MonsterSpawnManager : MonoBehaviour
 
         if (isMonsterSpawn)
         {
-            spawnPos.y = 0f;
+            spawnPos.y = 0.5f;
             TrySpawnRandom(spawnPos);
             isMonsterSpawn = false;
         }

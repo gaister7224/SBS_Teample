@@ -164,8 +164,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 25a2a7cd90c060e4fa53cd5e6692bffa, type: 3}
-  m_Color: {r: 0.70675117, g: 1, b: 0.69411767, a: 1}
+  m_Sprite: {fileID: 21300000, guid: e9a07f3a44689824ba9ed31b4d5f850a, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -1975,7 +1975,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19cae063ddb5321468dbc2283c53b95a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stageType: 9
+  stageType: 11
   SpawnPrefabs: []
   isCleared: 0
   isPortalActive: 0

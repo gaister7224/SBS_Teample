@@ -80,8 +80,8 @@ public class CreatingCharacter : MonoBehaviour, IPointerClickHandler
         if (curName.Length > 0)
         {
             UpdatePlayerPreview(GameManager.instance.profileIndex);
-            pos.position = new Vector3(pos.position.x, pos.position.y + 130, pos.position.z);
-            pos.localScale = new Vector3(2.5f, 4.5f, 4);
+            pos.position = new Vector3(pos.position.x + 30, pos.position.y + 200, pos.position.z);
+            pos.localScale = new Vector3(1f, 3f, 4);
             GameManager.instance.nickName = curName;
             create = true;
             nameZone.SetActive(false);
@@ -105,7 +105,7 @@ public class CreatingCharacter : MonoBehaviour, IPointerClickHandler
     /// </summary>
     private void Info()
     {
-        infoTexts[0].text = "이름 : " + GameManager.instance.name;
+        infoTexts[0].text = "이름 : " + GameManager.instance.nickName;
         infoTexts[1].text = "직업 : " + GameManager.instance.job;
         infoTexts[2].text = "레벨 : " + GameManager.instance.level;
     }

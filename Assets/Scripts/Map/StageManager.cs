@@ -75,6 +75,7 @@ public class StageManager : MonoBehaviour
 
     public GameObject StageParent;
 
+    public DungeonMapType[] mapType;
     private void Awake()
     {
         monsterSpawnManager = GetComponentInChildren<MonsterSpawnManager>();
@@ -86,12 +87,17 @@ public class StageManager : MonoBehaviour
     {
         curFloorCleared = false;
 
+        for(int i = 0; i < mapType[0].mapPrefab.Length; i++)
+        {
+            stage.Add(mapType[0].mapPrefab[i]);
+        }
+
         if (Tutorial && HasTutorialStageInHierarchy())
         {
             curFloor = Mathf.Min(1, TutorialStage.Count);
             StartCoroutine(InitializeDungeonMapWhenReady());
         }
-        else
+        else if(!Tutorial)
         {
             StartCoroutine(StartDungeon());
         }
