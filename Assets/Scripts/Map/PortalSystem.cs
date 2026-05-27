@@ -130,6 +130,7 @@ public class PortalSystem : MonoBehaviour
                 player.transform.position = returnPos;
                 break;
             case PortalDirection.Villiage:
+                player.GetComponent<PlayerProfile>().PlayerMoveToVillage();
                 break;
         }
 
