@@ -170,17 +170,12 @@ public class CornerMinimapInstaller : MonoBehaviour
 
     static GameObject ResolveMapStagePrefab()
     {
-        if (MinimapManager.instance != null && MinimapManager.instance.MapStagePrefab != null)
-            return MinimapManager.instance.MapStagePrefab;
-
+        // 레거시 MinimapManager 의존 제거: 없으면 GridBuilder가 런타임 셀을 생성합니다.
         return null;
     }
 
     static MapMarkSpriteSet ResolveMarkSpriteSet()
     {
-        if (MinimapManager.instance != null && MinimapManager.instance.MarkSpriteSet != null)
-            return MinimapManager.instance.MarkSpriteSet;
-
         return MapMarkSpriteSet.LoadFromResources();
     }
 

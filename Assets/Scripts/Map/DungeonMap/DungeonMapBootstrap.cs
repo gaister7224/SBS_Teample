@@ -41,9 +41,7 @@ public class DungeonMapBootstrap : MonoBehaviour
     {
         if (mapStagePrefab != null)
             return;
-
-        if (MinimapManager.instance != null)
-            mapStagePrefab = MinimapManager.instance.MapStagePrefab;
+        // 레거시 MinimapManager 의존 제거: 없으면 GridBuilder 런타임 셀 사용.
     }
 
     void BuildUi()

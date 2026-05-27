@@ -10,13 +10,14 @@ public class VillageMinimapUI : MonoBehaviour
 
     [SerializeField] private GameObject largeMapPanel;
     [SerializeField] private MapBoardPanelView mapBoardPanel;
-    [SerializeField] private GameObject mapStagePrefab;
     [SerializeField] private MapMarkSpriteSet markSpriteSet;
 
     private void Awake()
     {
         DemoSceneBootstrap.EnsureGameManager();
         Instance = this;
+
+        EnsureCornerMinimapInstaller();
 
         if (largeMapPanel != null)
             largeMapPanel.SetActive(false);
@@ -81,7 +82,8 @@ public class VillageMinimapUI : MonoBehaviour
             grid = content.gameObject.AddComponent<DungeonMapGridBuilder>();
 
         grid.ConfigureForMapBoard(allowMarking: false);
-        grid.SetCellPrefab(ResolveMapStagePrefab());
+        // 레거시 MinimapManager 프리팹 대신 런타임 셀을 사용합니다.
+        grid.SetCellPrefab(null);
         grid.SetMarkSpriteSet(ResolveMarkSpriteSet());
 
         if (mapBoardPanel == null)
@@ -92,16 +94,17 @@ public class VillageMinimapUI : MonoBehaviour
         }
 
         mapBoardPanel.Configure(largeMapPanel, content.gameObject, null, grid,
-            ResolveMapStagePrefab(), ResolveMarkSpriteSet());
+            null, ResolveMarkSpriteSet());
     }
 
-    GameObject ResolveMapStagePrefab()
+    void EnsureCornerMinimapInstaller()
     {
-        if (mapStagePrefab != null)
-            return mapStagePrefab;
-        if (MinimapManager.instance != null)
-            return MinimapManager.instance.MapStagePrefab;
-        return null;
+        var miniMapCanvas = GameObject.Find("MiniMapCanvas");
+        if (miniMapCanvas == null)
+            return;
+
+        if (miniMapCanvas.GetComponent<CornerMinimapInstaller>() == null)
+            miniMapCanvas.AddComponent<CornerMinimapInstaller>();
     }
 
     MapMarkSpriteSet ResolveMarkSpriteSet()
