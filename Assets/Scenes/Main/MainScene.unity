@@ -7098,6 +7098,74 @@ PrefabInstance:
       propertyPath: MaxSealedStoneCount
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 9219160503716778401, guid: 86ebae51297451d4ca8ec3ac3e3df582, type: 3}
+      propertyPath: 'stage.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2619334703123621966, guid: 353ea65809b425841a05bdfb1f94b72f, type: 3}
+    - target: {fileID: 9219160503716778401, guid: 86ebae51297451d4ca8ec3ac3e3df582, type: 3}
+      propertyPath: 'stage.Array.data[2]'
+      value: 
+      objectReference: {fileID: 2619334703123621966, guid: fcdd8c6f399c9eb4aad768dc5bc0025d, type: 3}
+    - target: {fileID: 9219160503716778401, guid: 86ebae51297451d4ca8ec3ac3e3df582, type: 3}
+      propertyPath: 'stage.Array.data[3]'
+      value: 
+      objectReference: {fileID: 2619334703123621966, guid: 1f1178efe564fe74c9c264d5649f9803, type: 3}
+    - target: {fileID: 9219160503716778401, guid: 86ebae51297451d4ca8ec3ac3e3df582, type: 3}
+      propertyPath: 'stage.Array.data[4]'
+      value: 
+      objectReference: {fileID: 2619334703123621966, guid: 1ce88f6b9d73df64c865d495d578e115, type: 3}
+    - target: {fileID: 9219160503716778401, guid: 86ebae51297451d4ca8ec3ac3e3df582, type: 3}
+      propertyPath: 'stage.Array.data[5]'
+      value: 
+      objectReference: {fileID: 2619334703123621966, guid: b7ab20b399a8d9c4ab8d81a44ad3c795, type: 3}
+    - target: {fileID: 9219160503716778401, guid: 86ebae51297451d4ca8ec3ac3e3df582, type: 3}
+      propertyPath: 'stage.Array.data[6]'
+      value: 
+      objectReference: {fileID: 2619334703123621966, guid: 27879d518414c104cb9e48db9a870536, type: 3}
+    - target: {fileID: 9219160503716778401, guid: 86ebae51297451d4ca8ec3ac3e3df582, type: 3}
+      propertyPath: 'stage.Array.data[7]'
+      value: 
+      objectReference: {fileID: 2619334703123621966, guid: 3da9d2620cae6b24293b1f6eee5079aa, type: 3}
+    - target: {fileID: 9219160503716778401, guid: 86ebae51297451d4ca8ec3ac3e3df582, type: 3}
+      propertyPath: 'stage.Array.data[8]'
+      value: 
+      objectReference: {fileID: 2619334703123621966, guid: e616edc21ac447144baad3ba5f60526e, type: 3}
+    - target: {fileID: 9219160503716778401, guid: 86ebae51297451d4ca8ec3ac3e3df582, type: 3}
+      propertyPath: StageTypeCount.Array.size
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 9219160503716778401, guid: 86ebae51297451d4ca8ec3ac3e3df582, type: 3}
+      propertyPath: 'StageTypeCount.Array.data[1]'
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9219160503716778401, guid: 86ebae51297451d4ca8ec3ac3e3df582, type: 3}
+      propertyPath: 'StageTypeCount.Array.data[2]'
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9219160503716778401, guid: 86ebae51297451d4ca8ec3ac3e3df582, type: 3}
+      propertyPath: 'StageTypeCount.Array.data[3]'
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9219160503716778401, guid: 86ebae51297451d4ca8ec3ac3e3df582, type: 3}
+      propertyPath: 'StageTypeCount.Array.data[4]'
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9219160503716778401, guid: 86ebae51297451d4ca8ec3ac3e3df582, type: 3}
+      propertyPath: 'StageTypeCount.Array.data[5]'
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9219160503716778401, guid: 86ebae51297451d4ca8ec3ac3e3df582, type: 3}
+      propertyPath: 'StageTypeCount.Array.data[6]'
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9219160503716778401, guid: 86ebae51297451d4ca8ec3ac3e3df582, type: 3}
+      propertyPath: 'StageTypeCount.Array.data[7]'
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9219160503716778401, guid: 86ebae51297451d4ca8ec3ac3e3df582, type: 3}
+      propertyPath: 'StageTypeCount.Array.data[8]'
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
