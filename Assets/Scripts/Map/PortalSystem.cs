@@ -114,7 +114,10 @@ public class PortalSystem : MonoBehaviour
                     randomPos = stageManager.StagePositions.ElementAt(randomIndex);
                 } while (randomPos.x == 0 && randomPos.y == 0);
 
-                player.transform.position = new Vector3(randomPos.x * stageManager.spacing, 1.9f, randomPos.y * stageManager.spacing - distance);
+                var randomGrid = new Vector2Int(Mathf.RoundToInt(randomPos.x), Mathf.RoundToInt(randomPos.y));
+                var randomWorld = stageManager.GridToWorld(randomGrid, 1.9f);
+                randomWorld.z -= distance;
+                player.transform.position = randomWorld;
                 break;
             case PortalDirection.Clear:
                 if (stageManager.Tutorial)
@@ -123,10 +126,8 @@ public class PortalSystem : MonoBehaviour
                     stageManager.curFloorCleared = true;
                 break;
             case PortalDirection.Return:
-                Vector3 returnPos = new Vector3(
-                    stageManager.StagePositions.ElementAt(0).x * stageManager.spacing,
-                    1.9f,
-                    stageManager.StagePositions.ElementAt(0).y * stageManager.spacing);
+                var returnGrid = stageManager.StagePositions.ElementAt(0);
+                Vector3 returnPos = stageManager.GridToWorld(returnGrid, 1.9f);
                 player.transform.position = returnPos;
                 break;
         }

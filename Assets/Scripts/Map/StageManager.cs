@@ -235,9 +235,31 @@ public class StageManager : MonoBehaviour
 
     public Vector2Int WorldToGrid(Vector3 worldPosition)
     {
+        var origin = GetGridOrigin();
         return new Vector2Int(
-            Mathf.RoundToInt(worldPosition.x / spacing),
-            Mathf.RoundToInt(worldPosition.z / spacing));
+            Mathf.RoundToInt((worldPosition.x - origin.x) / spacing),
+            Mathf.RoundToInt((worldPosition.z - origin.z) / spacing));
+    }
+
+    public Vector3 GridToWorld(Vector2Int gridPosition, float y = 0f)
+    {
+        var origin = GetGridOrigin();
+        return new Vector3(
+            origin.x + gridPosition.x * spacing,
+            y,
+            origin.z + gridPosition.y * spacing);
+    }
+
+    Vector3 GetGridOrigin()
+    {
+        if (StageParent != null)
+            return new Vector3(StageParent.transform.position.x, 0f, StageParent.transform.position.z);
+
+        var activeMapRoot = DungeonMapLayoutResolver.ResolveActiveMapRoot();
+        if (activeMapRoot != null)
+            return new Vector3(activeMapRoot.position.x, 0f, activeMapRoot.position.z);
+
+        return new Vector3(transform.position.x, 0f, transform.position.z);
     }
 
     public void SyncDungeonMapAfterLayout()
@@ -325,11 +347,11 @@ public class StageManager : MonoBehaviour
     // CreateStage : 기존 Update() 내부의 로컬 코루틴 StageCreate를
     //               public 멤버 코루틴으로 승격한 버전.
     //
-    // stage[] 인덱스 구조 (기존과 동일)
-    //   stage[0]   → 코너 시작방  ← 이 방 소환 위치로 플레이어를 이동
+    // stage[] index layout (same as legacy)
+    //   stage[0]   -> corner start room (player spawn room)
     //   stage[1]   → SealedStone 방
     //   stage[2]   → Trap 방
-    //   stage[3+]  → 일반/랜덤 방
+    //   stage[3+]  -> normal/random rooms
     // ─────────────────────────────────────────────────────────────────
 
     public IEnumerator CreateStage()
@@ -349,7 +371,7 @@ public class StageManager : MonoBehaviour
 
         Transform stageRoot = (StageParent != null) ? StageParent.transform : transform;
 
-        // ── 그리드 크기 계산 ──────────────────────────────────────
+        // ── grid size calculation ──────────────────────────────────
         int countHalf = (StageCount % 2 == 1) ? StageCount / 2 + 1 : StageCount / 2;
 
         // ── SealedStone 위치 결정 ─────────────────────────────────
@@ -395,6 +417,7 @@ public class StageManager : MonoBehaviour
             for (int z = -countHalf; z < StageCount - countHalf + 2; z++)
             {
                 Vector3 spawnPos = new Vector3(x * spacing, 0f, z * spacing);
+                Vector3 worldSpawnPos = stageRoot.position + spawnPos;
                 Vector2Int gridPos = new Vector2Int(x, z);
 
                 bool isCenterZone = (x >= -1 && x <= 1 && z >= -1 && z <= 1);
@@ -403,47 +426,47 @@ public class StageManager : MonoBehaviour
                 {
                     if (x == 0 && z == 0)
                     {
-                        Instantiate(BossStage, transform.localPosition, Quaternion.identity, stageRoot);
+                        Instantiate(BossStage, worldSpawnPos, Quaternion.identity, stageRoot);
                         StagePositions.Add(gridPos);
                     }
                 }
                 else if (x == -countHalf && z == -countHalf)
                 {
                     // stage[0]: 코너 시작방
-                    Instantiate(stage[0], spawnPos, Quaternion.identity, stageRoot);
+                    Instantiate(stage[0], worldSpawnPos, Quaternion.identity, stageRoot);
                     StagePositions.Add(gridPos);
                 }
                 else if (sealedStonePositions.Contains(gridPos))
                 {
                     // stage[1]: SealedStone 방
-                    Instantiate(stage[1], spawnPos, Quaternion.identity, stageRoot);
+                    Instantiate(stage[1], worldSpawnPos, Quaternion.identity, stageRoot);
                     StagePositions.Add(gridPos);
                 }
                 else if (trapStagePositions.Contains(gridPos))
                 {
                     // stage[2]: Trap 방
-                    Instantiate(stage[2], spawnPos, Quaternion.identity, stageRoot);
+                    Instantiate(stage[2], worldSpawnPos, Quaternion.identity, stageRoot);
                     StagePositions.Add(gridPos);
                 }
                 else
                 {
-                    // stage[3+]: 일반/랜덤 방
+                    // stage[3+]: normal/random room
                     int randomIndex = Random.Range(3, stage.Count);
-                    Instantiate(stage[randomIndex], spawnPos, Quaternion.identity, stageRoot);
+                    Instantiate(stage[randomIndex], worldSpawnPos, Quaternion.identity, stageRoot);
                     StagePositions.Add(gridPos);
                 }
             }
         }
 
-        // ── 한 프레임 대기 (Instantiate된 오브젝트 Awake/Start 완료 대기) ──
+        // ── wait one frame for instantiated objects initialization ──
         yield return null;
 
-        // ── 플레이어를 stage[0] 시작방 위치로 이동 ───────────────
+        // ── move player to stage[0] start room ─────────────────────
         if (Player == null)
             Player = GameObject.FindGameObjectWithTag("Player");
 
         if (Player != null)
-            Player.transform.position = new Vector3(-countHalf * spacing, 1.9f, -countHalf * spacing);
+            Player.transform.position = GridToWorld(new Vector2Int(-countHalf, -countHalf), 1.9f);
 
         RebuildStagePositions();
         SyncDungeonMapAfterLayout();
