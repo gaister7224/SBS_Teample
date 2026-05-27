@@ -13,7 +13,7 @@ public class PortalSystem : MonoBehaviour
     [SerializeField] PortalDirection direction;
 
     public bool toBoss;
-    public float distance = 9f;
+    float distance = 12f;
 
     void Awake()
     {
@@ -124,10 +124,13 @@ public class PortalSystem : MonoBehaviour
                 break;
             case PortalDirection.Return:
                 Vector3 returnPos = new Vector3(
-                    stageManager.StagePositions.ElementAt(0).x * stageManager.spacing,
+                    stageManager.StagePositions.ElementAt(-stageManager.StageCount / 2).x * stageManager.spacing,
                     1.9f,
-                    stageManager.StagePositions.ElementAt(0).y * stageManager.spacing);
+                    stageManager.StagePositions.ElementAt(-stageManager.StageCount / 2).y * stageManager.spacing);
                 player.transform.position = returnPos;
+                break;
+            case PortalDirection.Villiage:
+                player.GetComponent<PlayerProfile>().PlayerMoveToVillage();
                 break;
         }
 
