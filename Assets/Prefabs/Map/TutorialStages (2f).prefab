@@ -67182,7 +67182,7 @@ PrefabInstance:
     - target: {fileID: 3809560422600107664, guid: e616edc21ac447144baad3ba5f60526e, type: 3}
       propertyPath: 'SpawnPrefabs.Array.data[0]'
       value: 
-      objectReference: {fileID: 188980, guid: 8c2b62e7246b8be418a40cb56f42685a, type: 3}
+      objectReference: {fileID: 870703411376872377, guid: e6f1682d175e64141bc78964bcd0f18e, type: 3}
     - target: {fileID: 7291265072047404045, guid: e616edc21ac447144baad3ba5f60526e, type: 3}
       propertyPath: m_Enabled
       value: 0
