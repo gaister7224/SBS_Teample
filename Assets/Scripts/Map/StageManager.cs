@@ -87,7 +87,7 @@ public class StageManager : MonoBehaviour
             curFloor = Mathf.Min(1, TutorialStage.Count);
             StartCoroutine(InitializeDungeonMapWhenReady());
         }
-        else
+        else if(!Tutorial)
         {
             StartCoroutine(StartDungeon());
         }
