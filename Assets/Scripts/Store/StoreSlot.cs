@@ -87,7 +87,7 @@ public class StoreSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         item = nItem;
         itemCount = count;
         itemImage.sprite = item.Image;
-        if (item.Type == ItemType.GoldBox)
+        if (item.Type == ItemType.GoldBox || item.IsPotion)
         {
             priceText.text = item.Price.ToString();
         }

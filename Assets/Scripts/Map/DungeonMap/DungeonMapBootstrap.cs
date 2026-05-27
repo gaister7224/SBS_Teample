@@ -1,7 +1,8 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /// <summary>
-/// 던전 씬 진입 시 코너 미니맵 + M키 지도 게시판 UI를 구성합니다.
+/// 던전 전용 씬(DungeonSystem 등) 진입 시 지도 UI를 구성합니다. MainScene은 MinimapManager가 담당합니다.
 /// </summary>
 public class DungeonMapBootstrap : MonoBehaviour
 {
@@ -18,13 +19,18 @@ public class DungeonMapBootstrap : MonoBehaviour
 
     void Awake()
     {
+        if (SceneManager.GetActiveScene().name == "MainScene")
+        {
+            Destroy(gameObject);
+            return;
+        }
+
         if (markSpriteSet == null)
             markSpriteSet = MapMarkSpriteSet.LoadFromResources();
 
         EnsureMapStagePrefab();
         EnsureService();
         BuildUi();
-        DungeonMapUiInstaller.EnsureMapBoardUi();
         DungeonMapService.Instance.LoadForCurrentDungeon();
     }
 
@@ -46,19 +52,14 @@ public class DungeonMapBootstrap : MonoBehaviour
 
     void BuildUi()
     {
-        var canvas = Object.FindAnyObjectByType<Canvas>();
+        var canvas = MinimapHudLayout.FindMainOverlayCanvas();
         if (canvas == null)
             return;
 
         EnsureCornerMinimapOnCanvas(canvas.transform);
 
-        var existingUi = Object.FindAnyObjectByType<DungeonMapUI>();
-        var existingPanel = ResolveMapBoardPanel();
-        if (existingUi != null && existingPanel != null)
-        {
-            existingUi.SetMapBoardPanel(existingPanel);
+        if (DungeonMapUI.Instance != null && ResolveMapBoardPanel() != null)
             return;
-        }
 
         var mapBoard = MapBoardPanelFactory.Create(
             canvas.transform,
@@ -67,9 +68,9 @@ public class DungeonMapBootstrap : MonoBehaviour
             includeMarkingToolbar: true,
             panelName: "DungeonMapBoardPanel");
 
-        var mapUiObject = new GameObject("DungeonMapUI");
-        mapUiObject.transform.SetParent(canvas.transform, false);
-        var mapUi = mapUiObject.AddComponent<DungeonMapUI>();
+        MinimapHudLayout.ApplyFullscreenPanel(mapBoard.panelRoot.GetComponent<RectTransform>());
+
+        var mapUi = DungeonMapUI.EnsureSingleInstance(null);
         mapUi.SetMapBoardPanel(mapBoard);
     }
 
@@ -93,21 +94,12 @@ public class DungeonMapBootstrap : MonoBehaviour
 
     static MapBoardPanelView ResolveMapBoardPanel()
     {
-        var panels = Object.FindObjectsByType<MapBoardPanelView>(FindObjectsSortMode.None);
-        MapBoardPanelView fallback = null;
-
-        foreach (var panel in panels)
+        foreach (var panel in Object.FindObjectsByType<MapBoardPanelView>(FindObjectsSortMode.None))
         {
-            fallback ??= panel;
-
-            if (panel.gameObject.name.Contains("DungeonMapBoard"))
-                return panel;
-
-            if (panel.markingToolbar != null
-                || panel.transform.Find("MarkingToolbar") != null)
+            if (panel != null && panel.gameObject.name.Contains("DungeonMapBoard"))
                 return panel;
         }
 
-        return fallback;
+        return null;
     }
 }

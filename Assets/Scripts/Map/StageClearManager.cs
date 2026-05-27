@@ -1,14 +1,16 @@
 using System.Collections;
 using Unity.Cinemachine;
+using UnityEditor.Experimental;
 using UnityEngine;
 
 public class StageClearManager : MonoBehaviour
 {
     [SerializeField] private GameObject jobChoiceUI;
-
+    private ArtiFactGet artifactGet;
     void Start()
     {
         jobChoiceUI = GameObject.Find("JobChoiceUI");
+        artifactGet = GameObject.Find("InventorySystem").GetComponent<ArtiFactGet>();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -34,26 +36,35 @@ public class StageClearManager : MonoBehaviour
                 DayManager.instance.NightIconAppear();
                 return;
             }
+            artifactGet.ArtiFactRandomGet();
+
             other.gameObject.GetComponent<PlayerProfile>().BuffStoneRelease();
             GameManager.instance.possibleDungeon[GameManager.instance.curDungeonNumber] = true;
             GameManager.instance.statusPoint++;
             GameManager.instance.curLevel++;
             
             GameManager.instance.mapState = MapState.Village;
+            MinimapManager.ApplyMainSceneMinimapMode();
             DungeonMapService.Instance?.FlushSave();
-            UIManager.Instance.virtualCamera.GetComponent<CinemachineConfiner3D>().BoundingVolume
-                = UIManager.Instance.villageCollider;
-            DayManager.instance.sunLight.transform.rotation
-                = Quaternion.Euler(DayManager.instance.nightSunRotation);
-            DayManager.instance.curDay = Day.night;
-            DayManager.instance.NightIconAppear();
             //GameObject map = GameObject.FindGameObjectWithTag("Map");
             //Destroy(map);
-            GameManager.instance.spawnedDungeon = null;
             GameManager.instance.spawnedDungeon.spawnedDungeonInstance = null;
+            GameManager.instance.spawnedDungeon = null;
             MapDestroy();
-            GameObject.FindGameObjectWithTag("Player").transform.position = UIManager.Instance.villagePos.position;
+            PlayerMoveToVillage();
         }
+    }
+
+    private void PlayerMoveToVillage()
+    {
+        UIManager.Instance.virtualCamera.GetComponent<CinemachineConfiner3D>().BoundingVolume
+                = UIManager.Instance.villageCollider;
+        DayManager.instance.sunLight.transform.rotation
+            = Quaternion.Euler(DayManager.instance.nightSunRotation);
+        DayManager.instance.curDay = Day.night;
+        DayManager.instance.NightIconAppear();
+        DayManager.instance.ItemGetAllCheck();
+        GameObject.FindGameObjectWithTag("Player").transform.position = UIManager.Instance.villagePos.position;
     }
 
     private void MapDestroy()

@@ -13,7 +13,7 @@ public struct MarkToolbarLayout
 
     public static MarkToolbarLayout MapBoard => new()
     {
-        Width = 1000f,
+        Width = MapBoardPanelSettings.PanelSize,
         Height = 96f,
         ButtonSize = MapBoardPanelSettings.MarkToolbarButtonSize,
         Spacing = 10f,
@@ -55,7 +55,10 @@ public static class MapBoardPanelFactory
         contentRect.anchorMin = new Vector2(0.5f, 0.5f);
         contentRect.anchorMax = new Vector2(0.5f, 0.5f);
         contentRect.pivot = new Vector2(0.5f, 0.5f);
+        contentRect.anchoredPosition = Vector2.zero;
         contentRect.sizeDelta = new Vector2(MapBoardPanelSettings.PanelSize, MapBoardPanelSettings.PanelSize);
+
+        content.AddComponent<RectMask2D>();
 
         var grid = content.AddComponent<DungeonMapGridBuilder>();
         grid.ConfigureForMapBoard(includeMarkingToolbar);

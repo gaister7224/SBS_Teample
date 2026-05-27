@@ -432,6 +432,17 @@ public class PlayerProfile : PlayerState
         }
 
         curHp = maxHp;
+        
+    }
+
+    private void ItemsDestroy()
+    {
+        GameObject[] items = GameObject.FindGameObjectsWithTag("Item");
+
+        for(int i = 0; i < items.Length; i++)
+        {
+            Destroy(items[i]);
+        }
     }
 
     public bool PlayerDeadCheck()
@@ -455,8 +466,15 @@ public class PlayerProfile : PlayerState
             GameManager.instance.gold -= GoldDown;
             transform.position = UIManager.Instance.villagePos.position;
             GameManager.instance.mapState = MapState.Village;
+            MinimapManager.ApplyMainSceneMinimapMode();
+            DayManager.instance.curDay = Day.night;
+            DayManager.instance.NightIconAppear();
+            DayManager.instance.sunLight.transform.rotation
+                = Quaternion.Euler(DayManager.instance.nightSunRotation);
+            DayManager.instance.ItemGetAllCheck();
             UIManager.Instance.virtualCamera.GetComponent<CinemachineConfiner3D>().BoundingVolume
                 = UIManager.Instance.villageCollider;
+            ItemsDestroy();
         }
         else if(emergencyEscape)
         {
@@ -702,6 +720,17 @@ public class PlayerProfile : PlayerState
         return criticalPoint;
     }
 
+    public void PlayerMoveToVillage()
+    {
+        UIManager.Instance.virtualCamera.GetComponent<CinemachineConfiner3D>().BoundingVolume
+                = UIManager.Instance.villageCollider;
+        DayManager.instance.sunLight.transform.rotation
+            = Quaternion.Euler(DayManager.instance.nightSunRotation);
+        DayManager.instance.curDay = Day.night;
+        DayManager.instance.NightIconAppear();
+        DayManager.instance.ItemGetAllCheck();
+        GameObject.FindGameObjectWithTag("Player").transform.position = UIManager.Instance.villagePos.position;
+    }
     private void UpdateStateBarStatue(float curState, float maxState, TextMeshProUGUI stateText, Image _mask, Image _background)
     {
         if (stateText == null || _mask == null || _background == null)

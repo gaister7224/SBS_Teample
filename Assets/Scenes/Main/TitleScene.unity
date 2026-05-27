@@ -3881,12 +3881,17 @@ MonoBehaviour:
   dayCount: 0
   artifactInstallImpossibleDay: 0
   dayEnd: 0
-  possibleDungeon: 00000000
+  possibleDungeon: 0000000000000000000000
   itemGetAll: 0
+  skillInstall: 0
   curDungeonNumber: 0
   installImpossibleStart: 0
   goldMultiplier: 0
   buffStoneGetStatusNumber: 0
+  recoveryMultiplier: 0
+  shelterActCountBan: 0
+  shelterHpBan: 0
+  spawnedDungeon: {fileID: 0}
   mapState: 2
 --- !u!4 &782062185
 Transform:

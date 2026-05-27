@@ -2,25 +2,32 @@ using System.Collections;
 using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
 
 public class DungeonEntryManager : MonoBehaviour, IPointerClickHandler
 {
     public DungeonData data;
 
-    public GameObject spawnedDungeonInstance; //이미 생성된 던진이 있는지 체크
+    public GameObject spawnedDungeonInstance;
 
-    //[SerializeField] private GameObject map;
     [SerializeField] private GameObject ui;
-    //[SerializeField] private Transform mapSpawnPos;
-    //[SerializeField] private int dungeonNumber;
     private GameObject player;
     private PlayerProfile playerProfile;
     private Image backGroundImage;
 
+    private const float MAP_SPACING = 500f; //맵 끼리 안 겹치게 하는 고정 간격
+
     private void OnEnable()
     {
         backGroundImage = GetComponent<Image>();
+
+        if(data == null || GameManager.instance == null)
+        {
+            Debug.Log("필요한 instance 없음");
+            return;
+        }
+
         if (GameManager.instance.possibleDungeon[data.dungeonNumber - 1])
         {
             backGroundImage.color = Color.white;
@@ -36,7 +43,9 @@ public class DungeonEntryManager : MonoBehaviour, IPointerClickHandler
         {
             if(spawnedDungeonInstance == null)
             {
-                spawnedDungeonInstance = Instantiate(data.mapPrefab, data.spawnOffset, Quaternion.identity);
+                Vector3 autoSpawnPosition = new Vector3(data.dungeonNumber * MAP_SPACING, 0f, 0f);
+
+                spawnedDungeonInstance = Instantiate(data.mapPrefab, autoSpawnPosition, Quaternion.identity);
             }
 
             Time.timeScale = 1f;
@@ -46,6 +55,7 @@ public class DungeonEntryManager : MonoBehaviour, IPointerClickHandler
             GameManager.instance.dayEnd = false;
             GameManager.instance.itemGetAll = false;
             GameManager.instance.mapState = MapState.Stage;
+            MinimapManager.ApplyMainSceneMinimapMode();
 
             if (DungeonMapService.Instance == null)
             {
@@ -85,8 +95,21 @@ public class DungeonEntryManager : MonoBehaviour, IPointerClickHandler
         }
         else
         {
-            Debug.Log("입구 없음");
+            Debug.Log("??? ????");
         }
+
+        yield return null;
+
+        const int maxFrames = 30;
+        for (var frame = 0; frame < maxFrames; frame++)
+        {
+            if (DungeonMapLayoutResolver.CollectStagePositions().Count > 0)
+                break;
+
+            yield return null;
+        }
+
+        DungeonMapLayoutResolver.SyncAfterLayoutChange(clearVisibility: true);
 
         UIManager.Instance.inventory.currentUI = UIType.None;
         UIManager.Instance.inventory.playerProfile.SetActive(true);
