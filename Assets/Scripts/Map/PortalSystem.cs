@@ -88,7 +88,7 @@ public class PortalSystem : MonoBehaviour
                 player.GetComponent<PlayerProfile>().UseActCount(1);
                 break;
             case PortalDirection.toBoss:
-                player.transform.position = GameObject.FindWithTag("BossRoom").transform.localPosition + new Vector3(0f, 1.9f, -distance);
+                player.transform.position = GameObject.FindWithTag("BossRoom").transform.position + new Vector3(0f, 1.9f, -distance);
                 player.GetComponent<PlayerProfile>().UseActCount(1);
                 break;
             case PortalDirection.Random:

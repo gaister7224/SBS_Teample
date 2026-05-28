@@ -39,7 +39,12 @@ public class PortalManager : MonoBehaviour
     {
         ThisStage = transform.parent != null ? transform.parent.gameObject : gameObject;
 
-        stageManager = GameObject.Find("StageManager").GetComponent<StageManager>();
+        stageManager = StageManager.instance;
+
+        if (stageManager == null)
+        {
+            stageManager = GameObject.Find("StageManager").GetComponent<StageManager>();
+        }
 
         PlayerObject = GameObject.FindGameObjectWithTag("Player");
         MainCameraObject = GameObject.FindGameObjectWithTag("MainCamera");
