@@ -1,3 +1,4 @@
+using Mono.Cecil.Cil;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -84,6 +85,7 @@ public class StoreSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     //인벤토리에 새로운 아이템 슬롯 추가
     public void AddItem(Item nItem, int count = 0)
     {
+        Debug.Log("addItem");
         item = nItem;
         itemCount = count;
         itemImage.sprite = item.Image;
@@ -91,9 +93,10 @@ public class StoreSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         {
             priceText.text = item.Price.ToString();
         }
-        else
+        if(item.Type != ItemType.GoldBox && !item.IsPotion)
         {
             int randomPrice = Random.Range(item.MinGold, item.MaxGold + 1);
+            Debug.Log(item.ItemName + " price : " + randomPrice);
             priceText.text = randomPrice.ToString();
         }
 

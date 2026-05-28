@@ -329,7 +329,7 @@ public class PlayerAttack : MonoBehaviour
                 = UIManager.Instance.villageCollider;
         }
 
-        Invoke("StoreExplainDialogue", 0.5f);
+        //Invoke("StoreExplainDialogue", 0.5f);
     }
 
     private void StoreExplainDialogue()

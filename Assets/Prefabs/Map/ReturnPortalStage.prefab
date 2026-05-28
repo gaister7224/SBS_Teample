@@ -519,7 +519,6 @@ MonoBehaviour:
   portalManager: {fileID: 3809560422600107664}
   direction: 6
   toBoss: 0
-  distance: 9
 --- !u!1 &3126646247358463550
 GameObject:
   m_ObjectHideFlags: 0
@@ -764,7 +763,6 @@ MonoBehaviour:
   portalManager: {fileID: 3809560422600107664}
   direction: 3
   toBoss: 0
-  distance: 9
 --- !u!1 &5144979569810962450
 GameObject:
   m_ObjectHideFlags: 0
@@ -999,7 +997,6 @@ MonoBehaviour:
   portalManager: {fileID: 3809560422600107664}
   direction: 2
   toBoss: 0
-  distance: 9
 --- !u!1 &6813720926476073496
 GameObject:
   m_ObjectHideFlags: 0
@@ -1010,6 +1007,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4214426321052313630}
   - component: {fileID: 5859660669120381661}
+  - component: {fileID: 5823113012147541997}
   m_Layer: 0
   m_Name: PortalDesign0008
   m_TagString: Untagged
@@ -1087,6 +1085,28 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!95 &5823113012147541997
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6813720926476073496}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 43f44dae673e49a45bb662730812a184, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &6814660579665246470
 GameObject:
   m_ObjectHideFlags: 0
@@ -1205,6 +1225,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3234941480373276347}
   - component: {fileID: 7444086965420566180}
+  - component: {fileID: 205795234815457250}
   m_Layer: 0
   m_Name: PortalDesign0008
   m_TagString: Untagged
@@ -1282,6 +1303,28 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!95 &205795234815457250
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6847387093820399453}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 43f44dae673e49a45bb662730812a184, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &7269640967584282100
 GameObject:
   m_ObjectHideFlags: 0
@@ -1408,7 +1451,6 @@ MonoBehaviour:
   portalManager: {fileID: 3809560422600107664}
   direction: 1
   toBoss: 0
-  distance: 9
 --- !u!1 &7578044407623005106
 GameObject:
   m_ObjectHideFlags: 0
@@ -1419,6 +1461,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8888091051805528303}
   - component: {fileID: 5718721483314387993}
+  - component: {fileID: 8985967545418155834}
   m_Layer: 0
   m_Name: PortalDesign0008
   m_TagString: Untagged
@@ -1496,6 +1539,28 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!95 &8985967545418155834
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7578044407623005106}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 43f44dae673e49a45bb662730812a184, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &7828864564084967939
 GameObject:
   m_ObjectHideFlags: 0
@@ -1614,6 +1679,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3154039705454182768}
   - component: {fileID: 5589779690680619468}
+  - component: {fileID: 2113620108228322484}
   m_Layer: 0
   m_Name: PortalDesign0008
   m_TagString: Untagged
@@ -1691,6 +1757,28 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!95 &2113620108228322484
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7972244984905052588}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 43f44dae673e49a45bb662730812a184, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &8032132873244000005
 GameObject:
   m_ObjectHideFlags: 0
@@ -1817,7 +1905,6 @@ MonoBehaviour:
   portalManager: {fileID: 3809560422600107664}
   direction: 0
   toBoss: 0
-  distance: 9
 --- !u!1 &8076056445954916831
 GameObject:
   m_ObjectHideFlags: 0

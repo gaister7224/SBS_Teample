@@ -41,7 +41,8 @@ public class DungeonEntryManager : MonoBehaviour, IPointerClickHandler
     {
         if (GameManager.instance.possibleDungeon[data.dungeonNumber - 1] && GameManager.instance.dayEnd)
         {
-            if(spawnedDungeonInstance == null)
+            GameManager.instance.spawnedDungeon = this;
+            if (spawnedDungeonInstance == null)
             {
                 Vector3 autoSpawnPosition = new Vector3(data.dungeonNumber * MAP_SPACING, 0f, 0f);
 
@@ -65,7 +66,7 @@ public class DungeonEntryManager : MonoBehaviour, IPointerClickHandler
             DungeonMapService.Instance.LoadDungeon(data.dungeonNumber);
             DungeonMapUiInstaller.EnsureMapBoardUi();
 
-            GameManager.instance.spawnedDungeon = this;
+            
 
             StartCoroutine(PlayerMove(0.5f));
         }
@@ -95,7 +96,7 @@ public class DungeonEntryManager : MonoBehaviour, IPointerClickHandler
         }
         else
         {
-            Debug.Log("??? ????");
+            Debug.Log("entryTransform null");
         }
 
         yield return null;

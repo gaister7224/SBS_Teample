@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   IsEquipment: 1
   IsAccessory: 0
+  IsPotion: 0
   itemID: 23
   itemName: "\uC0AC\uC2AC \uD558\uC758"
   canOverlap: 0
@@ -35,3 +36,4 @@ MonoBehaviour:
   skillCoolTimeBuff: 0
   minGold: 200
   maxGold: 400
+  artifactGet: 0

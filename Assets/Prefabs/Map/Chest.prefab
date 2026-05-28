@@ -132,7 +132,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: defb71cc95af99c41bc33aeec417c15a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  chestData: {fileID: 11400000, guid: 5385719a39146514786bc6de05d9fab9, type: 2}
+  chestData:
+  - {fileID: 11400000, guid: 5385719a39146514786bc6de05d9fab9, type: 2}
+  - {fileID: 11400000, guid: 5385719a39146514786bc6de05d9fab9, type: 2}
+  - {fileID: 11400000, guid: f6d033674501b1c47ade3b8d7c59db08, type: 2}
+  - {fileID: 11400000, guid: f6d033674501b1c47ade3b8d7c59db08, type: 2}
+  - {fileID: 11400000, guid: 5f97582e5f148874383e021d2a4709ba, type: 2}
+  - {fileID: 11400000, guid: 5f97582e5f148874383e021d2a4709ba, type: 2}
+  - {fileID: 11400000, guid: e28e99df0295bcf46a010763d3bdb9ec, type: 2}
+  - {fileID: 11400000, guid: e28e99df0295bcf46a010763d3bdb9ec, type: 2}
+  - {fileID: 11400000, guid: c959998b18861344b9cea584feb672e7, type: 2}
+  - {fileID: 11400000, guid: c959998b18861344b9cea584feb672e7, type: 2}
+  - {fileID: 11400000, guid: 5b11318bf5dd2c6479ad070dc66ec0c6, type: 2}
+  - {fileID: 11400000, guid: 5b11318bf5dd2c6479ad070dc66ec0c6, type: 2}
   itemObjects:
   - {fileID: 0}
   - {fileID: 0}
@@ -154,7 +166,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -311,7 +323,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: -5310024246675612461, guid: 8ded8272afcb20045b1b746a0d446ff2, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -385,7 +398,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: GoldPile_002 (1)
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: -8951057877024997027, guid: 7140519a7120cd443ae42dfabb79148d, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -459,7 +473,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: GoldPileSmall_001 (1)
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: -8166251326586869889, guid: 5a3c6b41be0f936498ac3aca08394a07, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -533,7 +548,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: -5310024246675612461, guid: 8ded8272afcb20045b1b746a0d446ff2, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -607,7 +623,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: GoldPileSmall_001
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: -8166251326586869889, guid: 5a3c6b41be0f936498ac3aca08394a07, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -681,7 +698,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: GoldPile_002
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: -8951057877024997027, guid: 7140519a7120cd443ae42dfabb79148d, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

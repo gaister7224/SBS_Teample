@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   IsEquipment: 0
   IsAccessory: 0
+  IsPotion: 0
   itemID: 705
   itemName: "\uD63C\uB3C8\uC758 \uB098\uCE68\uBC18"
   canOverlap: 0

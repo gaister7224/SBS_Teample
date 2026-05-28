@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class StoreManager : MonoBehaviour
 {
-    public StoreData storeData;
+    public StoreData[] storeData;
     public List<StoreSlot> storeSlots;
     [SerializeField] private List<StoreSlot> villageStoreSlots;
     [SerializeField] private Item[] villageStoreItems;
@@ -104,7 +104,7 @@ public class StoreManager : MonoBehaviour
         float cumulativeChance = 0f;
 
         //어떤 등급이 당첨되었는지
-        foreach (var pool in storeData.itemPools)
+        foreach (var pool in storeData[GameManager.instance.spawnedDungeon.data.dungeonNumber].itemPools)
         {
             cumulativeChance += pool.dropChance;
             if (roll <= cumulativeChance)

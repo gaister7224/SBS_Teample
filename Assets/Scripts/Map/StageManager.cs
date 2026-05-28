@@ -87,11 +87,6 @@ public class StageManager : MonoBehaviour
     {
         curFloorCleared = false;
 
-        for(int i = 0; i < mapType[0].mapPrefab.Length; i++)
-        {
-            stage.Add(mapType[0].mapPrefab[i]);
-        }
-
         if (Tutorial && HasTutorialStageInHierarchy())
         {
             curFloor = Mathf.Min(1, TutorialStage.Count);
@@ -99,6 +94,13 @@ public class StageManager : MonoBehaviour
         }
         else if(!Tutorial)
         {
+            for (int i = 0; i < mapType[GameManager.instance.spawnedDungeon.data.dungeonNumber - 2].mapPrefab.Length; i++)
+            {
+                stage.Add(mapType[GameManager.instance.spawnedDungeon.data.dungeonNumber - 2].mapPrefab[i]);
+                StageTypeCount.Add(mapType[GameManager.instance.spawnedDungeon.data.dungeonNumber - 2].mapCount[i]);
+            }
+
+            BossStage = mapType[GameManager.instance.spawnedDungeon.data.dungeonNumber - 2].bossMapPrefab;
             StartCoroutine(StartDungeon());
         }
     }
@@ -399,10 +401,10 @@ public class StageManager : MonoBehaviour
             availableCells[rand] = temp;
         }
 
-        while (StageTypeCount.Count < stage.Count)
-        {
-            StageTypeCount.Add(0);
-        }
+        //while (StageTypeCount.Count < stage.Count)
+        //{
+        //    StageTypeCount.Add(0);
+        //}
 
         int cellIndex = 0;
 
@@ -491,34 +493,19 @@ public class StageManager : MonoBehaviour
                     if (typePositions.ContainsKey(si) &&
                         typePositions[si].Contains(gridPos))
                     {
-                        Instantiate(BossStage, worldSpawnPos, Quaternion.identity, stageRoot);
-                        StagePositions.Add(gridPos);
+                        spawnedStage = Instantiate(stage[si], stageRoot);
+
+                        placed = true;
+
+                        break;
                     }
+                    
                 }
-                else if (x == -countHalf && z == -countHalf)
+                if (!placed)
                 {
-                    // stage[0]: 코너 시작방
-                    Instantiate(stage[0], worldSpawnPos, Quaternion.identity, stageRoot);
-                    StagePositions.Add(gridPos);
-                }
-                else if (sealedStonePositions.Contains(gridPos))
-                {
-                    // stage[1]: SealedStone 방
-                    Instantiate(stage[1], worldSpawnPos, Quaternion.identity, stageRoot);
-                    StagePositions.Add(gridPos);
-                }
-                else if (trapStagePositions.Contains(gridPos))
-                {
-                    // stage[2]: Trap 방
-                    Instantiate(stage[2], worldSpawnPos, Quaternion.identity, stageRoot);
-                    StagePositions.Add(gridPos);
-                }
-                else
-                {
-                    // stage[3+]: normal/random room
-                    int randomIndex = Random.Range(3, stage.Count);
-                    Instantiate(stage[randomIndex], worldSpawnPos, Quaternion.identity, stageRoot);
-                    StagePositions.Add(gridPos);
+                    spawnedStage = Instantiate(
+                        stage[stage.Count - 1],
+                        stageRoot);
                 }
             }
 
@@ -540,7 +527,13 @@ public class StageManager : MonoBehaviour
         }
 
         if (Player != null)
-            Player.transform.position = GridToWorld(new Vector2Int(-countHalf, -countHalf), 1.9f);
+        {
+            Player.transform.position = stageRoot.TransformPoint(
+                new Vector3(
+                    xMin * spacing,
+                    1.9f,
+                    zMin * spacing));
+        }
 
         RebuildStagePositions();
 

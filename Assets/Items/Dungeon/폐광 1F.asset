@@ -14,5 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dungeonNumber: 2
   dungeonName: "\uD3D0\uAD11 1F"
-  mapPrefab: {fileID: 2027069352563740379, guid: 80b95b25fe286354b887f35bf6a57c89, type: 3}
-  spawnOffset: {x: 300, y: 0, z: 500}
+  mapPrefab: {fileID: 2491353122495895482, guid: 86ebae51297451d4ca8ec3ac3e3df582, type: 3}
