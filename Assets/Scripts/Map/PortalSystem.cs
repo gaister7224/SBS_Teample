@@ -21,7 +21,7 @@ public class PortalSystem : MonoBehaviour
             portalManager = GetComponentInParent<PortalManager>();
 
         if (stageManager == null)
-            stageManager = StageManager.instance;
+            stageManager = GameObject.Find("StageManager").GetComponent<StageManager>();
     }
 
     void Start()
@@ -30,12 +30,11 @@ public class PortalSystem : MonoBehaviour
 
     void Update()
     {
-        // Awake 시점에 못 찾았을 경우 재시도
         if (portalManager == null)
             portalManager = GetComponentInParent<PortalManager>();
 
-        if (stageManager == null && StageManager.instance != null) 
-            GameObject.Find("StageManager").GetComponent<StageManager>();
+        if (stageManager == null)
+            stageManager = GameObject.Find("StageManager").GetComponent<StageManager>();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -46,7 +45,7 @@ public class PortalSystem : MonoBehaviour
         if (portalManager == null)
             portalManager = GetComponentInParent<PortalManager>();
         if (stageManager == null)
-            GameObject.Find("StageManager").GetComponent<StageManager>();
+            stageManager = GameObject.Find("StageManager").GetComponent<StageManager>();
 
         player = other.gameObject;
         if (other.GetComponent<PlayerProfile>().ActCount > 0)
@@ -57,12 +56,6 @@ public class PortalSystem : MonoBehaviour
 
     IEnumerator Teleport()
     {
-        if (portalManager == null)
-            portalManager = GetComponentInParent<PortalManager>();
-        if (stageManager == null)
-            stageManager = StageManager.instance;
-
-
         Image img = UIManager.Instance.fade.GetComponent<Image>();
         img.gameObject.SetActive(true);
         player.transform.position = portalManager.PlayerTpSpotTransform.position;
@@ -88,8 +81,12 @@ public class PortalSystem : MonoBehaviour
                 player.GetComponent<PlayerProfile>().UseActCount(1);
                 break;
             case PortalDirection.toBoss:
-                player.transform.position = GameObject.FindWithTag("BossRoom").transform.position + new Vector3(0f, 1.9f, -distance);
-                player.GetComponent<PlayerProfile>().UseActCount(1);
+                var bossRoom = GameObject.FindWithTag("BossRoom");
+                if (bossRoom != null)
+                {
+                    player.transform.position = bossRoom.transform.position + new Vector3(0f, 1.9f, -distance);
+                    player.GetComponent<PlayerProfile>().UseActCount(1);
+                }
                 break;
             case PortalDirection.Random:
                 int randomIndex;
@@ -112,11 +109,9 @@ public class PortalSystem : MonoBehaviour
                     stageManager.curFloorCleared = true;
                 break;
             case PortalDirection.Return:
-                Vector3 returnPos = new Vector3(
-                    stageManager.StagePositions.ElementAt(-stageManager.StageCount / 2).x * stageManager.spacing,
-                    1.9f,
-                    stageManager.StagePositions.ElementAt(-stageManager.StageCount / 2).y * stageManager.spacing);
-                player.transform.position = returnPos;
+                int half = stageManager.StageCount / 2;
+                var returnWorld = stageManager.GridToWorld(new Vector2Int(-half, -half), 1.9f);
+                player.transform.position = returnWorld;
                 break;
             case PortalDirection.Villiage:
                 player.GetComponent<PlayerProfile>().PlayerMoveToVillage();

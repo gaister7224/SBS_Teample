@@ -66,6 +66,9 @@ public class PortalManager : MonoBehaviour
         if (MainCameraObject == null)
             MainCameraObject = GameObject.FindGameObjectWithTag("MainCamera");
 
+        if (stageManager == null)
+            stageManager = GameObject.Find("StageManager").GetComponent<StageManager>();
+
         if (stageType == StageType.Normal || stageType == StageType.Boss || stageType == StageType.SealedStone)
         {
             isPortalActive = false;
@@ -79,10 +82,15 @@ public class PortalManager : MonoBehaviour
 
     void Update()
     {
-
-        PortalActivation();
+        if (stageManager == null)
+        {
+            stageManager = GameObject.Find("StageManager").GetComponent<StageManager>();
+            return;
+        }
 
         isPortalActive = stageManager.activePortal;
+
+        PortalActivation();
 
         if (!stageManager.Tutorial)
         {

@@ -75,7 +75,7 @@ public class StageDetector : MonoBehaviour
         // Awake 에서 stageManager 가 null 이었을 경우 재시도
         if (stageManager == null)
         {
-            stageManager = StageManager.instance;
+            stageManager = GameObject.Find("StageManager").GetComponent<StageManager>();
             if (stageManager == null)
             {
                 Debug.LogError("[StageDetector] OnTriggerEnter: StageManager를 찾을 수 없습니다.");
