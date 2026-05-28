@@ -12,7 +12,12 @@ public class StageDetector : MonoBehaviour
 
     private void Awake()
     {
-        stageManager = GameObject.Find("StageManager").GetComponent<StageManager>();
+        stageManager = StageManager.instance;
+
+        if(stageManager == null)
+        {
+            stageManager = GameObject.Find("StageManager").GetComponent<StageManager>();
+        }
 
         portalManager = GetComponentInParent<PortalManager>();
         monsterSpawnManager = stageManager.GetComponentInChildren<MonsterSpawnManager>();
