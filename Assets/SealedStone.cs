@@ -9,13 +9,7 @@ public class SealedStone : MonoBehaviour
 
     private void Awake()
     {
-        stageManager = StageManager.instance;
-
-        if (stageManager == null)
-        {
-            Debug.LogError("[SealedStone] StageManager.instance 가 null입니다.");
-            return;
-        }
+        stageManager = GameObject.Find("StageManager").GetComponent<StageManager>();
 
         portalManager = GetComponentInParent<PortalManager>();
         stageManager.SealedStoneLeft++;

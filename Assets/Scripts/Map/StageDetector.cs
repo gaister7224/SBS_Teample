@@ -12,18 +12,7 @@ public class StageDetector : MonoBehaviour
 
     private void Awake()
     {
-        // GameObject.Find("StageManager") 는 Instantiate 직후 Awake가 실행될 때
-        // 씬에서 오브젝트를 못 찾으면 NullReferenceException 이 납니다.
-        // StageManager.instance 는 StageManager.Awake() 에서 이미 할당되어 있으므로
-        // 이쪽을 사용하는 것이 안전합니다.
-        stageManager = StageManager.instance;
-
-        if (stageManager == null)
-        {
-            Debug.LogError("[StageDetector] StageManager.instance 가 null입니다. " +
-                           "StageManager가 StageDetector보다 먼저 Awake되는지 확인하세요.");
-            return;
-        }
+        stageManager = GameObject.Find("StageManager").GetComponent<StageManager>();
 
         portalManager = GetComponentInParent<PortalManager>();
         monsterSpawnManager = stageManager.GetComponentInChildren<MonsterSpawnManager>();

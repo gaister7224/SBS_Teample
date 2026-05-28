@@ -533,6 +533,7 @@ public class StageManager : MonoBehaviour
                     xMin * spacing,
                     1.9f,
                     zMin * spacing));
+            Debug.Log($"Player TP at {xMin}, {zMin}");
         }
 
         RebuildStagePositions();
