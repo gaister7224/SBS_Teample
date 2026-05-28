@@ -24,6 +24,11 @@ public class SealStoneManager : MonoBehaviour
     {
         stageManager = GameObject.Find("StageManager").GetComponent<StageManager>();
 
+        if (stageManager == null)
+        {
+            stageManager = GameObject.FindWithTag("Map").GetComponent<StageManager>();
+        }
+
         stageManager.SealedStoneLeft++;
     }
     private void Start()

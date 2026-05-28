@@ -46,15 +46,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   monsterSpawnManager: {fileID: 0}
-  Tutorial: 1
+  Tutorial: 0
   stage: []
-  BossStage: {fileID: 2619334703123621966, guid: dfbf6f4a30574c24ea5345b27d3913f9, type: 3}
+  StageTypeCount: 
+  BossStage: {fileID: 0}
   spacing: 40
   TutorialStage:
   - {fileID: 7745263230637702956, guid: 163aa95d14003fe4d992f1c73003c75e, type: 3}
   - {fileID: 2027069352563740379, guid: 80b95b25fe286354b887f35bf6a57c89, type: 3}
   StageCount: 7
-  MaxSealedStoneCount: 3
   surroundStagePositions: []
   curStagePos: {x: 0, y: 0}
   curStageType: 0

@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 
 public class ChestManager : MonoBehaviour
 {
-    public ChestData chestData;
+    public ChestData[] chestData;
 
     private InventoryMain inventory;
     private bool isChestActive;
@@ -48,7 +48,7 @@ public class ChestManager : MonoBehaviour
                 {
                     Vector2 randomCircle = Random.insideUnitCircle.normalized;
 
-                    float spread = 0.5f;
+                    float spread = 1.5f;
 
                     Vector3 jumpDir = new Vector3(randomCircle.x * spread, 1.5f, randomCircle.y * spread).normalized;
                     rb.AddForce(jumpDir * 5f, ForceMode.Impulse);
@@ -68,7 +68,7 @@ public class ChestManager : MonoBehaviour
         float cumulativeChance = 0f;
 
         //어떤 등급이 당첨되었는지
-        foreach (var pool in chestData.itemPools)
+        foreach (var pool in chestData[GameManager.instance.spawnedDungeon.data.dungeonNumber].itemPools)
         {
             cumulativeChance += pool.dropChance;
             if (roll <= cumulativeChance)

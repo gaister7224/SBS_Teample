@@ -447,7 +447,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Axe_001
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 5057290191468735415, guid: ad4ea0f93db741943bafc438f7df75e3, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -521,7 +522,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: StatueKnight_002
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: -5041431668163623133, guid: e146a87b1eed38544959959fdf36aea3, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -590,6 +592,22 @@ PrefabInstance:
     - target: {fileID: 4553830765889161676, guid: 785813da7743a6c4cbab34f1f2345958, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5810886257971053130, guid: 785813da7743a6c4cbab34f1f2345958, type: 3}
+      propertyPath: m_Size.y
+      value: 1.096426
+      objectReference: {fileID: 0}
+    - target: {fileID: 5810886257971053130, guid: 785813da7743a6c4cbab34f1f2345958, type: 3}
+      propertyPath: m_Center.x
+      value: 0.030935425
+      objectReference: {fileID: 0}
+    - target: {fileID: 5810886257971053130, guid: 785813da7743a6c4cbab34f1f2345958, type: 3}
+      propertyPath: m_Center.y
+      value: 0.32061163
+      objectReference: {fileID: 0}
+    - target: {fileID: 5810886257971053130, guid: 785813da7743a6c4cbab34f1f2345958, type: 3}
+      propertyPath: m_Center.z
+      value: 0.04897212
       objectReference: {fileID: 0}
     - target: {fileID: 7438738692135396205, guid: 785813da7743a6c4cbab34f1f2345958, type: 3}
       propertyPath: m_Name

@@ -1,0 +1,73 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 481e673461ec4524bb5e5cab4c8a6b21, type: 3}
+  m_Name: "\uD0D1ChestList"
+  m_EditorClassIdentifier: 
+  itemPools:
+  - gradeName: hp
+    items:
+    - {fileID: 8192550687955436207, guid: 3f910e278b2a97b478f4648d0031087b, type: 3}
+    dropChance: 8
+  - gradeName: mp
+    items:
+    - {fileID: 8422765340507450754, guid: 36fccc8e13296994faa780ebfc38032c, type: 3}
+    dropChance: 8
+  - gradeName: hp
+    items:
+    - {fileID: 8862767147778783983, guid: 16b65491e34bdb54fa3011e92bfd3c73, type: 3}
+    dropChance: 8
+  - gradeName: mp
+    items:
+    - {fileID: 4877839280167773156, guid: 859b3137b9f0fdd448e6264e215bb588, type: 3}
+    dropChance: 8
+  - gradeName: goldbox
+    items:
+    - {fileID: 4084295170943574036, guid: 2f495f3dc862af8459e4a8e16a40985b, type: 3}
+    dropChance: 8
+  - gradeName: weapon
+    items:
+    - {fileID: 8907857893382622661, guid: e3fcf0bc641f14741a6e846fa9d38588, type: 3}
+    - {fileID: 3182845529304043809, guid: d40678557c5dc8e46bf605b7bbf6ab89, type: 3}
+    - {fileID: 8492887074606835835, guid: e2cc8ce96d3c0f741a4b7f4e2afb6f76, type: 3}
+    dropChance: 8
+  - gradeName: head
+    items:
+    - {fileID: 6558843000000667407, guid: 40cbbaab3ff53364ea3753d1676ddcab, type: 3}
+    dropChance: 8
+  - gradeName: armor
+    items:
+    - {fileID: 511201904277226387, guid: 1cfb960077950ca4790917d7a4b1e23f, type: 3}
+    dropChance: 8
+  - gradeName: bottoms
+    items:
+    - {fileID: 528610031979842343, guid: d1dd9013715476644916483c4da03ef2, type: 3}
+    dropChance: 8
+  - gradeName: shoes
+    items:
+    - {fileID: 1724030170379391145, guid: 317e0b1c17c4dfc4cb4559913a0fed92, type: 3}
+    dropChance: 8
+  - gradeName: pendent
+    items:
+    - {fileID: 5797473403323381592, guid: 81af8732669221d4b8f4c59d7e6dcd22, type: 3}
+    dropChance: 5
+  - gradeName: glove
+    items:
+    - {fileID: 3600865934311762340, guid: 10501fb7944ab9649bf0b4f9f5bd56f6, type: 3}
+    dropChance: 5
+  - gradeName: ring
+    items:
+    - {fileID: 8342335558273767497, guid: 8c31936df61c0a9449b5950963f4b711, type: 3}
+    dropChance: 5
+  - gradeName: amulet
+    items:
+    - {fileID: 8281123471279090356, guid: 59dd9958d18fbf540b6bce207131ebe6, type: 3}
+    dropChance: 5

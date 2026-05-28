@@ -727,6 +727,7 @@ public class PlayerProfile : PlayerState
         DayManager.instance.sunLight.transform.rotation
             = Quaternion.Euler(DayManager.instance.nightSunRotation);
         DayManager.instance.curDay = Day.night;
+        GameManager.instance.mapState = MapState.Village;
         DayManager.instance.NightIconAppear();
         DayManager.instance.ItemGetAllCheck();
         GameObject.FindGameObjectWithTag("Player").transform.position = UIManager.Instance.villagePos.position;
