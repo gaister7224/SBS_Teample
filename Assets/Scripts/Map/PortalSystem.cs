@@ -17,7 +17,6 @@ public class PortalSystem : MonoBehaviour
 
     void Awake()
     {
-        // Update 지연 할당 대신 Awake 에서 즉시 확보합니다.
         if (portalManager == null)
             portalManager = GetComponentInParent<PortalManager>();
 
@@ -35,8 +34,8 @@ public class PortalSystem : MonoBehaviour
         if (portalManager == null)
             portalManager = GetComponentInParent<PortalManager>();
 
-        if (stageManager == null && StageManager.instance != null)
-            stageManager = StageManager.instance;
+        if (stageManager == null && StageManager.instance != null) 
+            GameObject.Find("StageManager").GetComponent<StageManager>();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -44,17 +43,10 @@ public class PortalSystem : MonoBehaviour
         if (!other.CompareTag("Player"))
             return;
 
-        // 진입 직전에 null 재확인
         if (portalManager == null)
             portalManager = GetComponentInParent<PortalManager>();
         if (stageManager == null)
-            stageManager = StageManager.instance;
-
-        if (portalManager == null)
-        {
-            Debug.LogError("[PortalSystem] OnTriggerEnter: PortalManager를 찾을 수 없습니다.");
-            return;
-        }
+            GameObject.Find("StageManager").GetComponent<StageManager>();
 
         player = other.gameObject;
         if (other.GetComponent<PlayerProfile>().ActCount > 0)
@@ -65,17 +57,11 @@ public class PortalSystem : MonoBehaviour
 
     IEnumerator Teleport()
     {
-        // Teleport 시작 시점에도 null 재확인
         if (portalManager == null)
             portalManager = GetComponentInParent<PortalManager>();
         if (stageManager == null)
             stageManager = StageManager.instance;
 
-        if (portalManager == null)
-        {
-            Debug.LogError("[PortalSystem] Teleport: PortalManager가 null입니다.");
-            yield break;
-        }
 
         Image img = UIManager.Instance.fade.GetComponent<Image>();
         img.gameObject.SetActive(true);
@@ -102,7 +88,7 @@ public class PortalSystem : MonoBehaviour
                 player.GetComponent<PlayerProfile>().UseActCount(1);
                 break;
             case PortalDirection.toBoss:
-                player.transform.position = GameObject.FindWithTag("BossRoom").transform.position + new Vector3(0f, 1.9f, -distance);
+                player.transform.position = GameObject.FindWithTag("BossRoom").transform.localPosition + new Vector3(0f, 1.9f, -distance);
                 player.GetComponent<PlayerProfile>().UseActCount(1);
                 break;
             case PortalDirection.Random:

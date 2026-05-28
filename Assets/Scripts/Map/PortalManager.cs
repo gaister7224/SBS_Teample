@@ -39,22 +39,14 @@ public class PortalManager : MonoBehaviour
     {
         ThisStage = transform.parent != null ? transform.parent.gameObject : gameObject;
 
-        // GameObject.Find 는 Instantiate 직후 Awake 실행 시 씬 탐색에 실패할 수 있습니다.
-        // StageManager.instance 는 StageManager.Awake() 에서 이미 할당되어 있어 안전합니다.
-        stageManager = StageManager.instance;
-        if (stageManager == null)
-            Debug.LogError("[PortalManager] StageManager.instance 가 null입니다. " +
-                           "StageManager가 PortalManager보다 먼저 Awake 되는지 확인하세요.");
+        stageManager = GameObject.Find("StageManager").GetComponent<StageManager>();
 
         PlayerObject = GameObject.FindGameObjectWithTag("Player");
         MainCameraObject = GameObject.FindGameObjectWithTag("MainCamera");
 
-        // GameObject.Find("PlayerCamera") 가 null 이면 GetComponent 에서 크래시가 납니다.
         var playerCameraObj = GameObject.Find("PlayerCamera");
         if (playerCameraObj != null)
             CinemachineCamera = playerCameraObj.GetComponent<CinemachineCamera>();
-        else
-            Debug.LogError("[PortalManager] 씬에서 'PlayerCamera' 오브젝트를 찾을 수 없습니다.");
     }
 
     void Start()
@@ -69,10 +61,6 @@ public class PortalManager : MonoBehaviour
         if (MainCameraObject == null)
             MainCameraObject = GameObject.FindGameObjectWithTag("MainCamera");
 
-        // stageManager 가 Awake 에서 null 이었을 경우 Start 에서 재시도
-        if (stageManager == null)
-            stageManager = StageManager.instance;
-
         if (stageType == StageType.Normal || stageType == StageType.Boss || stageType == StageType.SealedStone)
         {
             isPortalActive = false;
@@ -86,12 +74,6 @@ public class PortalManager : MonoBehaviour
 
     void Update()
     {
-        // stageManager 가 아직 null 이면 Update 로직 전체를 건너뜁니다.
-        if (stageManager == null)
-        {
-            stageManager = StageManager.instance;
-            return;
-        }
 
         PortalActivation();
 
