@@ -115,6 +115,7 @@ public class DungeonEntryManager : MonoBehaviour, IPointerClickHandler
         UIManager.Instance.inventory.currentUI = UIType.None;
         UIManager.Instance.inventory.playerProfile.SetActive(true);
         UIManager.Instance.inventory.playerAttack.uiClicking = false;
+        StoreManager.Instance.ReFreshShop();
         playerProfile.AnimationReset();
         ui.SetActive(false);
     }

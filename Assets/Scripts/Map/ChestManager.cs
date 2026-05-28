@@ -41,7 +41,7 @@ public class ChestManager : MonoBehaviour
             for(int i = 0; i < 4; i++)
             {
                 itemObjects[i] = RollByChance();
-                GameObject newItem = Instantiate(itemObjects[i], transform.position, Quaternion.identity);
+                GameObject newItem = Instantiate(itemObjects[i], transform.position, Quaternion.identity, transform);
                 Rigidbody rb = newItem.GetComponent<Rigidbody>();
 
                 if(rb != null)
