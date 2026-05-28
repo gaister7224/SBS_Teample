@@ -34,7 +34,7 @@ public class MonsterSpawnManager : MonoBehaviour
     private void Awake()
     {
         instance = this;
-        stageManager = GetComponentInParent<StageManager>();
+        stageManager = GameObject.Find("StageManager").GetComponent<StageManager>();
     }
 
     private void Update()

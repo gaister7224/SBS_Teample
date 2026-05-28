@@ -21,7 +21,7 @@ public class PortalSystem : MonoBehaviour
             portalManager = GetComponentInParent<PortalManager>();
 
         if (stageManager == null)
-            stageManager = GetComponentInParent<StageManager>();
+            stageManager = GameObject.Find("StageManager").GetComponent<StageManager>();
     }
 
     void Start()
@@ -33,8 +33,8 @@ public class PortalSystem : MonoBehaviour
         if (portalManager == null)
             portalManager = GetComponentInParent<PortalManager>();
 
-        if (stageManager == null && StageManager.instance != null)
-            stageManager = GetComponentInParent<StageManager>();
+        if (stageManager == null)
+            stageManager = GameObject.Find("StageManager").GetComponent<StageManager>();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -45,7 +45,7 @@ public class PortalSystem : MonoBehaviour
         if (portalManager == null)
             portalManager = GetComponentInParent<PortalManager>();
         if (stageManager == null)
-            stageManager = GetComponentInParent<StageManager>();
+            stageManager = GameObject.Find("StageManager").GetComponent<StageManager>();
 
         player = other.gameObject;
         if (other.GetComponent<PlayerProfile>().ActCount > 0)

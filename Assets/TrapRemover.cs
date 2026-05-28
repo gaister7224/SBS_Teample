@@ -6,7 +6,7 @@ public class TrapRemover : MonoBehaviour
 
     void Start()
     {
-        stageManager = GetComponentInParent<StageManager>();
+        stageManager = GameObject.Find("StageManager").GetComponent<StageManager>();
     }
 
     void Update()
