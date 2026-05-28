@@ -47,10 +47,11 @@ public static class DungeonMapLayoutResolver
         if (spacing <= 0.0001f)
             return positions;
 
+        var origin = ResolveGridOrigin();
         var mapRoot = ResolveActiveMapRoot();
         if (mapRoot != null)
         {
-            CollectFromRoot(mapRoot, spacing, positions);
+            CollectFromRoot(mapRoot, spacing, origin, positions);
             return positions;
         }
 
@@ -63,7 +64,7 @@ public static class DungeonMapLayoutResolver
             if (!BelongsToManagedDungeon(portal))
                 continue;
 
-            TryAddPortalPosition(portal, spacing, positions);
+            TryAddPortalPosition(portal, spacing, origin, positions);
         }
 
         return positions;
@@ -87,26 +88,47 @@ public static class DungeonMapLayoutResolver
         SyncPlayerPosition();
     }
 
-    static void CollectFromRoot(Transform mapRoot, float spacing, HashSet<Vector2Int> positions)
+    static void CollectFromRoot(Transform mapRoot, float spacing, Vector3 origin, HashSet<Vector2Int> positions)
     {
         foreach (var portal in mapRoot.GetComponentsInChildren<PortalManager>(true))
-            TryAddPortalPosition(portal, spacing, positions);
+            TryAddPortalPosition(portal, spacing, origin, positions);
     }
 
-    static void TryAddPortalPosition(PortalManager portal, float spacing, HashSet<Vector2Int> positions)
+    static void TryAddPortalPosition(PortalManager portal, float spacing, Vector3 origin, HashSet<Vector2Int> positions)
     {
         if (portal == null || !portal.isActiveAndEnabled)
             return;
 
         var root = portal.ThisStage != null ? portal.ThisStage.transform : portal.transform;
-        positions.Add(WorldToGrid(root.position, spacing));
+        positions.Add(WorldToGrid(root.position, spacing, origin));
     }
 
-    static Vector2Int WorldToGrid(Vector3 worldPosition, float spacing)
+    static Vector3 ResolveGridOrigin()
+    {
+        if (StageManager.instance != null)
+        {
+            if (StageManager.instance.StageParent != null)
+            {
+                var stageParentPos = StageManager.instance.StageParent.transform.position;
+                return new Vector3(stageParentPos.x, 0f, stageParentPos.z);
+            }
+
+            var stageManagerPos = StageManager.instance.transform.position;
+            return new Vector3(stageManagerPos.x, 0f, stageManagerPos.z);
+        }
+
+        var mapRoot = ResolveActiveMapRoot();
+        if (mapRoot != null)
+            return new Vector3(mapRoot.position.x, 0f, mapRoot.position.z);
+
+        return Vector3.zero;
+    }
+
+    static Vector2Int WorldToGrid(Vector3 worldPosition, float spacing, Vector3 origin)
     {
         return new Vector2Int(
-            Mathf.RoundToInt(worldPosition.x / spacing),
-            Mathf.RoundToInt(worldPosition.z / spacing));
+            Mathf.RoundToInt((worldPosition.x - origin.x) / spacing),
+            Mathf.RoundToInt((worldPosition.z - origin.z) / spacing));
     }
 
     static bool BelongsToManagedDungeon(PortalManager portal)

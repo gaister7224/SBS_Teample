@@ -136,9 +136,7 @@ public class PortalManager : MonoBehaviour
 
     void PortalActivation()
     {
-        int x = Mathf.RoundToInt(ThisStage.transform.position.x / stageManager.spacing);
-        int z = Mathf.RoundToInt(ThisStage.transform.position.z / stageManager.spacing);
-        Vector2Int pos = new Vector2Int(x, z);
+        Vector2Int pos = stageManager.WorldToGrid(ThisStage.transform.position);
 
         bool north = stageManager.StagePositions.Contains(new Vector2Int(pos.x, pos.y + 1));
         bool south = stageManager.StagePositions.Contains(new Vector2Int(pos.x, pos.y - 1));
@@ -169,7 +167,7 @@ public class PortalManager : MonoBehaviour
 
     void SurroundStageCheck()
     {
-        Vector2Int stageV2I = new Vector2Int((int)(ThisStage.transform.position.x / stageManager.spacing), (int)(ThisStage.transform.position.z / stageManager.spacing));
+        Vector2Int stageV2I = stageManager.WorldToGrid(ThisStage.transform.position);
         Vector2Int frontStageV2I = new Vector2Int(stageV2I.x, stageV2I.y + 1);
         Vector2Int backStageV2I = new Vector2Int(stageV2I.x, stageV2I.y - 1);
         Vector2Int leftStageV2I = new Vector2Int(stageV2I.x - 1, stageV2I.y);

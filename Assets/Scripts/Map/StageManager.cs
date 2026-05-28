@@ -11,7 +11,8 @@ enum PortalDirection
     Clear,
     Random,
     Return,
-    toBoss
+    toBoss,
+    Villiage
 }
 
 public enum StageType
@@ -42,13 +43,16 @@ public class StageManager : MonoBehaviour
     [Space(10f)]
 
     public List<GameObject> stage = new List<GameObject>();
+    public List<int> StageTypeCount = new List<int>();
+    // stage 리스트 인덱스에 해당하는 방이 StageTypeCount 개수만큼 생성
+    // 0(시작방), 1(함정방), stage.Count - 1(일반방)은 StageTypeCount에 포함X
+
     public GameObject BossStage;
     public float spacing = 40f;
     public List<GameObject> TutorialStage = new List<GameObject>();
     [Space(10f)]
 
     public int StageCount = 7;
-    public int MaxSealedStoneCount = 3;
 
     public HashSet<Vector2Int> StagePositions = new HashSet<Vector2Int>();
     public List<Vector2Int> surroundStagePositions = new List<Vector2Int>();
@@ -135,7 +139,6 @@ public class StageManager : MonoBehaviour
             if (child.name.Contains("TutorialStages"))
                 return true;
         }
-
         return false;
     }
 
@@ -174,12 +177,10 @@ public class StageManager : MonoBehaviour
     IEnumerator WaitUntilTutorialRootsDestroyed()
     {
         const int maxFrames = 15;
-
         for (var frame = 0; frame < maxFrames; frame++)
         {
             if (!HasTutorialStageInHierarchy())
                 yield break;
-
             yield return null;
         }
     }
@@ -187,13 +188,11 @@ public class StageManager : MonoBehaviour
     IEnumerator WaitForStageLayoutReady()
     {
         const int maxFrames = 30;
-
         for (var frame = 0; frame < maxFrames; frame++)
         {
             RebuildStagePositions();
             if (StagePositions.Count > 0)
                 yield break;
-
             yield return null;
         }
     }
@@ -217,7 +216,6 @@ public class StageManager : MonoBehaviour
     public void RebuildStagePositions()
     {
         StagePositions.Clear();
-
         foreach (var position in DungeonMapLayoutResolver.CollectStagePositions())
             StagePositions.Add(position);
     }
@@ -235,9 +233,31 @@ public class StageManager : MonoBehaviour
 
     public Vector2Int WorldToGrid(Vector3 worldPosition)
     {
+        var origin = GetGridOrigin();
         return new Vector2Int(
-            Mathf.RoundToInt(worldPosition.x / spacing),
-            Mathf.RoundToInt(worldPosition.z / spacing));
+            Mathf.RoundToInt((worldPosition.x - origin.x) / spacing),
+            Mathf.RoundToInt((worldPosition.z - origin.z) / spacing));
+    }
+
+    public Vector3 GridToWorld(Vector2Int gridPosition, float y = 0f)
+    {
+        var origin = GetGridOrigin();
+        return new Vector3(
+            origin.x + gridPosition.x * spacing,
+            y,
+            origin.z + gridPosition.y * spacing);
+    }
+
+    Vector3 GetGridOrigin()
+    {
+        if (StageParent != null)
+            return new Vector3(StageParent.transform.position.x, 0f, StageParent.transform.position.z);
+
+        var activeMapRoot = DungeonMapLayoutResolver.ResolveActiveMapRoot();
+        if (activeMapRoot != null)
+            return new Vector3(activeMapRoot.position.x, 0f, activeMapRoot.position.z);
+
+        return new Vector3(transform.position.x, 0f, transform.position.z);
     }
 
     public void SyncDungeonMapAfterLayout()
@@ -322,130 +342,208 @@ public class StageManager : MonoBehaviour
     }
 
     // ─────────────────────────────────────────────────────────────────
-    // CreateStage : 기존 Update() 내부의 로컬 코루틴 StageCreate를
-    //               public 멤버 코루틴으로 승격한 버전.
+    // CreateStage
     //
-    // stage[] 인덱스 구조 (기존과 동일)
-    //   stage[0]   → 코너 시작방  ← 이 방 소환 위치로 플레이어를 이동
-    //   stage[1]   → SealedStone 방
-    //   stage[2]   → Trap 방
-    //   stage[3+]  → 일반/랜덤 방
+    // 중앙 (0,0)
+    //
+    // stage[] 인덱스 구조
+    //   stage[0]       → 코너 시작방 (1개 고정)
+    //   stage[1]       → Trap 방 (10% 비율)
+    //   stage[2+]      → StageTypeCount[i] 개수만큼 생성
+    //   stage[마지막]  → 일반방 (나머지 빈 칸 전부 채움)
     // ─────────────────────────────────────────────────────────────────
-
     public IEnumerator CreateStage()
     {
-        // ── null / 범위 가드 ──────────────────────────────────────
-        if (BossStage == null)
-        {
-            Debug.LogWarning("[StageManager] CreateStage: BossStage가 null입니다.");
-            yield break;
-        }
-
-        if (stage == null || stage.Count < 4)
-        {
-            Debug.LogWarning("[StageManager] CreateStage: stage 리스트가 비어있거나 4개 미만입니다.");
-            yield break;
-        }
-
         Transform stageRoot = (StageParent != null) ? StageParent.transform : transform;
 
-        // ── 그리드 크기 계산 ──────────────────────────────────────
-        int countHalf = (StageCount % 2 == 1) ? StageCount / 2 + 1 : StageCount / 2;
+        int half = StageCount / 2;
 
-        // ── SealedStone 위치 결정 ─────────────────────────────────
-        HashSet<Vector2Int> sealedStonePositions = new HashSet<Vector2Int>();
-        for (int i = 0; i < MaxSealedStoneCount; i++)
+        int xMin = -half;
+        int xMax = xMin + StageCount - 1;
+
+        int zMin = -half;
+        int zMax = zMin + StageCount - 1;
+
+        List<Vector2Int> availableCells = new List<Vector2Int>();
+
+
+        for (int x = xMin; x <= xMax; x++)
         {
-            int x, z;
-            int safety = 0;
-            do
+            for (int z = zMin; z <= zMax; z++)
             {
-                x = Random.Range(-countHalf, StageCount - countHalf + 2);
-                z = Random.Range(-countHalf, StageCount - countHalf + 2);
-                if (++safety > 1000) break;
-            }
-            while ((x >= -1 && x <= 1 && z >= -1 && z <= 1)
-                || sealedStonePositions.Contains(new Vector2Int(x, z)));
-
-            sealedStonePositions.Add(new Vector2Int(x, z));
-        }
-
-        // ── Trap 위치 결정 ────────────────────────────────────────
-        int trapCount = Mathf.FloorToInt((Mathf.Pow(StageCount + 2, 2) - 9) / 10f);
-        HashSet<Vector2Int> trapStagePositions = new HashSet<Vector2Int>();
-        for (int i = 0; i < trapCount; i++)
-        {
-            int x, z;
-            int safety = 0;
-            do
-            {
-                x = Random.Range(-countHalf, StageCount - countHalf + 2);
-                z = Random.Range(-countHalf, StageCount - countHalf + 2);
-                if (++safety > 1000) break;
-            }
-            while ((x >= -1 && x <= 1 && z >= -1 && z <= 1)
-                || trapStagePositions.Contains(new Vector2Int(x, z)));
-
-            trapStagePositions.Add(new Vector2Int(x, z));
-        }
-
-        // ── 그리드 순회 → 스테이지 배치 ──────────────────────────
-        for (int x = -countHalf; x < StageCount - countHalf + 2; x++)
-        {
-            for (int z = -countHalf; z < StageCount - countHalf + 2; z++)
-            {
-                Vector3 spawnPos = new Vector3(x * spacing, 0f, z * spacing);
-                Vector2Int gridPos = new Vector2Int(x, z);
-
-                bool isCenterZone = (x >= -1 && x <= 1 && z >= -1 && z <= 1);
-
-                if (isCenterZone)
+                // 중앙 보스 3x3 제외
+                if (x >= -1 && x <= 1 &&
+                    z >= -1 && z <= 1)
                 {
-                    if (x == 0 && z == 0)
+                    continue;
+                }
+
+                // 시작방 제외
+                if (x == xMin && z == zMin)
+                {
+                    continue;
+                }
+
+                availableCells.Add(new Vector2Int(x, z));
+            }
+        }
+
+        // ───────────────── 랜덤 로직 ─────────────────
+
+        for (int i = 0; i < availableCells.Count; i++)
+        {
+            int rand = Random.Range(i, availableCells.Count);
+
+            Vector2Int temp = availableCells[i];
+            availableCells[i] = availableCells[rand];
+            availableCells[rand] = temp;
+        }
+
+        while (StageTypeCount.Count < stage.Count)
+        {
+            StageTypeCount.Add(0);
+        }
+
+        int cellIndex = 0;
+
+        // ───────────────── Trap 위치 ─────────────────
+
+        HashSet<Vector2Int> trapPositions
+            = new HashSet<Vector2Int>();
+
+        for (int i = 0;
+             i < StageTypeCount[1] &&
+             cellIndex < availableCells.Count;
+             i++, cellIndex++)
+        {
+            trapPositions.Add(availableCells[cellIndex]);
+        }
+
+        // ───────────────── 특수방 위치 ─────────────────
+
+        Dictionary<int, HashSet<Vector2Int>> typePositions
+            = new Dictionary<int, HashSet<Vector2Int>>();
+
+        for (int si = 2; si < stage.Count - 1; si++)
+        {
+            int count = StageTypeCount[si];
+
+            HashSet<Vector2Int> positions
+                = new HashSet<Vector2Int>();
+
+            for (int i = 0;
+                 i < count &&
+                 cellIndex < availableCells.Count;
+                 i++, cellIndex++)
+            {
+                positions.Add(availableCells[cellIndex]);
+            }
+
+            typePositions[si] = positions;
+        }
+
+        // ───────────────── 보스방 생성 ─────────────────
+
+        GameObject bossRoom = Instantiate(BossStage, stageRoot);
+
+        bossRoom.transform.localPosition = Vector3.zero;
+
+        StagePositions.Add(Vector2Int.zero);
+
+        // ───────────────── 시작방 생성 ─────────────────
+
+        GameObject startRoom = Instantiate(stage[0], stageRoot);
+
+        startRoom.transform.localPosition = new Vector3(
+            xMin * spacing,
+            0f,
+            zMin * spacing);
+
+        StagePositions.Add(new Vector2Int(xMin, zMin));
+
+        // ───────────────── 나머지 방 생성 ─────────────────
+
+        for (int i = 0; i < availableCells.Count; i++)
+        {
+            Vector2Int gridPos = availableCells[i];
+
+            Vector3 localPos = new Vector3(
+                gridPos.x * spacing,
+                0f,
+                gridPos.y * spacing);
+
+            GameObject spawnedStage = null;
+
+            // ───── Trap 방 ─────
+
+            if (trapPositions.Contains(gridPos))
+            {
+                spawnedStage = Instantiate(stage[1], stageRoot);
+            }
+            else
+            {
+                bool placed = false;
+
+                // ───── 특수방 ─────
+
+                for (int si = 2; si < stage.Count - 1; si++)
+                {
+                    if (typePositions.ContainsKey(si) &&
+                        typePositions[si].Contains(gridPos))
                     {
-                        Instantiate(BossStage, transform.localPosition, Quaternion.identity, stageRoot);
+                        Instantiate(BossStage, worldSpawnPos, Quaternion.identity, stageRoot);
                         StagePositions.Add(gridPos);
                     }
                 }
                 else if (x == -countHalf && z == -countHalf)
                 {
                     // stage[0]: 코너 시작방
-                    Instantiate(stage[0], spawnPos, Quaternion.identity, stageRoot);
+                    Instantiate(stage[0], worldSpawnPos, Quaternion.identity, stageRoot);
                     StagePositions.Add(gridPos);
                 }
                 else if (sealedStonePositions.Contains(gridPos))
                 {
                     // stage[1]: SealedStone 방
-                    Instantiate(stage[1], spawnPos, Quaternion.identity, stageRoot);
+                    Instantiate(stage[1], worldSpawnPos, Quaternion.identity, stageRoot);
                     StagePositions.Add(gridPos);
                 }
                 else if (trapStagePositions.Contains(gridPos))
                 {
                     // stage[2]: Trap 방
-                    Instantiate(stage[2], spawnPos, Quaternion.identity, stageRoot);
+                    Instantiate(stage[2], worldSpawnPos, Quaternion.identity, stageRoot);
                     StagePositions.Add(gridPos);
                 }
                 else
                 {
-                    // stage[3+]: 일반/랜덤 방
+                    // stage[3+]: normal/random room
                     int randomIndex = Random.Range(3, stage.Count);
-                    Instantiate(stage[randomIndex], spawnPos, Quaternion.identity, stageRoot);
+                    Instantiate(stage[randomIndex], worldSpawnPos, Quaternion.identity, stageRoot);
                     StagePositions.Add(gridPos);
                 }
             }
+
+            if (spawnedStage != null)
+            {
+                spawnedStage.transform.localPosition = localPos;
+            }
+
+            StagePositions.Add(gridPos);
         }
 
-        // ── 한 프레임 대기 (Instantiate된 오브젝트 Awake/Start 완료 대기) ──
         yield return null;
 
-        // ── 플레이어를 stage[0] 시작방 위치로 이동 ───────────────
+        // ───────────────── 플레이어 위치 ─────────────────
+
         if (Player == null)
+        {
             Player = GameObject.FindGameObjectWithTag("Player");
+        }
 
         if (Player != null)
-            Player.transform.position = new Vector3(-countHalf * spacing, 1.9f, -countHalf * spacing);
+            Player.transform.position = GridToWorld(new Vector2Int(-countHalf, -countHalf), 1.9f);
 
         RebuildStagePositions();
+
         SyncDungeonMapAfterLayout();
     }
 
@@ -557,61 +655,28 @@ public class StageManager : MonoBehaviour
         //            {
         //                if (x == 0 && z == 0)
         //                {
-        //                    Vector3 spawnPos = new Vector3
-        //                    (
-        //                        x * spacing,
-        //                        0f,
-        //                        z * spacing
-        //                    );
-
         //                    Instantiate(BossStage, transform.localPosition, Quaternion.identity, StageParent.transform);
         //                    StagePositions.Add(new Vector2Int(x, z));
         //                }
         //            }
         //            else if (x == -countHalf && z == -countHalf)
         //            {
-        //                Vector3 spawnPos = new Vector3
-        //                (
-        //                    x * spacing,
-        //                    0f,
-        //                    z * spacing
-        //                );
-
         //                Instantiate(stage[0], spawnPos, Quaternion.identity, StageParent.transform);
         //                StagePositions.Add(new Vector2Int(x, z));
         //            }
         //            else if (sealedStonePositions.Contains(new Vector2Int(x, z)))
         //            {
-        //                Vector3 spawnPos = new Vector3
-        //                (
-        //                    x * spacing,
-        //                    0f,
-        //                    z * spacing
-        //                );
         //                StagePositions.Add(new Vector2Int(x, z));
         //                Instantiate(stage[1], spawnPos, Quaternion.identity, StageParent.transform);
         //            }
         //            else if (trapStagePositions.Contains(new Vector2Int(x, z)))
         //            {
-        //                Vector3 spawnPos = new Vector3
-        //                (
-        //                    x * spacing,
-        //                    0f,
-        //                    z * spacing
-        //                );
         //                StagePositions.Add(new Vector2Int(x, z));
         //                Instantiate(stage[2], spawnPos, Quaternion.identity, transform);
         //            }
         //            else
         //            {
-        //                Vector3 spawnPos = new Vector3
-        //                (
-        //                    x * spacing,
-        //                    0f,
-        //                    z * spacing
-        //                );
         //                StagePositions.Add(new Vector2Int(x, z));
-
         //                Instantiate(stage[Random.Range(3, stage.Count)], spawnPos, Quaternion.identity, transform);
         //            }
         //        }
