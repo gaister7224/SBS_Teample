@@ -74,9 +74,6 @@ public class DungeonMapUiInstaller : MonoBehaviour
         if (markSpriteSet == null)
             markSpriteSet = MapMarkSpriteSet.LoadFromResources();
 
-        if (mapStagePrefab == null)
-            mapStagePrefab = MinimapManager.ResolveMapStagePrefab();
-
         var canvas = MinimapHudLayout.FindMainOverlayCanvas();
         if (canvas == null)
             return;

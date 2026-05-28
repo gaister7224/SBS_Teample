@@ -233,9 +233,31 @@ public class StageManager : MonoBehaviour
 
     public Vector2Int WorldToGrid(Vector3 worldPosition)
     {
+        var origin = GetGridOrigin();
         return new Vector2Int(
-            Mathf.RoundToInt(worldPosition.x / spacing),
-            Mathf.RoundToInt(worldPosition.z / spacing));
+            Mathf.RoundToInt((worldPosition.x - origin.x) / spacing),
+            Mathf.RoundToInt((worldPosition.z - origin.z) / spacing));
+    }
+
+    public Vector3 GridToWorld(Vector2Int gridPosition, float y = 0f)
+    {
+        var origin = GetGridOrigin();
+        return new Vector3(
+            origin.x + gridPosition.x * spacing,
+            y,
+            origin.z + gridPosition.y * spacing);
+    }
+
+    Vector3 GetGridOrigin()
+    {
+        if (StageParent != null)
+            return new Vector3(StageParent.transform.position.x, 0f, StageParent.transform.position.z);
+
+        var activeMapRoot = DungeonMapLayoutResolver.ResolveActiveMapRoot();
+        if (activeMapRoot != null)
+            return new Vector3(activeMapRoot.position.x, 0f, activeMapRoot.position.z);
+
+        return new Vector3(transform.position.x, 0f, transform.position.z);
     }
 
     public void SyncDungeonMapAfterLayout()
@@ -469,21 +491,34 @@ public class StageManager : MonoBehaviour
                     if (typePositions.ContainsKey(si) &&
                         typePositions[si].Contains(gridPos))
                     {
-                        spawnedStage = Instantiate(stage[si], stageRoot);
-
-                        placed = true;
-
-                        break;
+                        Instantiate(BossStage, worldSpawnPos, Quaternion.identity, stageRoot);
+                        StagePositions.Add(gridPos);
                     }
                 }
-
-                // ───── 일반방 ─────
-
-                if (!placed)
+                else if (x == -countHalf && z == -countHalf)
                 {
-                    spawnedStage = Instantiate(
-                        stage[stage.Count - 1],
-                        stageRoot);
+                    // stage[0]: 코너 시작방
+                    Instantiate(stage[0], worldSpawnPos, Quaternion.identity, stageRoot);
+                    StagePositions.Add(gridPos);
+                }
+                else if (sealedStonePositions.Contains(gridPos))
+                {
+                    // stage[1]: SealedStone 방
+                    Instantiate(stage[1], worldSpawnPos, Quaternion.identity, stageRoot);
+                    StagePositions.Add(gridPos);
+                }
+                else if (trapStagePositions.Contains(gridPos))
+                {
+                    // stage[2]: Trap 방
+                    Instantiate(stage[2], worldSpawnPos, Quaternion.identity, stageRoot);
+                    StagePositions.Add(gridPos);
+                }
+                else
+                {
+                    // stage[3+]: normal/random room
+                    int randomIndex = Random.Range(3, stage.Count);
+                    Instantiate(stage[randomIndex], worldSpawnPos, Quaternion.identity, stageRoot);
+                    StagePositions.Add(gridPos);
                 }
             }
 
@@ -505,13 +540,7 @@ public class StageManager : MonoBehaviour
         }
 
         if (Player != null)
-        {
-            Player.transform.position = stageRoot.TransformPoint(
-                new Vector3(
-                    xMin * spacing,
-                    1.9f,
-                    zMin * spacing));
-        }
+            Player.transform.position = GridToWorld(new Vector2Int(-countHalf, -countHalf), 1.9f);
 
         RebuildStagePositions();
 
