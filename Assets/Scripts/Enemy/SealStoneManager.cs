@@ -18,11 +18,15 @@ public class SealStoneManager : MonoBehaviour
 
     private BoxCollider boxCollider;
 
-    StageManager stageManager;
+    [SerializeField] StageManager stageManager;
 
     private void Awake()
     {
-        stageManager = GameObject.Find("StageManager").GetComponent<StageManager>();
+        
+    }
+    private void Start()
+    {
+        stageManager = StageManager.instance;
 
         if (stageManager == null)
         {
@@ -30,9 +34,6 @@ public class SealStoneManager : MonoBehaviour
         }
 
         stageManager.SealedStoneLeft++;
-    }
-    private void Start()
-    {
         boxCollider = GetComponent<BoxCollider>();
     }
     private void Update()

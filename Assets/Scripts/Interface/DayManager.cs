@@ -84,7 +84,8 @@ public class DayManager : MonoBehaviour
             curDay = Day.day;
             DayIconAppear();
             GameManager.instance.dayCount++;
-            if(GameManager.instance.installImpossibleStart)
+            playerProfile.HpMpReset();
+            if (GameManager.instance.installImpossibleStart)
             {
                 GameManager.instance.artifactInstallImpossibleDay++;
 

@@ -31,6 +31,8 @@ TagManager:
   - FKey
   - MapBoard
   - StorageCollider
+  - BossRoom
+  - BossRoomPos
   layers:
   - Default
   - TransparentFX

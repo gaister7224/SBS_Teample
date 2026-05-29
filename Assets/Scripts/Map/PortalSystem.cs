@@ -6,17 +6,19 @@ using UnityEngine.UI;
 public class PortalSystem : MonoBehaviour
 {
     [SerializeField] PortalManager portalManager;
-    StageManager stageManager;
+    [SerializeField] StageManager stageManager;
 
     GameObject player;
 
-    [SerializeField] PortalDirection direction;
+    [SerializeField] private PortalDirection direction;
 
     public bool toBoss;
     float distance = 12f;
 
     void Awake()
     {
+        stageManager = StageManager.instance;
+
         if (portalManager == null)
             portalManager = GetComponentInParent<PortalManager>();
 
@@ -26,6 +28,21 @@ public class PortalSystem : MonoBehaviour
 
     void Start()
     {
+        stageManager = StageManager.instance;
+        if (stageManager == null)
+            stageManager = GameObject.FindWithTag("Map").GetComponent<StageManager>();
+        if (toBoss)
+        {
+            direction = PortalDirection.toBoss;
+        }
+    }
+
+    private void OnEnable()
+    {
+        if (toBoss)
+        {
+            direction = PortalDirection.toBoss;
+        }
     }
 
     void Update()
@@ -33,8 +50,10 @@ public class PortalSystem : MonoBehaviour
         if (portalManager == null)
             portalManager = GetComponentInParent<PortalManager>();
 
-        if (stageManager == null)
-            stageManager = GameObject.Find("StageManager").GetComponent<StageManager>();
+        //if (toBoss)
+        //{
+        //    direction = PortalDirection.toBoss;
+        //}
     }
 
     private void OnTriggerEnter(Collider other)
@@ -84,7 +103,9 @@ public class PortalSystem : MonoBehaviour
                 var bossRoom = GameObject.FindWithTag("BossRoom");
                 if (bossRoom != null)
                 {
-                    player.transform.position = bossRoom.transform.position + new Vector3(0f, 1.9f, -distance);
+                    //player.transform.position = bossRoom.transform.position + new Vector3(0f, 1.9f, -distance);
+                    Transform bossRoomPos = GameObject.FindWithTag("BossRoomPos").GetComponent<Transform>();
+                    player.transform.position = bossRoomPos.position;
                     player.GetComponent<PlayerProfile>().UseActCount(1);
                 }
                 break;

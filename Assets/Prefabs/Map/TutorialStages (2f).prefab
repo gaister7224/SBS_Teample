@@ -595,6 +595,37 @@ Transform:
   - {fileID: 9163452865718420605}
   m_Father: {fileID: 6617250797807845784}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+--- !u!1 &1159565350795169909
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1803811238799237105}
+  m_Layer: 0
+  m_Name: BossRoomPos
+  m_TagString: BossRoomPos
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1803811238799237105
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1159565350795169909}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -9.13, y: 2, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4022792049990141160}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1273164954946746556
 GameObject:
   m_ObjectHideFlags: 0
@@ -52908,6 +52939,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7560381821120080026, guid: e616edc21ac447144baad3ba5f60526e, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4671412982026851569}
+    - targetCorrespondingSourceObject: {fileID: 7560381821120080026, guid: e616edc21ac447144baad3ba5f60526e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1803811238799237105}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 4417808012535134601, guid: e616edc21ac447144baad3ba5f60526e, type: 3}
       insertIndex: -1

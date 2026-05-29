@@ -2476,6 +2476,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   portalManager: {fileID: 0}
+  stageManager: {fileID: 0}
   direction: 3
   toBoss: 0
 --- !u!65 &502540365

@@ -88,7 +88,10 @@ public class PortalManager : MonoBehaviour
             return;
         }
 
-        isPortalActive = stageManager.activePortal;
+        if (stageType == StageType.Normal || stageType == StageType.Boss || stageType == StageType.SealedStone)
+        {
+            isPortalActive = stageManager.activePortal;
+        }
 
         PortalActivation();
 
