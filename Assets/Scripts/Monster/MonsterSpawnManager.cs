@@ -335,7 +335,7 @@ public class MonsterSpawnManager : MonoBehaviour
                 GameObject monster = Instantiate(
                     prefab,
                     spawnPos + offset,
-                    Quaternion.identity, transform);
+                    Quaternion.identity);
 
                 CurrentAliveMonsters.Add(monster);
 
