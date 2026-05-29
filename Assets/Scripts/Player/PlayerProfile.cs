@@ -359,13 +359,20 @@ public class PlayerProfile : PlayerState
         moveSpeed = passiveMoveSpeed;
     }
 
+    public void HpMpReset()
+    {
+        curHp = maxHp;
+        curMp = maxMp;
+    }
+
     public void GetDamage(int damage)
     {
         if (!barrier)
         {
             if (!noDamage)
             {
-                curHp -= damage * (1 - curDEF);
+                //curHp -= damage * (1 - curDEF);
+                curHp -= damage * (100f / (100f + curDEF));
                 noDamage = true;
             }
 

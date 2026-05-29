@@ -34,7 +34,9 @@ public class MonsterSpawnManager : MonoBehaviour
     private void Awake()
     {
         instance = this;
-        stageManager = GameObject.Find("StageManager").GetComponent<StageManager>();
+        stageManager = StageManager.instance;
+        if(stageManager == null)
+            stageManager = GameObject.Find("StageManager").GetComponent<StageManager>();
     }
 
     private void Update()
@@ -106,13 +108,14 @@ public class MonsterSpawnManager : MonoBehaviour
     {
         if (isMonsterSpawn)
         {
-            if (stageManager.curStagePos == Vector2Int.zero)
-            {
-                stageManager.curStageCleared = true;
-                stageManager.activePortal = true;
-                isMonsterSpawn = false;
-                return;
-            }
+            //if (stageManager.curStagePos == Vector2Int.zero)
+            //{
+            //    Debug.Log("stageManager.curStagePos == Vector2Int.zero");
+            //    stageManager.curStageCleared = true;
+            //    stageManager.activePortal = true;
+            //    isMonsterSpawn = false;
+            //    return;
+            //}
 
             bool spawned = SpawnGrid();
 
@@ -274,6 +277,8 @@ public class MonsterSpawnManager : MonoBehaviour
 
     bool SpawnGrid()
     {
+        Debug.Log("SpawnGrid");
+
         if (stageManager.curStageSpawnPrefabs == null)
         {
             Debug.LogWarning("SpawnPrefabs NULL");
@@ -330,7 +335,7 @@ public class MonsterSpawnManager : MonoBehaviour
                 GameObject monster = Instantiate(
                     prefab,
                     spawnPos + offset,
-                    Quaternion.identity);
+                    Quaternion.identity, transform);
 
                 CurrentAliveMonsters.Add(monster);
 

@@ -96,7 +96,6 @@ public class StoreSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         if(item.Type != ItemType.GoldBox && !item.IsPotion)
         {
             int randomPrice = Random.Range(item.MinGold, item.MaxGold + 1);
-            Debug.Log(item.ItemName + " price : " + randomPrice);
             priceText.text = randomPrice.ToString();
         }
 

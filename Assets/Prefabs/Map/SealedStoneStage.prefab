@@ -156,6 +156,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   portalManager: {fileID: 3809560422600107664}
   stageManager: {fileID: 0}
+  monsterSpawnManager: {fileID: 0}
 --- !u!1 &2613477811451857407
 GameObject:
   m_ObjectHideFlags: 0
@@ -548,6 +549,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   portalManager: {fileID: 3809560422600107664}
+  stageManager: {fileID: 0}
   direction: 3
   toBoss: 0
 --- !u!1 &5144979569810962450
@@ -782,6 +784,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   portalManager: {fileID: 3809560422600107664}
+  stageManager: {fileID: 0}
   direction: 2
   toBoss: 0
 --- !u!1 &6813720926476073496
@@ -1236,6 +1239,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   portalManager: {fileID: 3809560422600107664}
+  stageManager: {fileID: 0}
   direction: 1
   toBoss: 0
 --- !u!1 &7578044407623005106
@@ -1690,6 +1694,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   portalManager: {fileID: 3809560422600107664}
+  stageManager: {fileID: 0}
   direction: 0
   toBoss: 0
 --- !u!1 &8076056445954916831
@@ -1850,7 +1855,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stageType: 3
-  SpawnPrefabs: []
+  SpawnPrefabs:
+  - {fileID: 7174707113039170683, guid: eaaedcd3f9de54345aecb0a6d97deae0, type: 3}
+  - {fileID: 7174707113039170683, guid: eaaedcd3f9de54345aecb0a6d97deae0, type: 3}
+  - {fileID: 7174707113039170683, guid: eaaedcd3f9de54345aecb0a6d97deae0, type: 3}
+  - {fileID: 7174707113039170683, guid: eaaedcd3f9de54345aecb0a6d97deae0, type: 3}
+  - {fileID: 7174707113039170683, guid: eaaedcd3f9de54345aecb0a6d97deae0, type: 3}
+  - {fileID: 7174707113039170683, guid: eaaedcd3f9de54345aecb0a6d97deae0, type: 3}
+  - {fileID: 7174707113039170683, guid: eaaedcd3f9de54345aecb0a6d97deae0, type: 3}
+  - {fileID: 7174707113039170683, guid: eaaedcd3f9de54345aecb0a6d97deae0, type: 3}
+  - {fileID: 7174707113039170683, guid: eaaedcd3f9de54345aecb0a6d97deae0, type: 3}
+  - {fileID: 7174707113039170683, guid: eaaedcd3f9de54345aecb0a6d97deae0, type: 3}
   isCleared: 0
   isPortalActive: 0
   PortalObject:
