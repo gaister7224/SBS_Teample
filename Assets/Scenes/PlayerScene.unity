@@ -1318,6 +1318,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   portalManager: {fileID: 0}
   stageManager: {fileID: 0}
+  monsterSpawnManager: {fileID: 0}
 --- !u!65 &510482533
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4672,6 +4673,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   portalManager: {fileID: 494960428}
+  stageManager: {fileID: 0}
   direction: 3
   toBoss: 0
 --- !u!65 &2089528374

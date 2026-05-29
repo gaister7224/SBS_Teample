@@ -14,13 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   IsEquipment: 0
   IsAccessory: 0
+  IsPotion: 1
   itemID: 60
   itemName: "\uD558\uAE09 \uB9C8\uB098 \uD68C\uBCF5\uBB3C\uC57D"
   canOverlap: 1
   isInteractivity: 1
   isConsumable: 1
   itemType: 8192
-  itemImage: {fileID: 21300000, guid: 0d4b174e5f52ed44dba3525ba48688ea, type: 3}
+  tier: 0
+  itemImage: {fileID: 21300000, guid: d2ae835dddd24238f93018fae6595e73, type: 3}
   price: 500
   coolTime: 0
   explanation: 
@@ -33,3 +35,4 @@ MonoBehaviour:
   skillCoolTimeBuff: 0
   minGold: 0
   maxGold: 0
+  artifactGet: 0

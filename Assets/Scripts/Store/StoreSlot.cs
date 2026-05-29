@@ -85,7 +85,6 @@ public class StoreSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     //인벤토리에 새로운 아이템 슬롯 추가
     public void AddItem(Item nItem, int count = 0)
     {
-        Debug.Log("addItem");
         item = nItem;
         itemCount = count;
         itemImage.sprite = item.Image;

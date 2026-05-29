@@ -43,7 +43,10 @@ public class ChestManager : MonoBehaviour
                 itemObjects[i] = RollByChance();
                 GameObject newItem = Instantiate(itemObjects[i], transform.position, Quaternion.identity, transform);
                 float itemScale = 0.03f;
+                float itemRotation = 52f;
                 newItem.transform.localScale = new Vector3(itemScale, itemScale, itemScale);
+                newItem.transform.localRotation = Quaternion.Euler(itemRotation, 0, 0);
+                newItem.transform.GetChild(1).transform.localScale = new Vector3(12, 7, 17);
                 Rigidbody rb = newItem.GetComponent<Rigidbody>();
 
                 if(rb != null)

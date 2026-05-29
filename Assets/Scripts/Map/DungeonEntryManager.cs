@@ -117,6 +117,8 @@ public class DungeonEntryManager : MonoBehaviour, IPointerClickHandler
         UIManager.Instance.inventory.playerAttack.uiClicking = false;
         StoreManager.Instance.ReFreshShop();
         playerProfile.AnimationReset();
+        DayManager.instance.sunLight.transform.rotation
+                = Quaternion.Euler(DayManager.instance.nightSunRotation);
         ui.SetActive(false);
     }
 }

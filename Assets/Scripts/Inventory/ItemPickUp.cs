@@ -40,4 +40,16 @@ public class ItemPickUp : MonoBehaviour
             return indicatorHeight;
         }
     }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.collider.CompareTag("Place"))
+        {
+            GameObject shadow = transform.GetChild(1).gameObject;
+            if (shadow != null)
+            {
+                shadow.SetActive(true);
+            }
+        }
+    }
 }
