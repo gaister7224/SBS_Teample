@@ -22,7 +22,7 @@ MonoBehaviour:
   isConsumable: 0
   itemType: 256
   tier: 1
-  itemImage: {fileID: 21300000, guid: fa8852460f13bf4488e21303f4c5b0b9, type: 3}
+  itemImage: {fileID: 21300000, guid: 4bb85e9d81dd972438a5d43bf3dd0a87, type: 3}
   price: 0
   coolTime: 0
   explanation: "\uCC9C\uC73C\uB85C\uB41C \uB0A1\uC740 \uC7A5\uAC11. \uC18C\uB7C9\uC758
