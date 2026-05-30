@@ -429,7 +429,7 @@ GameObject:
   - component: {fileID: 2099591892451867528}
   - component: {fileID: 7571088622774725024}
   m_Layer: 7
-  m_Name: TutorialBoss
+  m_Name: TutorialBoss2
   m_TagString: Boss
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -620,9 +620,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67e1fd528f5666846b7f3ac75a12e85e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHp: 120
-  curHp: 120
-  atk: 3
+  maxHp: 300
+  curHp: 300
+  atk: 8
   def: 0
   critical: 15
 --- !u!1 &8022215595149671705

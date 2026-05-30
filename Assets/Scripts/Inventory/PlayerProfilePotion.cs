@@ -75,6 +75,14 @@ public class PlayerProfilePotion : MonoBehaviour
         slot = null;
         itemCountText.text = "";
         itemImage.sprite = null;
+        if (hpSlot)
+        {
+            inventory.hpPotionSlot = null;
+        }
+        if(mpSlot)
+        {
+            inventory.mpPotionSlot = null;
+        }
         type = ItemType.NONE;
         add = false;
         SetColor(0);

@@ -130,6 +130,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   portalManager: {fileID: 0}
   stageManager: {fileID: 0}
+  monsterSpawnManager: {fileID: 0}
 --- !u!1 &1601576031421379611
 GameObject:
   m_ObjectHideFlags: 0
@@ -965,6 +966,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   portalManager: {fileID: 0}
+  stageManager: {fileID: 0}
   direction: 4
   toBoss: 0
 --- !u!114 &1414864463322651658
@@ -1136,7 +1138,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stageType: 6
   SpawnPrefabs:
-  - {fileID: 6839591569014979432, guid: eac0114bedb819e4da9748d90f4e0377, type: 3}
+  - {fileID: 7279627412490526026, guid: 64e33980b0b308048a31cec424ff48cf, type: 3}
   isCleared: 0
   isPortalActive: 0
   PortalObject:
