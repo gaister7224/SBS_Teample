@@ -36,6 +36,11 @@ public class TutorialExplainManager : MonoBehaviour
 
     public void Appear()
     {
+        Debug.Log("Appear");
+        if(count == 8)
+        {
+            this.gameObject.SetActive(false);
+        }
         titleText.text = data[count].title;
         keyboardImage.sprite = data[count].keyboard;
         ani.SetBool("Appear", true);

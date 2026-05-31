@@ -64,25 +64,21 @@ public class DungeonMapUI : MonoBehaviour
     {
         if (Keyboard.current == null || mapBoardPanel == null)
         {
-            Debug.Log("Keyboard.current == null || mapBoardPanel == null");
             return;
         }
 
         if (!IsDungeonPlayActive())
         {
-            Debug.Log("!IsDungeonPlayActive()");
             return;
         }
 
         if (Keyboard.current.mKey.wasPressedThisFrame)
         {
-            Debug.Log("Keyboard.current.mKey.wasPressedThisFrame");
             mapBoardPanel.Toggle(readOnly: false);
         }
 
         if (mapBoardPanel.IsOpen && Keyboard.current.escapeKey.wasPressedThisFrame)
         {
-            Debug.Log("mapBoardPanel.IsOpen && Keyboard.current.escapeKey.wasPressedThisFrame");
             mapBoardPanel.Close();
         }
     }

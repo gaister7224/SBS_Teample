@@ -1287,6 +1287,8 @@ MonoBehaviour:
     keyboard: {fileID: 21300000, guid: 679102cd603104746b5f8735f7e8e4e7, type: 3}
   - title: "\uC2A4\uD14C\uC774\uD130\uC2A4\uCC3D \uC5F4\uAE30"
     keyboard: {fileID: 21300000, guid: bd4e675c1a069194daeb7a212665b44e, type: 3}
+  - title: "\uC2A4\uD14C\uC774\uD130\uC2A4\uCC3D \uC5F4\uAE30"
+    keyboard: {fileID: 21300000, guid: bd4e675c1a069194daeb7a212665b44e, type: 3}
   titleText: {fileID: 864091452}
   keyboardImage: {fileID: 2088330200}
   count: 0
