@@ -337,6 +337,7 @@ public class PlayerAttack : MonoBehaviour
         if (!DialogueManager.instance.start)
         {
             DialogueManager.instance.OnDialogue(UIManager.Instance.storeExplainDialogue);
+            DialogueManager.instance.OnDialogueComplete -= TutorialExplainManager.instance.Appear;
             DialogueManager.instance.OnDialogueComplete += StorageZoom;
         }
     }
@@ -353,6 +354,7 @@ public class PlayerAttack : MonoBehaviour
         Time.timeScale = 0;
         yield return new WaitForSecondsRealtime((float)UIManager.Instance.storageDirector.duration);
         DialogueManager.instance.OnDialogueComplete -= StorageZoom;
+        TutorialExplainManager.instance.Appear();
         UIManager.Instance.storageDirector.gameObject.SetActive(false);
         Time.timeScale = 1;
     }
