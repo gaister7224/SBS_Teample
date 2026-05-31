@@ -31,20 +31,21 @@ public class MonsterSpawnManager : MonoBehaviour
     [HideInInspector]
     public Vector3 spawnPos;
 
+    private SealedStoneRoom currentSealedStoneRoom;
+    private bool sealedStoneWaveStarted = false;
+
     private void Awake()
     {
         instance = this;
         stageManager = StageManager.instance;
-        if(stageManager == null)
+        if (stageManager == null)
             stageManager = GameObject.Find("StageManager").GetComponent<StageManager>();
     }
 
     private void Update()
     {
         if (stageManager == null)
-        {
             return;
-        }
 
         if (stageManager.curStageCleared)
         {
@@ -55,34 +56,24 @@ public class MonsterSpawnManager : MonoBehaviour
         switch (stageManager.curStageType)
         {
             case StageType.Normal:
-                {
-                    HandleCombatStage(false);
-                    break;
-                }
+                HandleCombatStage(false);
+                break;
 
             case StageType.Boss:
-                {
-                    HandleCombatStage(true);
-                    break;
-                }
+                HandleCombatStage(true);
+                break;
 
             case StageType.Bonfire:
-                {
-                    HandleBonfireStage();
-                    break;
-                }
+                HandleBonfireStage();
+                break;
 
             case StageType.Trap:
-                {
-                    HandleTrapStage();
-                    break;
-                }
+                HandleTrapStage();
+                break;
 
             case StageType.Treasure:
-                {
-                    HandleTreasureStage();
-                    break;
-                }
+                HandleTreasureStage();
+                break;
 
             case StageType.RandomPortal:
             case StageType.ReturnPortal:
@@ -91,16 +82,12 @@ public class MonsterSpawnManager : MonoBehaviour
             case StageType.Store:
             case StageType.Shop:
             case StageType.None:
-                {
-                    HandleFreeClearStage();
-                    break;
-                }
+                HandleFreeClearStage();
+                break;
 
             case StageType.SealedStone:
-                {
-                    HandleSealedStoneStage();
-                    break;
-                }
+                HandleSealedStoneStage();
+                break;
         }
     }
 
@@ -108,15 +95,6 @@ public class MonsterSpawnManager : MonoBehaviour
     {
         if (isMonsterSpawn)
         {
-            //if (stageManager.curStagePos == Vector2Int.zero)
-            //{
-            //    Debug.Log("stageManager.curStagePos == Vector2Int.zero");
-            //    stageManager.curStageCleared = true;
-            //    stageManager.activePortal = true;
-            //    isMonsterSpawn = false;
-            //    return;
-            //}
-
             bool spawned = SpawnGrid();
 
             if (!spawned)
@@ -131,9 +109,7 @@ public class MonsterSpawnManager : MonoBehaviour
         PruneDeadMonsters();
 
         if (CurrentAliveMonsters.Count > 0)
-        {
             stageManager.activePortal = false;
-        }
         else
         {
             stageManager.activePortal = true;
@@ -151,33 +127,24 @@ public class MonsterSpawnManager : MonoBehaviour
             spawnPos.y = 1f;
 
             if (TrySpawnAt(spawnPos, 0))
-            {
                 Debug.Log("Bonfire Spawn");
-            }
 
             isMonsterSpawn = false;
         }
 
         GameManager.instance.OnShelterEnter?.Invoke();
 
-        PlayerProfile playerProfile =
-            GameObject.FindWithTag("Player").GetComponent<PlayerProfile>();
+        PlayerProfile playerProfile = GameObject.FindWithTag("Player").GetComponent<PlayerProfile>();
 
         if (playerProfile != null)
         {
             playerProfile.MPBuff(4);
 
             if (!GameManager.instance.shelterHpBan)
-            {
                 playerProfile.HPBuff(0.5f);
-            }
 
             if (!GameManager.instance.shelterActCountBan)
-            {
-                playerProfile.ActCountPlus(
-                    3,
-                    GameManager.instance.recoveryMultiplier);
-            }
+                playerProfile.ActCountPlus(3, GameManager.instance.recoveryMultiplier);
         }
     }
 
@@ -216,33 +183,91 @@ public class MonsterSpawnManager : MonoBehaviour
 
     void HandleSealedStoneStage()
     {
-        stageManager.activePortal = stageManager.SealedStoneLeft <= 0;
-        stageManager.curStageCleared = stageManager.SealedStoneLeft <= 0;
+        if (isMonsterSpawn)
+        {
+            currentSealedStoneRoom = FindCurrentSealedStoneRoom();
+            sealedStoneWaveStarted = false;
+
+            if (currentSealedStoneRoom != null && currentSealedStoneRoom.isFake)
+            {
+                // 가짜 봉인석 방: 웨이브 스폰
+                WaveMonsterSpawn wave = currentSealedStoneRoom.waveMonsterSpawn;
+
+                if (wave != null)
+                {
+                    wave.spawnPos = spawnPos;
+                    wave.StartWaves();
+                    sealedStoneWaveStarted = true;
+                }
+                else
+                {
+                    Debug.LogWarning("[MonsterSpawnManager] 가짜 봉인석 방에 WaveMonsterSpawn이 없습니다.");
+                    stageManager.curStageCleared = true;
+                    stageManager.activePortal = true;
+                }
+
+                isMonsterSpawn = false;
+                return;
+            }
+
+            // 진짜 봉인석 방: 일반 그리드 스폰
+            bool spawned = SpawnGrid();
+
+            if (!spawned)
+            {
+                stageManager.curStageCleared = true;
+                stageManager.activePortal = true;
+                isMonsterSpawn = false;
+                return;
+            }
+
+            isMonsterSpawn = false;
+        }
+
+        if (currentSealedStoneRoom != null && currentSealedStoneRoom.isFake)
+            return;
+
+        PruneDeadMonsters();
+
+        if (CurrentAliveMonsters.Count > 0)
+            stageManager.activePortal = false;
+        else
+        {
+            stageManager.activePortal = true;
+            stageManager.curStageCleared = true;
+        }
+    }
+
+    SealedStoneRoom FindCurrentSealedStoneRoom()
+    {
+        Vector3 stageWorldPos = stageManager.GridToWorld(stageManager.curStagePos);
+
+        Collider[] hits = Physics.OverlapSphere(stageWorldPos, stageManager.spacing * 0.4f);
+        foreach (var hit in hits)
+        {
+            SealedStoneRoom room = hit.GetComponentInParent<SealedStoneRoom>();
+            if (room != null)
+                return room;
+        }
+
+        return null;
     }
 
     bool TrySpawnAt(Vector3 pos, int index)
     {
         if (stageManager.curStageSpawnPrefabs == null)
-        {
             return false;
-        }
 
         if (stageManager.curStageSpawnPrefabs.Count == 0)
-        {
             return false;
-        }
 
         if (index < 0 || index >= stageManager.curStageSpawnPrefabs.Count)
-        {
             return false;
-        }
 
         GameObject prefab = stageManager.curStageSpawnPrefabs[index];
 
         if (prefab == null)
-        {
             return false;
-        }
 
         Instantiate(prefab, pos, Quaternion.identity, stageManager.transform);
         return true;
@@ -251,25 +276,16 @@ public class MonsterSpawnManager : MonoBehaviour
     bool TrySpawnRandom(Vector3 pos)
     {
         if (stageManager.curStageSpawnPrefabs == null)
-        {
             return false;
-        }
 
         if (stageManager.curStageSpawnPrefabs.Count == 0)
-        {
             return false;
-        }
 
-        int randomIndex =
-            Random.Range(0, stageManager.curStageSpawnPrefabs.Count);
-
-        GameObject prefab =
-            stageManager.curStageSpawnPrefabs[randomIndex];
+        int randomIndex = Random.Range(0, stageManager.curStageSpawnPrefabs.Count);
+        GameObject prefab = stageManager.curStageSpawnPrefabs[randomIndex];
 
         if (prefab == null)
-        {
             return false;
-        }
 
         Instantiate(prefab, pos, Quaternion.identity, stageManager.transform);
         return true;
@@ -294,13 +310,10 @@ public class MonsterSpawnManager : MonoBehaviour
         }
 
         List<GameObject> validPrefabs = new List<GameObject>();
-
         for (int i = 0; i < stageManager.curStageSpawnPrefabs.Count; i++)
         {
             if (stageManager.curStageSpawnPrefabs[i] != null)
-            {
                 validPrefabs.Add(stageManager.curStageSpawnPrefabs[i]);
-            }
         }
 
         if (validPrefabs.Count == 0)
@@ -312,7 +325,6 @@ public class MonsterSpawnManager : MonoBehaviour
 
         int gridSize = Mathf.CeilToInt(Mathf.Sqrt(validPrefabs.Count));
         float gridSpacing = 2f;
-
         int count = 0;
 
         for (int x = 0; x < gridSize; x++)
@@ -326,19 +338,9 @@ public class MonsterSpawnManager : MonoBehaviour
                 }
 
                 GameObject prefab = validPrefabs[count];
-
-                Vector3 offset = new Vector3(
-                    x * gridSpacing,
-                    0f,
-                    z * gridSpacing);
-
-                GameObject monster = Instantiate(
-                    prefab,
-                    spawnPos + offset,
-                    Quaternion.identity, transform);
-
+                Vector3 offset = new Vector3(x * gridSpacing, 0f, z * gridSpacing);
+                GameObject monster = Instantiate(prefab, spawnPos + offset, Quaternion.identity, transform);
                 CurrentAliveMonsters.Add(monster);
-
                 count++;
             }
         }
@@ -350,47 +352,25 @@ public class MonsterSpawnManager : MonoBehaviour
     void PruneDeadMonsters()
     {
         if (CurrentAliveMonsters == null)
-        {
             return;
-        }
 
         for (int i = CurrentAliveMonsters.Count - 1; i >= 0; i--)
         {
             if (CurrentAliveMonsters[i] == null)
-            {
                 CurrentAliveMonsters.RemoveAt(i);
-            }
         }
     }
 
     public void MonsterDead(GameObject enemy)
     {
-        if (dropItems == null)
-        {
+        if (dropItems == null || dropItems.Length == 0 || dropItems[0] == null)
             return;
-        }
-
-        if (dropItems.Length == 0)
-        {
-            return;
-        }
-
-        if (dropItems[0] == null)
-        {
-            return;
-        }
 
         GameObject map = GameObject.FindGameObjectWithTag("Map");
 
         if (map == null)
-        {
             return;
-        }
 
-        Instantiate(
-            dropItems[0],
-            enemy.transform.position,
-            Quaternion.identity,
-            map.transform);
+        Instantiate(dropItems[0], enemy.transform.position, Quaternion.identity, map.transform);
     }
 }
