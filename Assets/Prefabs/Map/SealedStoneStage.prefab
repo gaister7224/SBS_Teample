@@ -1815,6 +1815,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2652078531936724205}
   - component: {fileID: 3809560422600107664}
+  - component: {fileID: 8862696107089358076}
+  - component: {fileID: 2101812513903372551}
   m_Layer: 0
   m_Name: PortalManager
   m_TagString: PortalManager
@@ -1881,6 +1883,37 @@ MonoBehaviour:
   PortalEffectImage: {fileID: 0}
   CinemachineCamera: {fileID: 0}
   PlayerTransform: {fileID: 0}
+--- !u!114 &8862696107089358076
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9095803923124381983}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c96a9a0ba5c71aa4391b3c8014ab3a4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waves: []
+  waveClearDelay: 2
+  gridSpacing: 2
+  spawnPos: {x: 0, y: 0, z: 0}
+  currentAliveMonsters: []
+  currentWave: 0
+  isAllWavesCleared: 0
+--- !u!114 &2101812513903372551
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9095803923124381983}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8dd5ec41477bbd4188950d4aec997a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &255803404922264795
 PrefabInstance:
   m_ObjectHideFlags: 0
