@@ -81,7 +81,7 @@ public class CreatingCharacter : MonoBehaviour, IPointerClickHandler
         {
             UpdatePlayerPreview(GameManager.instance.profileIndex);
             pos.position = new Vector3(pos.position.x + 30, pos.position.y + 200, pos.position.z);
-            pos.localScale = new Vector3(1f, 3f, 4);
+            pos.localScale = new Vector3(0.8f, 3f, 4);
             GameManager.instance.nickName = curName;
             create = true;
             nameZone.SetActive(false);
@@ -112,7 +112,8 @@ public class CreatingCharacter : MonoBehaviour, IPointerClickHandler
 
     public void GamePlay()
     {
-        SceneManager.LoadScene("MainScene");
+        //SceneManager.LoadScene("MainScene");
+        SceneLoader.instance.LoadScene(SceneNames.MainScene);
         GameManager.instance.character1Spawn = true;
     }
 
