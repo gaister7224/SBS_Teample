@@ -9,7 +9,6 @@ public class DungeonMapUI : MonoBehaviour
     public static DungeonMapUI Instance { get; private set; }
 
     [SerializeField] MapBoardPanelView mapBoardPanel;
-
     public static DungeonMapUI EnsureSingleInstance(Transform parent)
     {
         if (Instance != null)

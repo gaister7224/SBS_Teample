@@ -1,4 +1,5 @@
 using System.Collections;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -141,6 +142,8 @@ public class DungeonMapCellView : MonoBehaviour
             {
                 ApplyMarkIconLayout();
                 var sprite = spriteSet.GetSprite(markType);
+                //string typeName = markType.ToString().ToLower();
+
                 markIcon.sprite = sprite;
                 markIcon.enabled = sprite != null;
             }
@@ -195,8 +198,23 @@ public class DungeonMapCellView : MonoBehaviour
     public void ApplyMarkClick()
     {
         var service = DungeonMapService.Instance;
-        if (service == null || service.IsReadOnly || !service.PendingMarkType.HasValue)
+        //if (service == null || service.IsReadOnly || !service.PendingMarkType.HasValue)
+        //    return;
+
+        if (service == null)
+        {
             return;
+        }
+
+        if (service.IsReadOnly)
+        {
+            return;
+        }
+
+        if (!service.PendingMarkType.HasValue)
+        {
+            return;
+        }
 
         var pending = service.PendingMarkType.Value;
         if (service.Current.TryGetMark(Index, out var existing) && existing == pending)
@@ -205,9 +223,13 @@ public class DungeonMapCellView : MonoBehaviour
             return;
         }
 
-        if (!service.ApplyMark(Index, pending))
-            return;
+        //if (!service.ApplyMark(Index, pending))
+        //    return;
 
+        if (!service.ApplyMark(Index, pending))
+        {
+            return;
+        }
         PlayMarkFeedbackOnAllGrids();
     }
 

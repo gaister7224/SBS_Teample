@@ -14,18 +14,31 @@ public class MapMarkSpriteSet : ScriptableObject
 
     public Sprite GetSprite(DungeonMapMarkType markType)
     {
-        return markType switch
+        //return markType switch
+        //{
+        //    DungeonMapMarkType.Trap => trap,
+        //    DungeonMapMarkType.Treasure => treasure,
+        //    DungeonMapMarkType.SealedStone => sealedStone,
+        //    DungeonMapMarkType.Shop => shop,
+        //    DungeonMapMarkType.Bonfire => bonfire,
+        //    DungeonMapMarkType.BuffStatue => buffStatue,
+        //    DungeonMapMarkType.ReturnPortal => backPortal,
+        //    DungeonMapMarkType.RandomPortal => randomPortal != null ? randomPortal : backPortal,
+        //    _ => null
+        //};
+
+        switch (markType)
         {
-            DungeonMapMarkType.Trap => trap,
-            DungeonMapMarkType.Treasure => treasure,
-            DungeonMapMarkType.SealedStone => sealedStone,
-            DungeonMapMarkType.Shop => shop,
-            DungeonMapMarkType.Bonfire => bonfire,
-            DungeonMapMarkType.BuffStatue => buffStatue,
-            DungeonMapMarkType.ReturnPortal => backPortal,
-            DungeonMapMarkType.RandomPortal => randomPortal != null ? randomPortal : backPortal,
-            _ => null
-        };
+            case DungeonMapMarkType.Trap: return trap;
+            case DungeonMapMarkType.Treasure: return treasure;
+            case DungeonMapMarkType.SealedStone: return sealedStone;
+            case DungeonMapMarkType.Shop: return shop;
+            case DungeonMapMarkType.Bonfire: return bonfire;
+            case DungeonMapMarkType.BuffStatue: return buffStatue;
+            case DungeonMapMarkType.ReturnPortal: return backPortal;
+            case DungeonMapMarkType.RandomPortal: return randomPortal;
+            default: return null;
+        }
     }
 
     public static MapMarkSpriteSet LoadFromResources()

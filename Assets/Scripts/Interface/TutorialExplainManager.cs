@@ -36,7 +36,6 @@ public class TutorialExplainManager : MonoBehaviour
 
     public void Appear()
     {
-        Debug.Log("Appear");
         if(count == 8)
         {
             this.gameObject.SetActive(false);

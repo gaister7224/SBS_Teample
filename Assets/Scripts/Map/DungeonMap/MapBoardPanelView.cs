@@ -16,6 +16,8 @@ public class MapBoardPanelView : MonoBehaviour
     [SerializeField] public MapMarkSpriteSet markSpriteSet;
     [SerializeField] int dungeonIdOverride;
 
+    InventoryMain inventory;
+
     bool built;
     bool isOpen;
 
@@ -42,6 +44,10 @@ public class MapBoardPanelView : MonoBehaviour
 
     public void Open(bool readOnly)
     {
+        inventory = GameObject.Find("InventorySystem").GetComponent<InventoryMain>();
+        inventory.playerProfile.SetActive(false);
+        inventory.playerAttack.uiClicking = true;
+
         EnsureService();
         DungeonMapService.Instance.IsReadOnly = readOnly;
 
@@ -57,6 +63,7 @@ public class MapBoardPanelView : MonoBehaviour
 
         if (panelRoot != null)
         {
+            MapBoardPanelFactory.ApplyPanelBackground(panelRoot);
             panelRoot.SetActive(true);
             panelRoot.transform.SetAsLastSibling();
         }
@@ -83,6 +90,9 @@ public class MapBoardPanelView : MonoBehaviour
     public void Close()
     {
         isOpen = false;
+        inventory = GameObject.Find("InventorySystem").GetComponent<InventoryMain>();
+        inventory.playerProfile.SetActive(true);
+        inventory.playerAttack.uiClicking = false;
 
         if (ActiveMarkingPanel == this)
             ActiveMarkingPanel = null;
@@ -109,14 +119,64 @@ public class MapBoardPanelView : MonoBehaviour
 
     void EnsureGrid(bool allowMarking)
     {
-        if (gridBuilder == null && mapContentRoot != null)
-            gridBuilder = mapContentRoot.GetComponent<DungeonMapGridBuilder>();
+        if (mapContentRoot != null)
+        {
+            var gridTransform = mapContentRoot.transform.Find("Grid");
+            if (gridTransform != null)
+                gridBuilder = gridTransform.GetComponent<DungeonMapGridBuilder>();
+
+            // Legacy panels had GridBuilder directly on MapContent; migrate to child Grid so Background survives rebuild.
+            var legacyBuilder = mapContentRoot.GetComponent<DungeonMapGridBuilder>();
+            if (legacyBuilder != null)
+            {
+                if (gridBuilder == null)
+                {
+                    var gridObject = new GameObject("Grid", typeof(RectTransform));
+                    gridObject.transform.SetParent(mapContentRoot.transform, false);
+                    var gridRect = gridObject.GetComponent<RectTransform>();
+                    gridRect.anchorMin = Vector2.zero;
+                    gridRect.anchorMax = Vector2.one;
+                    gridRect.offsetMin = Vector2.zero;
+                    gridRect.offsetMax = Vector2.zero;
+                    gridRect.pivot = new Vector2(0.5f, 0.5f);
+                    gridRect.anchoredPosition = Vector2.zero;
+                    gridObject.AddComponent<RectMask2D>();
+                    gridBuilder = gridObject.AddComponent<DungeonMapGridBuilder>();
+                }
+
+                Destroy(legacyBuilder);
+            }
+        }
 
         if (gridBuilder == null && mapContentRoot != null)
-            gridBuilder = mapContentRoot.AddComponent<DungeonMapGridBuilder>();
+        {
+            var gridObject = new GameObject("Grid", typeof(RectTransform));
+            gridObject.transform.SetParent(mapContentRoot.transform, false);
+            var gridRect = gridObject.GetComponent<RectTransform>();
+            gridRect.anchorMin = new Vector2(0.5f, 0.5f);
+            gridRect.anchorMax = new Vector2(0.5f, 0.5f);
+            gridRect.pivot = new Vector2(0.5f, 0.5f);
+            gridRect.sizeDelta = new Vector2(
+                MapBoardPanelSettings.MapAreaWidth,
+                MapBoardPanelSettings.PanelSize - MapBoardPanelSettings.MapAreaTopInset - MapBoardPanelSettings.MapAreaBottomInset);
+            gridRect.anchoredPosition = new Vector2(
+                0f,
+                (MapBoardPanelSettings.MapAreaBottomInset - MapBoardPanelSettings.MapAreaTopInset) * 0.5f);
+            gridObject.AddComponent<RectMask2D>();
+            gridBuilder = gridObject.AddComponent<DungeonMapGridBuilder>();
+        }
 
         if (gridBuilder == null)
             return;
+
+        // 안전장치: MapContent 하위에 GridBuilder가 중복으로 남아있으면(레거시/RequireComponent 영향)
+        // 아이콘/그리드가 배경 밖에 같이 그려질 수 있어 모두 정리한다.
+        var allBuilders = mapContentRoot.GetComponentsInChildren<DungeonMapGridBuilder>(true);
+        foreach (var b in allBuilders)
+        {
+            if (b != null && b != gridBuilder)
+                Destroy(b);
+        }
 
         gridBuilder.ConfigureForMapBoard(allowMarking);
 
@@ -140,10 +200,13 @@ public class MapBoardPanelView : MonoBehaviour
         if (panelRect != null)
             MinimapHudLayout.ApplyFullscreenPanel(panelRect);
 
+        MapBoardPanelFactory.ApplyPanelBackground(panelRoot, warnOnFailure: false);
+
         if (mapContentRoot == null)
             return;
 
         var contentRect = mapContentRoot.GetComponent<RectTransform>();
+        
         if (contentRect != null)
         {
             MinimapHudLayout.ApplyCenteredMapContent(
@@ -152,7 +215,27 @@ public class MapBoardPanelView : MonoBehaviour
 
             if (mapContentRoot.GetComponent<RectMask2D>() == null)
                 mapContentRoot.AddComponent<RectMask2D>();
+
+            // ───────────────── [강력한 치트키 코드 추가] ─────────────────
+            // 다른 맵으로 이동할 때 불필요하게 부활한 검은 배경(dim)이나 
+            // 중복 생성된 배경 오브젝트가 있다면 이름으로 찾아서 강제로 파괴합니다.
+
+            // 1. 만약 panelRoot 자체에 Image 컴포넌트(검은판)가 다시 붙었다면 제거
+            var panelImage = mapContentRoot.GetComponent<Image>();
+            if (panelImage != null)
+            {
+                panelImage.color = new Color(1f, 1f, 1f, 0.004f);
+                panelImage.raycastTarget = true;
+            }
         }
+        float targetX = -contentRect.sizeDelta.x * 0.5f + MapBoardPanelSettings.MapAreaInsetX;
+        float targetY = contentRect.sizeDelta.y * 0.5f - MapBoardPanelSettings.MapAreaTopInset;
+
+        if(StageManager.instance.Tutorial)
+            contentRect.anchoredPosition = new Vector2(targetX + 180, targetY - 60);
+        if (!StageManager.instance.Tutorial)
+            contentRect.anchoredPosition = new Vector2(targetX + 393, targetY - 267);
+
     }
 
     void EnsureMarkingInput()
@@ -207,6 +290,15 @@ public class MapBoardPanelView : MonoBehaviour
 
         markingToolbar.transform.SetAsLastSibling();
         markingToolbar.SetActive(visible);
+
+        if (visible)
+        {
+            var toolbarRect = markingToolbar.GetComponent<RectTransform>();
+            if (toolbarRect != null)
+            {
+                toolbarRect.anchoredPosition += new Vector2(0f, 180f);
+            }
+        }
 
         if (visible)
             RefreshToolbarSprites();
