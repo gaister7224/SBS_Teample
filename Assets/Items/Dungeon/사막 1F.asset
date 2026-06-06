@@ -15,5 +15,4 @@ MonoBehaviour:
   dungeonNumber: 4
   dungeonName: "\uC0AC\uB9C9 1F"
   mapPrefab: {fileID: 0}
-  portalPrefab: {fileID: 0}
-  spawnOffset: {x: 300, y: 0, z: 1500}
+  floor: 1

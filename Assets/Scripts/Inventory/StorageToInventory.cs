@@ -159,11 +159,12 @@ public class StorageToInventory : MonoBehaviour
                         }
                     }
                 }
-                GameManager.instance.level += GameManager.instance.curLevel;
-                GameManager.instance.curLevel = 0;
-                UIManager.Instance.profileLevelText.text = "LV." + GameManager.instance.level.ToString();
-                GameManager.instance.itemGetAll = true;
+                
             }
+            GameManager.instance.level += GameManager.instance.curLevel;
+            GameManager.instance.curLevel = 0;
+            UIManager.Instance.profileLevelText.text = "LV." + GameManager.instance.level.ToString();
+            GameManager.instance.itemGetAll = true;
         }
         
     }

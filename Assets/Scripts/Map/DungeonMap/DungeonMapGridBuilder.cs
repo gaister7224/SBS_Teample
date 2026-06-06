@@ -123,6 +123,17 @@ public class DungeonMapGridBuilder : MonoBehaviour
             cellPrefab = CreateRuntimeCellPrefab();
 
         var positions = GetStagePositions();
+        
+        if (DungeonMapService.Instance != null && DungeonMapService.Instance.Current != null)
+        {
+            // 현재 로드된 던전 데이터의 '모든 유효 방 좌표 목록'을 가져오는 내장 함수가 있다면 
+            // 아래처럼 positions 리스트에 강제로 주입해 줍니다.
+            // (예: data.GetAllCellPositions() 또는 세이브 데이터에 저장된 키값들)
+            
+            // 만약 Service 내부에 전체 좌표를 들고오는 창구가 있다면 여기에 병합해 주는 것이 
+            // 마을 게시판이나 전체 맵에서 통째로 맵이 다 그려지는 핵심 열쇠가 됩니다!
+        }
+
         if (positions.Count == 0)
         {
             built = false;
@@ -207,6 +218,7 @@ public class DungeonMapGridBuilder : MonoBehaviour
 
     HashSet<Vector2Int> GetStagePositions()
     {
+
         var resolved = DungeonMapLayoutResolver.CollectStagePositions();
         if (resolved.Count > 0)
             return resolved;
@@ -274,6 +286,7 @@ public class DungeonMapGridBuilder : MonoBehaviour
 
         foreach (var pair in cells)
         {
+            // 순정 상태의 깔끔한 리프레시 기능만 남겨둡니다.
             pair.Value.Refresh(data, selected, markSpriteSet, showPlayerPin, allowCellInteraction);
 
             if (!centerOnPlayer || !data.PlayerPosition.HasValue)
@@ -390,4 +403,6 @@ public class DungeonMapGridBuilder : MonoBehaviour
         image.raycastTarget = false;
         return go;
     }
+
+    
 }

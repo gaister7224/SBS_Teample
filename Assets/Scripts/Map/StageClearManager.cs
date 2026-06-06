@@ -20,6 +20,11 @@ public class StageClearManager : MonoBehaviour
             Debug.Log("clear");
             if(!GameManager.instance.tutorialClear)
             {
+                if (DungeonMapService.Instance != null)
+                {
+                    DungeonMapService.Instance.EnsureLoaded(1);
+                }
+
                 Time.timeScale = 0;
                 UIManager.Instance.jobChoiceUI.SetActive(true);
                 other.GetComponent<PlayerAttack>().uiClicking = true;
@@ -46,8 +51,6 @@ public class StageClearManager : MonoBehaviour
             GameManager.instance.mapState = MapState.Village;
             MinimapManager.ApplyMainSceneMinimapMode();
             DungeonMapService.Instance?.FlushSave();
-            //GameObject map = GameObject.FindGameObjectWithTag("Map");
-            //Destroy(map);
             GameManager.instance.spawnedDungeon.spawnedDungeonInstance = null;
             GameManager.instance.spawnedDungeon = null;
             MapDestroy();

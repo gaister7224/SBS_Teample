@@ -52,6 +52,7 @@ public class GameManager : MonoBehaviour
     public bool itemGetAll;
     public bool skillInstall;
     public int curDungeonNumber;
+    public int curDungeonFloorNumber;
     public bool installImpossibleStart;
     public float goldMultiplier;
     public int buffStoneGetStatusNumber;

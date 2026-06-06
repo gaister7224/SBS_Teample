@@ -8,6 +8,8 @@ public class DungeonMapService : MonoBehaviour
 
     [SerializeField] float saveDebounceSeconds = 0.3f;
 
+    //던전 ID별로 탐험 데이터를 따로따로 기억할 보관함(딕셔너리)
+    [SerializeField] private Dictionary<int, DungeonMapData> _dungeonDataCache = new();
     public DungeonMapData Current { get; private set; } = new();
     public Vector2Int? SelectedCell { get; private set; }
     public DungeonMapMarkType? PendingMarkType { get; private set; }
@@ -68,10 +70,18 @@ public class DungeonMapService : MonoBehaviour
     /// </summary>
     public void EnsureLoaded(int dungeonId)
     {
-        if (loadedDungeonId == dungeonId && Current.DungeonId == dungeonId)
-            return;
+        // 1. 만약 보관함에 이 던전 ID의 데이터가 없다면 새로 만들어서 넣어줍니다.
+        if (!_dungeonDataCache.ContainsKey(dungeonId))
+        {
+            var newData = new DungeonMapData();
+            newData.SetDungeonId(dungeonId);
+            _dungeonDataCache[dungeonId] = newData;
+        }
 
-        LoadDungeon(dungeonId);
+        // 2. 현재 활성화된 데이터를 보관함에 있던 해당 던전 데이터로 교체해줍니다!
+        Current = _dungeonDataCache[dungeonId];
+
+        Debug.Log($"[DungeonMapService] 메모리 캐시에서 던전 ID {dungeonId} 데이터를 로드했습니다.");
     }
 
     public void LoadDungeon(int dungeonId)

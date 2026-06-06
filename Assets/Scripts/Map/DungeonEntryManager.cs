@@ -52,6 +52,7 @@ public class DungeonEntryManager : MonoBehaviour, IPointerClickHandler
             Time.timeScale = 1f;
             
             GameManager.instance.curDungeonNumber = data.dungeonNumber;
+            GameManager.instance.curDungeonFloorNumber = data.floor;
             
             GameManager.instance.dayEnd = false;
             GameManager.instance.itemGetAll = false;
@@ -87,6 +88,20 @@ public class DungeonEntryManager : MonoBehaviour, IPointerClickHandler
             {
                 entryTransform = child;
                 break;
+            }
+            
+            if(child.CompareTag("NoneStage"))
+            {
+                Transform entryChild = child.GetComponentInChildren<Transform>();
+                foreach (Transform _child in entryChild)
+                {
+                    if (_child.CompareTag("DungeonEntry"))
+                    {
+                        entryTransform = _child;
+                        break;
+                    }
+                }
+                    
             }
         }
 

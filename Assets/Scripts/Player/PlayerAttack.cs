@@ -78,8 +78,8 @@ public class PlayerAttack : MonoBehaviour
                 UIManager.Instance.stampJobButton.onClick.AddListener(StampChoice);
         }
 
-        //????? ???
-        StateDecision(1f, 0f, 0f, false, Job.Sword, 10, 3, 0, 0, swordAnimation);
+        //StateDecision(1f, 0f, 0f, false, Job.Sword, 10, 3, 0, 0, swordAnimation);
+        StateDecision(1f, 0f, 0f, false, Job.Sword, 10, 300, 0, 0, swordAnimation);
     }
 
     // Update is called once per frame
