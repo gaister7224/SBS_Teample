@@ -36,8 +36,21 @@ public class DungeonMapData
     public Vector2Int? PlayerPosition { get; private set; }
 
     public event Action OnChanged;
+    public HashSet<Vector2Int> ValidCells { get; private set; } = new();
 
-    public void SetDungeonId(int dungeonId) => DungeonId = dungeonId;
+    public bool IsVisited { get; set; } = false;
+
+    public void SetValidCells(HashSet<Vector2Int> cells)
+    {
+        ValidCells = new HashSet<Vector2Int>(cells);
+        NotifyChanged();
+    }
+    public void SetDungeonId(int dungeonId)
+    {
+        DungeonId = dungeonId;
+        IsVisited = true; // ID가 설정되면 방문한 것으로 간주
+        NotifyChanged();
+    }
 
     public void Reveal(Vector2Int cell)
     {
@@ -88,6 +101,7 @@ public class DungeonMapData
         Revealed.Clear();
         Marks.Clear();
         PlayerPosition = null;
+        IsVisited = false;
         NotifyChanged();
     }
 

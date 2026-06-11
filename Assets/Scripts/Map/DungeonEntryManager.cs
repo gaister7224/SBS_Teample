@@ -59,18 +59,25 @@ public class DungeonEntryManager : MonoBehaviour, IPointerClickHandler
             GameManager.instance.mapState = MapState.Stage;
             MinimapManager.ApplyMainSceneMinimapMode();
 
-            if (DungeonMapService.Instance == null)
-            {
-                var serviceObject = new GameObject("DungeonMapService");
-                serviceObject.AddComponent<DungeonMapService>();
-            }
-            DungeonMapService.Instance.LoadDungeon(data.dungeonNumber);
-            DungeonMapUiInstaller.EnsureMapBoardUi();
-
-            
-
-            StartCoroutine(PlayerMove(0.5f));
+            StartCoroutine(SetupAndLoadDungeon(data)); ;
         }
+    }
+
+    private IEnumerator SetupAndLoadDungeon(DungeonData data)
+    {
+        if (DungeonMapService.Instance == null)
+        {
+            var serviceObject = new GameObject("DungeonMapService");
+            serviceObject.AddComponent<DungeonMapService>();
+            yield return null; // 생성 후 다음 프레임까지 대기 (Awake 실행 보장)
+        }
+
+        int targetMapId = DungeonMapService.GetDungeonMapId(data.dungeonNumber, data.floor);
+        DungeonMapService.Instance.LoadDungeon(targetMapId);
+
+        //DungeonMapService.Instance.LoadDungeon(data.dungeonNumber);
+        DungeonMapUiInstaller.EnsureMapBoardUi();
+        StartCoroutine(PlayerMove(0.5f));
     }
 
     private IEnumerator PlayerMove(float delay)

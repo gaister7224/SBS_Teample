@@ -82,8 +82,8 @@ public static class DungeonMapLayoutResolver
         if (StageManager.instance != null)
             StageManager.instance.RebuildStagePositions();
 
-        foreach (var grid in Object.FindObjectsByType<DungeonMapGridBuilder>(FindObjectsSortMode.None))
-            grid.ForceRebuild();
+        //foreach (var grid in Object.FindObjectsByType<DungeonMapGridBuilder>(FindObjectsSortMode.None))
+        //    grid.ForceRebuild();
 
         SyncPlayerPosition();
     }
