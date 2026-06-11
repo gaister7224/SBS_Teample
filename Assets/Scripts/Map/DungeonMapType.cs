@@ -4,6 +4,9 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "MapType", menuName = "Add MapType")]
 public class DungeonMapType : ScriptableObject
 {
+    [Header("스테이지 크기")]
+    public int stageSize;
+
     [Header("맵 프리팹")]
     public GameObject[] mapPrefab;
 
