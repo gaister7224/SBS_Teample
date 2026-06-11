@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 854b780e23d92874b92f948b9e817dd4, type: 3}
+  m_Name: "\uD3D0\uAD11 \uB358\uC804 2\uCE35"
+  m_EditorClassIdentifier: 
+  stageSize: 12
+  mapPrefab:
+  - {fileID: 2619334703123621966, guid: e3ee7a9894fb6e745964e54dbb501bc7, type: 3}
+  - {fileID: 2619334703123621966, guid: 353ea65809b425841a05bdfb1f94b72f, type: 3}
+  - {fileID: 2619334703123621966, guid: fcdd8c6f399c9eb4aad768dc5bc0025d, type: 3}
+  - {fileID: 2619334703123621966, guid: 9a321acc0cc1fe648a0811b5b3cd1ef4, type: 3}
+  - {fileID: 2619334703123621966, guid: 1ce88f6b9d73df64c865d495d578e115, type: 3}
+  - {fileID: 2619334703123621966, guid: 3da9d2620cae6b24293b1f6eee5079aa, type: 3}
+  - {fileID: 2619334703123621966, guid: 27879d518414c104cb9e48db9a870536, type: 3}
+  - {fileID: 2619334703123621966, guid: 1f1178efe564fe74c9c264d5649f9803, type: 3}
+  - {fileID: 2619334703123621966, guid: b7ab20b399a8d9c4ab8d81a44ad3c795, type: 3}
+  - {fileID: 2619334703123621966, guid: c7a5563464e673e47994e11ae4618f85, type: 3}
+  - {fileID: 2619334703123621966, guid: e616edc21ac447144baad3ba5f60526e, type: 3}
+  bossMapPrefab: {fileID: 2619334703123621966, guid: dfbf6f4a30574c24ea5345b27d3913f9, type: 3}
+  mapCount: 0000000000000000010000000100000001000000010000000100000001000000020000000400000000000000
