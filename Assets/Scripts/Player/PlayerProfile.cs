@@ -373,6 +373,7 @@ public class PlayerProfile : PlayerState
             {
                 //curHp -= damage * (1 - curDEF);
                 curHp -= damage * (100f / (100f + curDEF));
+                ani.SetTrigger("Hit");
                 noDamage = true;
             }
 
@@ -387,8 +388,8 @@ public class PlayerProfile : PlayerState
 
     IEnumerator NoDamageReMove()
     {
-        Debug.Log("???? ??");
         yield return new WaitForSeconds(0.4f);
+        ani.ResetTrigger("Hit");
         noDamage = false;
     }
 

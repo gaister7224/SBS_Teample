@@ -1991,6 +1991,7 @@ MonoBehaviour:
   itemGetAll: 0
   skillInstall: 0
   curDungeonNumber: 2
+  curDungeonFloorNumber: 0
   installImpossibleStart: 0
   goldMultiplier: 0
   buffStoneGetStatusNumber: 0

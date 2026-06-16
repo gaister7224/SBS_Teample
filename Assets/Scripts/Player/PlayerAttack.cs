@@ -80,6 +80,8 @@ public class PlayerAttack : MonoBehaviour
 
         //StateDecision(1f, 0f, 0f, false, Job.Sword, 10, 3, 0, 0, swordAnimation);
         StateDecision(1f, 0f, 0f, false, Job.Sword, 10, 300, 0, 0, swordAnimation);
+        //StateDecision(0.5f, 10.0f, 10.0f, false, Job.Bow, 8, 3, -10, 1, bowAnimation);
+        //StateDecision(2.5f, 10.0f, 5.0f, false, Job.Stamp, 7, 3, 0, 2, stampAnimation);
     }
 
     // Update is called once per frame
