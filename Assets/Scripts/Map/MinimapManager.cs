@@ -17,11 +17,10 @@ public class MinimapManager : MonoBehaviour
     public GameObject MapStagePrefab => MapStageImage;
     public MapMarkSpriteSet MarkSpriteSet => markSpriteSet;
 
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
-    static void BootstrapForMainScene()
+    //[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+    public static void BootstrapForMainScene()
     {
-        if (SceneManager.GetActiveScene().name != "MainScene")
-            return;
+        Debug.Log("BootstrapForMainScene");
 
         EnsureRuntimeInstance();
         instance?.BootstrapMainScene();
@@ -67,6 +66,7 @@ public class MinimapManager : MonoBehaviour
 
     void BootstrapMainScene()
     {
+        Debug.Log("BootstrapMainScene");
         EnsureDungeonMapService();
         ApplyMainSceneMinimapMode();
         DungeonMapUiInstaller.EnsureMapBoardUi();
@@ -74,9 +74,6 @@ public class MinimapManager : MonoBehaviour
 
     public static void ApplyMainSceneMinimapMode()
     {
-        if (SceneManager.GetActiveScene().name != "MainScene")
-            return;
-
         MinimapHudLayout.EnsureMiniMapCanvas();
 
         if (IsVillageMapState())

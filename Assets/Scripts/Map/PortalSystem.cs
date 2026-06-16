@@ -80,6 +80,8 @@ public class PortalSystem : MonoBehaviour
         player.transform.position = portalManager.PlayerTpSpotTransform.position;
         portalManager.MainCameraObject.transform.position = portalManager.MainCameraTpSpotTransform.position;
         portalManager.isCleared = true;
+        if(!GameManager.instance.tutorialClear)
+            TutorialExplainManager.instance.Back();
 
         switch (direction)
         {

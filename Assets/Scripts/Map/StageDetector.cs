@@ -72,7 +72,6 @@ public class StageDetector : MonoBehaviour
         if (!other.CompareTag("Player"))
             return;
 
-        Debug.Log("player entry");
         // Awake 에서 stageManager 가 null 이었을 경우 재시도
         if (stageManager == null)
         {

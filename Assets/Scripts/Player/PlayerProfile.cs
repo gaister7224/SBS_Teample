@@ -373,6 +373,7 @@ public class PlayerProfile : PlayerState
             {
                 //curHp -= damage * (1 - curDEF);
                 curHp -= damage * (100f / (100f + curDEF));
+                ani.SetTrigger("Hit");
                 noDamage = true;
             }
 
@@ -387,8 +388,8 @@ public class PlayerProfile : PlayerState
 
     IEnumerator NoDamageReMove()
     {
-        Debug.Log("???? ??");
         yield return new WaitForSeconds(0.4f);
+        ani.ResetTrigger("Hit");
         noDamage = false;
     }
 
@@ -437,7 +438,7 @@ public class PlayerProfile : PlayerState
         {
             transform.position = nearestEntry.transform.position;
         }
-
+        Debug.Log(nearestEntry.name);
         curHp = maxHp;
         
     }
@@ -446,9 +447,23 @@ public class PlayerProfile : PlayerState
     {
         GameObject[] items = GameObject.FindGameObjectsWithTag("Item");
 
+        GameObject[] enemys = GameObject.FindGameObjectsWithTag("Enemy");
+
         for(int i = 0; i < items.Length; i++)
         {
             Destroy(items[i]);
+        }
+
+        for(int i = 0;i < enemys.Length; i++)
+        {
+            Destroy(enemys[i]);
+        }
+
+        GameObject boss = GameObject.FindWithTag("Boss");
+
+        if (boss != null)
+        {
+            Destroy(boss);
         }
     }
 

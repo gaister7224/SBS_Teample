@@ -180,6 +180,7 @@ public class InventorySlot : MonoBehaviour, IPointerClickHandler, IPointerEnterH
                 GameManager.instance.gold += bounusGold;
                 inventory.goldText.text = "Gold : " + GameManager.instance.gold.ToString();
                 itemCount--;
+                textCount.text = itemCount.ToString();
                 if (itemCount <= 0)
                 {
                     ClearSlot();

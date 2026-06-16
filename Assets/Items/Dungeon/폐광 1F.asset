@@ -15,3 +15,4 @@ MonoBehaviour:
   dungeonNumber: 2
   dungeonName: "\uD3D0\uAD11 1F"
   mapPrefab: {fileID: 2491353122495895482, guid: 86ebae51297451d4ca8ec3ac3e3df582, type: 3}
+  floor: 1

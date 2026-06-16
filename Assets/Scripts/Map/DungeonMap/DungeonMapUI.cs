@@ -8,8 +8,7 @@ public class DungeonMapUI : MonoBehaviour
 {
     public static DungeonMapUI Instance { get; private set; }
 
-    [SerializeField] MapBoardPanelView mapBoardPanel;
-
+    public MapBoardPanelView mapBoardPanel;
     public static DungeonMapUI EnsureSingleInstance(Transform parent)
     {
         if (Instance != null)
@@ -63,16 +62,24 @@ public class DungeonMapUI : MonoBehaviour
     void Update()
     {
         if (Keyboard.current == null || mapBoardPanel == null)
+        {
             return;
+        }
 
         if (!IsDungeonPlayActive())
+        {
             return;
+        }
 
         if (Keyboard.current.mKey.wasPressedThisFrame)
+        {
             mapBoardPanel.Toggle(readOnly: false);
+        }
 
         if (mapBoardPanel.IsOpen && Keyboard.current.escapeKey.wasPressedThisFrame)
+        {
             mapBoardPanel.Close();
+        }
     }
 
     static bool IsDungeonPlayActive()

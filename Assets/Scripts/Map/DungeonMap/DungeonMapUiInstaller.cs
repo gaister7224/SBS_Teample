@@ -102,6 +102,7 @@ public class DungeonMapUiInstaller : MonoBehaviour
             return;
 
         MinimapHudLayout.ApplyFullscreenPanel(panel.panelRoot.GetComponent<RectTransform>());
+        MapBoardPanelFactory.ApplyPanelBackground(panel.panelRoot);
     }
 
     static void EnsureDungeonMapUiRoot(DungeonMapUI mapUi, Canvas rootCanvas)

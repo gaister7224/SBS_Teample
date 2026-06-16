@@ -78,6 +78,11 @@ public class InventoryMain : InventoryBase
             if (!IsInventoryActive && currentUI == UIType.None && GameManager.instance.mapState == MapState.Village)
             {
                 OpenInventory();
+
+                if(!GameManager.instance.inventoryTutorial)
+                {
+                    TutorialExplainManager.instance.Back();
+                }
             }
             else if (IsInventoryActive && currentUI == UIType.Inventory)
             {
@@ -89,6 +94,7 @@ public class InventoryMain : InventoryBase
                     {
                         DialogueManager.instance.OnDialogue(UIManager.Instance.statusExplainDialogue);
                         GameManager.instance.inventoryTutorial = true;
+                        DialogueManager.instance.OnDialogueComplete += TutorialExplainManager.instance.Appear;
                     }
                 }
             }

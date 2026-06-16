@@ -88,7 +88,10 @@ public class ItemRaycast : MonoBehaviour
             if (inventory.currentUI == UIType.None)
             {
                 Window(0f, storageInventory, true, false, true, UIType.Chest, isStorageActive, true);
-
+                if(!GameManager.instance.storageTutorial)
+                {
+                    TutorialExplainManager.instance.Back();
+                }
             }
             else if (inventory.currentUI == UIType.Chest)
             {
@@ -100,6 +103,7 @@ public class ItemRaycast : MonoBehaviour
                     {
                         DialogueManager.instance.OnDialogue(UIManager.Instance.inventoryExplainDialogue);
                         GameManager.instance.storageTutorial = true;
+                        DialogueManager.instance.OnDialogueComplete += TutorialExplainManager.instance.Appear;
                     }
                 }
             }

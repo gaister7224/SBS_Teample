@@ -6,7 +6,6 @@ using UnityEngine.UI;
 /// <summary>
 /// M키 대형 지도: 클릭 위치로 셀을 찾아 마킹/삭제합니다.
 /// </summary>
-[RequireComponent(typeof(DungeonMapGridBuilder))]
 public class MapBoardMarkingInput : MonoBehaviour, IPointerClickHandler
 {
     static readonly List<RaycastResult> RaycastHits = new();
@@ -16,6 +15,7 @@ public class MapBoardMarkingInput : MonoBehaviour, IPointerClickHandler
 
     void Awake()
     {
+        // GridBuilder는 BindGrid()로 주입될 수도 있으므로 Awake에서는 없어도 동작해야 한다.
         grid = GetComponent<DungeonMapGridBuilder>();
         EnsureClickSurface();
     }
@@ -38,12 +38,25 @@ public class MapBoardMarkingInput : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
+  
         if (MapBoardPanelView.ActiveMarkingPanel == null)
+        {
             return;
+        }
 
         var service = DungeonMapService.Instance;
-        if (service == null || service.IsReadOnly || grid == null)
+        if (service == null)
+        {
             return;
+        }
+        if (service.IsReadOnly)
+        {
+            return;
+        }
+        if (grid == null)
+        {
+            return;
+        }
 
         var cell = ResolveCell(eventData);
         if (cell == null)

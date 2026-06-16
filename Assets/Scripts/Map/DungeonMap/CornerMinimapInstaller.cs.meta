@@ -1,2 +1,13 @@
 fileFormatVersion: 2
 guid: f27cc0718de1882479ab14d86c832d7c
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - legacyMinimapImage: {instanceID: 0}
+  - miniMapBackground: {fileID: 21300000, guid: 96fd11ef8e7068e47b969b25b5c0e2bc, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

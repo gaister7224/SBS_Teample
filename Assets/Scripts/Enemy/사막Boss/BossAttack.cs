@@ -28,6 +28,7 @@ public class BossAttack : MonoBehaviour
     private bool spawn;
 
     private BossStatus bossStatus;
+    [SerializeField] private Animator ani;
     private void Awake()
     {
         agent = GetComponent<BehaviorGraphAgent>();
@@ -85,6 +86,7 @@ public class BossAttack : MonoBehaviour
     }
     public void Attack1()
     {
+        ani.SetTrigger("Attack");
         StartCoroutine(Attack1Routine());
         agent.SetVariableValue("coolTime", 1.5f);
     }
@@ -93,23 +95,27 @@ public class BossAttack : MonoBehaviour
     {
         //StartCoroutine(Attack2Routine());
         attack2Count = 0;
+        ani.SetTrigger("Attack");
         agent.SetVariableValue("coolTime", 1.5f);
         InvokeRepeating("Attack2Create", 0.1f, 0.1f);
     }
 
     public void Attack3()
     {
+        ani.SetTrigger("Attack");
         StartCoroutine(Attack3Routine());
         agent.SetVariableValue("coolTime", 3.0f);
     }
 
     public void Attack4()
     {
+        ani.SetTrigger("Attack");
         StartCoroutine(Attack4Routine());
         agent.SetVariableValue("coolTime", 1.5f);
     }
     public void Attack5()
     {
+        ani.SetTrigger("Attack");
         StartCoroutine(Attack5Routine());
         agent.SetVariableValue("coolTime", 3.0f);
     }

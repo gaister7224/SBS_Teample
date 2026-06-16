@@ -1,4 +1,5 @@
 using System.Collections;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -105,55 +106,42 @@ public class DungeonMapCellView : MonoBehaviour
         spriteSet = marks;
     }
 
+    public void SetPlayerIcon(bool active)
+    {
+        playerPin.enabled = true;
+    }
+
     public void Refresh(DungeonMapData data, Vector2Int? selectedCell, MapMarkSpriteSet marks,
         bool showPlayerPin = true, bool allowInteraction = true)
     {
-        if (marks != null)
-            spriteSet = marks;
+        if (data == null) return;
+        if (marks != null) spriteSet = marks;
 
-        isRevealed = data != null && data.IsRevealed(Index);
+        isRevealed = data.IsRevealed(Index);
         isSelected = selectedCell.HasValue && selectedCell.Value == Index;
-        showPlayer = showPlayerPin && data != null && data.PlayerPosition.HasValue && data.PlayerPosition.Value == Index;
+        showPlayer = showPlayerPin && data.PlayerPosition.HasValue && data.PlayerPosition.Value == Index;
 
-        if (revealedImage != null)
-            revealedImage.color = isRevealed ? revealedColor : hiddenColor;
+        // 색상 적용 (기존 로직)
+        var targetColor = isRevealed ? revealedColor : hiddenColor;
+        if (revealedImage != null) revealedImage.color = targetColor;
+        if (backgroundImage != null && backgroundImage != revealedImage) backgroundImage.color = targetColor;
 
-        if (backgroundImage != null && backgroundImage != revealedImage)
-            backgroundImage.color = isRevealed ? revealedColor : hiddenColor;
-
-        if (backgroundImage != null)
+        // [중요] 마크 갱신 로직: 데이터에서 직접 가져오기
+        if (data.TryGetMark(Index, out var markType))
         {
-            EnsureRaycastGraphic(backgroundImage);
-            backgroundImage.raycastTarget = false;
-            backgroundImage.color = isRevealed ? revealedColor : hiddenColor;
+            SetMark(markType);
         }
-
-        if (revealedImage != null && revealedImage != backgroundImage)
+        else
         {
-            EnsureRaycastGraphic(revealedImage);
-            revealedImage.raycastTarget = false;
-            revealedImage.color = isRevealed ? revealedColor : hiddenColor;
+            SetMark(null); // 데이터에 마크가 없으면 끄기
         }
-
-        if (markIcon != null)
-        {
-            if (data != null && data.TryGetMark(Index, out var markType) && spriteSet != null)
-            {
-                ApplyMarkIconLayout();
-                var sprite = spriteSet.GetSprite(markType);
-                markIcon.sprite = sprite;
-                markIcon.enabled = sprite != null;
-            }
-            else
-            {
-                markIcon.enabled = false;
-            }
-        }
-
-        if (selectionOutline != null)
-            selectionOutline.enabled = false;
 
         UpdatePlayerPinVisual(showPlayer);
+
+        if (selectionOutline != null)
+            selectionOutline.enabled = isSelected; // 선택된 셀 하이라이트
+
+        if (backgroundImage != null) backgroundImage.raycastTarget = isRevealed;
     }
 
     public void PlayMarkFeedback()
@@ -192,23 +180,35 @@ public class DungeonMapCellView : MonoBehaviour
         }
     }
 
+    public void SetVisibility(bool isVisible)
+    {
+        // 밝혀지지 않은 칸은 투명하게 하거나, 아주 연한 색으로 표시
+        var img = GetComponent<Image>();
+        img.color = isRevealed ? Color.white : new Color(0, 0, 0, 0.3f);
+    }
+
     public void ApplyMarkClick()
     {
         var service = DungeonMapService.Instance;
+        //if (service == null || service.IsReadOnly || !service.PendingMarkType.HasValue)
+        //    return;
+
         if (service == null || service.IsReadOnly || !service.PendingMarkType.HasValue)
             return;
 
         var pending = service.PendingMarkType.Value;
         if (service.Current.TryGetMark(Index, out var existing) && existing == pending)
         {
-            RemoveMark();
-            return;
+            service.ClearMark(Index); // 내부에서 OnMapDataChanged 발생
+        }
+        else
+        {
+            service.ApplyMark(Index, pending); // 내부에서 OnMapDataChanged 발생
         }
 
-        if (!service.ApplyMark(Index, pending))
-            return;
-
-        PlayMarkFeedbackOnAllGrids();
+        // 각 셀은 자기 자신의 애니메이션만 재생합니다.
+        PlayMarkFeedback();
+        //PlayMarkFeedbackOnAllGrids();
     }
 
     public void RemoveMark()
@@ -217,10 +217,9 @@ public class DungeonMapCellView : MonoBehaviour
         if (service == null || service.IsReadOnly)
             return;
 
-        if (!service.ClearMark(Index))
-            return;
+        service.ClearMark(Index);
 
-        RefreshAllGrids();
+        //RefreshAllGrids();
     }
 
     public void SelectIfRevealed()
@@ -260,18 +259,39 @@ public class DungeonMapCellView : MonoBehaviour
             image.sprite = MapUiSpriteUtil.White;
     }
 
-    void PlayMarkFeedbackOnAllGrids()
-    {
-        var grids = UnityEngine.Object.FindObjectsByType<DungeonMapGridBuilder>(FindObjectsSortMode.None);
-        foreach (var grid in grids)
-            grid.GetCell(Index)?.PlayMarkFeedback();
-    }
+    //void PlayMarkFeedbackOnAllGrids()
+    //{
+    //    var grids = UnityEngine.Object.FindObjectsByType<DungeonMapGridBuilder>(FindObjectsSortMode.None);
+    //    foreach (var grid in grids)
+    //        grid.GetCell(Index)?.PlayMarkFeedback();
+    //}
 
-    void RefreshAllGrids()
+    //void RefreshAllGrids()
+    //{
+    //    var grids = UnityEngine.Object.FindObjectsByType<DungeonMapGridBuilder>(FindObjectsSortMode.None);
+    //    foreach (var grid in grids)
+    //        grid.RefreshAll();
+    //}
+
+    public void SetMark(DungeonMapMarkType? markType)
     {
-        var grids = UnityEngine.Object.FindObjectsByType<DungeonMapGridBuilder>(FindObjectsSortMode.None);
-        foreach (var grid in grids)
-            grid.RefreshAll();
+        if (markIcon == null) return;
+
+        if (markType.HasValue && spriteSet != null)
+        {
+            var sprite = spriteSet.GetSprite(markType.Value);
+            markIcon.sprite = sprite;
+            markIcon.enabled = sprite != null;
+
+            // 아이콘 크기 재조정
+            ApplyMarkIconLayout();
+        }
+        else
+        {
+            markIcon.enabled = false;
+        }
+
+        LayoutRebuilder.ForceRebuildLayoutImmediate(GetComponent<RectTransform>());
     }
 }
 

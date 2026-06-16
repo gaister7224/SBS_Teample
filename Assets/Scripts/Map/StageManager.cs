@@ -108,11 +108,19 @@ public class StageManager : MonoBehaviour
     IEnumerator StartDungeon()
     {
         yield return StartCoroutine(CreateStage());
+        Debug.Log($"[디버그] StartDungeon: 생성된 방 개수: {StagePositions.Count}");
+        if (DungeonMapService.Instance != null)
+        {
+            DungeonMapService.Instance.StagePositions = StagePositions; // 변수 전달
+        }
 
         if (Player == null)
             Player = GameObject.FindGameObjectWithTag("Player");
 
         SyncPlayerToMinimap();
+
+        var builders = UnityEngine.Object.FindObjectsByType<DungeonMapGridBuilder>(FindObjectsSortMode.None);
+        foreach (var grid in builders) grid.RefreshAll();
     }
 
     IEnumerator InitializeDungeonMapWhenReady()
@@ -157,6 +165,8 @@ public class StageManager : MonoBehaviour
         DestroyTutorialStageRoots();
         yield return WaitUntilTutorialRootsDestroyed();
 
+        curFloor++;
+
         var prefab = TutorialStage[curFloor];
         if (prefab != null)
         {
@@ -164,7 +174,6 @@ public class StageManager : MonoBehaviour
             stageInstance.name = prefab.name;
         }
 
-        curFloor++;
         LeftFloorCount = Mathf.Max(0, TutorialStage.Count - curFloor);
         curFloorCleared = false;
         surroundStagePositions.Clear();
@@ -264,14 +273,16 @@ public class StageManager : MonoBehaviour
 
     public void SyncDungeonMapAfterLayout()
     {
-        foreach (var grid in Object.FindObjectsByType<DungeonMapGridBuilder>(FindObjectsSortMode.None))
-            grid.ForceRebuild();
+        //foreach (var grid in Object.FindObjectsByType<DungeonMapGridBuilder>(FindObjectsSortMode.None))
+        //    grid.ForceRebuild();
 
         SyncPlayerToMinimap();
     }
 
     public void SyncPlayerToMinimap(Vector2Int? cellOverride = null)
     {
+        if (DungeonMapService.Instance == null) return;
+
         EnsureStagePositions();
 
         if (DungeonMapService.Instance == null)
@@ -280,7 +291,50 @@ public class StageManager : MonoBehaviour
             serviceObject.AddComponent<DungeonMapService>();
         }
 
-        DungeonMapService.Instance.EnsureLoadedForCurrentDungeon();
+        int dungeonIndex = GameManager.instance.curDungeonNumber;
+        int floor = GameManager.instance.curDungeonFloorNumber;
+        int exactInGameId = 1;
+        if (Tutorial)
+        {
+            exactInGameId = (GameManager.instance.curDungeonNumber * 100) + floor;
+            Debug.Log($"[디버그] 튜토리얼 ID 계산: {GameManager.instance.curDungeonNumber} * 100 + {floor} = {exactInGameId}");
+        }
+        else
+        {
+            dungeonIndex = GameManager.instance.curDungeonNumber;
+            exactInGameId = (dungeonIndex * 100) + GameManager.instance.curDungeonFloorNumber;
+        }
+
+        DungeonMapService.Instance.LoadDungeon(exactInGameId);
+
+        if (DungeonMapService.Instance.LoadedDungeonId != exactInGameId)
+        {
+            Debug.Log($"[미니맵] 던전 ID 불일치 감지: {DungeonMapService.Instance.LoadedDungeonId} -> {exactInGameId}. 강제 로드 수행.");
+            DungeonMapService.Instance.LoadDungeon(exactInGameId);
+            //DungeonMapService.Instance.EnsureLoaded(exactInGameId);
+
+            // 미니맵 기존 오브젝트들 싹 지우기 (잔상 제거)
+            var builder = UnityEngine.Object.FindObjectsByType<DungeonMapGridBuilder>(FindObjectsSortMode.None);
+            foreach (var grid in builder)
+            {
+                grid.ClearGrid(); // 이전 데이터(1층)의 모든 흔적 제거
+                grid.ForceRebuild(); // 강제로 즉시 재생성
+            }
+        }
+        // 1. 여기서 데이터를 확실히 2층(102)으로 로드
+        DungeonMapService.Instance.LoadDungeon(exactInGameId);
+
+        // 2. [추가] 서비스의 내부 상태를 강제로 현재 ID로 고정 (오염 방지)
+        DungeonMapService.Instance.LoadedDungeonId = exactInGameId;
+
+        EnsureStagePositions();
+
+        Debug.Log($"[디버그] SyncPlayerToMinimap 호출됨. 계산된 ID: {exactInGameId}, 현재 던전인덱스: {dungeonIndex}, 층: {floor}");
+        DungeonMapService.Instance.EnsureLoaded(exactInGameId);
+
+        //Debug.Log($"[디버그] 서비스에 전달할 StagePositions 개수: {StagePositions.Count}");
+        DungeonMapService.Instance.Current.SetValidCells(StagePositions);
+        //DungeonMapService.Instance.EnsureLoadedForCurrentDungeon();
 
         if (StagePositions.Count == 0)
             return;
@@ -292,6 +346,12 @@ public class StageManager : MonoBehaviour
         curStagePos = cell;
         DungeonMapService.Instance.SetPlayerPosition(cell);
         DungeonMapService.Instance.RevealAround(cell, 1, StagePositions);
+
+        var builders = UnityEngine.Object.FindObjectsByType<DungeonMapGridBuilder>(FindObjectsSortMode.None);
+        foreach (var grid in builders)
+        {
+            grid.RefreshAll();
+        }
     }
 
     Vector2Int ResolvePlayerMapCell()
@@ -389,7 +449,7 @@ public class StageManager : MonoBehaviour
                 availableCells.Add(new Vector2Int(x, z));
             }
         }
-
+        
         // ───────────────── 랜덤 로직 ─────────────────
 
         for (int i = 0; i < availableCells.Count; i++)
@@ -516,6 +576,7 @@ public class StageManager : MonoBehaviour
 
             StagePositions.Add(gridPos);
         }
+        Debug.Log($"[디버그] CreateStage 종료. 최종 StagePositions Count: {StagePositions.Count}");
 
         yield return null;
 
@@ -539,144 +600,5 @@ public class StageManager : MonoBehaviour
         RebuildStagePositions();
 
         SyncDungeonMapAfterLayout();
-    }
-
-    void Update()
-    {
-        //StartCoroutine(SurroundStage());
-        //if (curFloorCleared && !Tutorial)
-        //{
-        //    curFloorCleared = false;
-        //    StagePositions.Clear();
-
-        //    for (int i = transform.childCount - 1; i >= 0; i--)
-        //    {
-        //        if (transform.GetChild(i).name.Contains("Stage"))
-        //        {
-        //            Destroy(transform.GetChild(i).gameObject);
-        //        }
-        //    }
-
-        //    if (LeftFloorCount > 0)
-        //    {
-        //        curFloor++;
-        //        LeftFloorCount--;
-        //        StartCoroutine(StageCreate());
-        //    }
-        //    else
-        //    {
-        //        //클리어 처리
-        //    }
-        //}
-        //else if (curFloorCleared && Tutorial && TutorialStage.Count > 0)
-        //{
-        //    curFloorCleared = false;
-
-        //    for (int i = transform.childCount - 1; i >= 0; i--)
-        //    {
-        //        if (transform.GetChild(i).name.Contains("Stage"))
-        //        {
-        //            Destroy(transform.GetChild(i).gameObject);
-        //        }
-        //    }
-
-        //    if (LeftFloorCount == 2f)
-        //    {
-        //        curFloor++;
-        //        LeftFloorCount--;
-        //        Instantiate(TutorialStage[0], transform.position, Quaternion.identity, transform);
-        //    }
-        //    else if (LeftFloorCount == 1f)
-        //    {
-        //        curFloor++;
-        //        LeftFloorCount--;
-        //        Instantiate(TutorialStage[1], transform.position, Quaternion.identity, transform);
-        //    }
-        //    else if (LeftFloorCount == 0f)
-        //    {
-        //        //튜토리얼 클리어
-        //    }
-        //}
-
-        //IEnumerator SurroundStage()
-        //{
-        //    for (int i = 0; i < 9; i++)
-        //    {
-        //        int x = curStagePos.x + (i % 3 - 1);
-        //        int z = curStagePos.y + (i / 3 - 1);
-        //        Vector2Int pos = new Vector2Int(x, z);
-        //        if (StagePositions.Contains(pos))
-        //        {
-        //            surroundStagePositions.Add(pos);
-        //        }
-        //    }
-
-        //    yield return null;
-        //}
-
-        //IEnumerator StageCreate()
-        //{
-        //    int countHalf = (StageCount % 2 == 1) ? StageCount / 2 + 1 : StageCount / 2;
-        //    HashSet<Vector2Int> sealedStonePositions = new HashSet<Vector2Int>();
-        //    for (int i = 0; i < MaxSealedStoneCount; i++)
-        //    {
-        //        int x, z;
-        //        do
-        //        {
-        //            x = Random.Range(-countHalf, StageCount - countHalf + 2);
-        //            z = Random.Range(-countHalf, StageCount - countHalf + 2);
-        //        } while ((x >= -1 && x <= 1 && z >= -1 && z <= 1) || sealedStonePositions.Contains(new Vector2Int(x, z)));
-        //        sealedStonePositions.Add(new Vector2Int(x, z));
-        //    }
-
-        //    HashSet<Vector2Int> trapStagePositions = new HashSet<Vector2Int>();
-        //    for (int i = 0; i < Mathf.FloorToInt((Mathf.Pow(StageCount + 2, 2) - 9) / 10f); i++)
-        //    {
-        //        int x, z;
-        //        do
-        //        {
-        //            x = Random.Range(-countHalf, StageCount - countHalf + 2);
-        //            z = Random.Range(-countHalf, StageCount - countHalf + 2);
-        //        } while ((x >= -1 && x <= 1 && z >= -1 && z <= 1) || trapStagePositions.Contains(new Vector2Int(x, z)));
-        //        trapStagePositions.Add(new Vector2Int(x, z));
-        //    }
-
-        //    for (int x = -countHalf; x < StageCount - countHalf + 2; x++)
-        //    {
-        //        for (int z = -countHalf; z < StageCount - countHalf + 2; z++)
-        //        {
-        //            if (x >= -1 && x <= 1 && z >= -1 && z <= 1)
-        //            {
-        //                if (x == 0 && z == 0)
-        //                {
-        //                    Instantiate(BossStage, transform.localPosition, Quaternion.identity, StageParent.transform);
-        //                    StagePositions.Add(new Vector2Int(x, z));
-        //                }
-        //            }
-        //            else if (x == -countHalf && z == -countHalf)
-        //            {
-        //                Instantiate(stage[0], spawnPos, Quaternion.identity, StageParent.transform);
-        //                StagePositions.Add(new Vector2Int(x, z));
-        //            }
-        //            else if (sealedStonePositions.Contains(new Vector2Int(x, z)))
-        //            {
-        //                StagePositions.Add(new Vector2Int(x, z));
-        //                Instantiate(stage[1], spawnPos, Quaternion.identity, StageParent.transform);
-        //            }
-        //            else if (trapStagePositions.Contains(new Vector2Int(x, z)))
-        //            {
-        //                StagePositions.Add(new Vector2Int(x, z));
-        //                Instantiate(stage[2], spawnPos, Quaternion.identity, transform);
-        //            }
-        //            else
-        //            {
-        //                StagePositions.Add(new Vector2Int(x, z));
-        //                Instantiate(stage[Random.Range(3, stage.Count)], spawnPos, Quaternion.identity, transform);
-        //            }
-        //        }
-        //    }
-
-        //    yield return null;
-        //}
     }
 }

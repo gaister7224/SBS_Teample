@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &158373973870216516
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3325981028089953408}
+  m_Layer: 0
+  m_Name: DungeonEntry
+  m_TagString: DungeonEntry
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3325981028089953408
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 158373973870216516}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 2, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7560381821120080026}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &353587307873532341
 GameObject:
   m_ObjectHideFlags: 0
@@ -156,6 +187,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   portalManager: {fileID: 3809560422600107664}
   stageManager: {fileID: 0}
+  monsterSpawnManager: {fileID: 0}
 --- !u!1 &2613477811451857407
 GameObject:
   m_ObjectHideFlags: 0
@@ -275,7 +307,7 @@ GameObject:
   - component: {fileID: 7560381821120080026}
   m_Layer: 0
   m_Name: NoneStage
-  m_TagString: Untagged
+  m_TagString: NoneStage
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -303,6 +335,7 @@ Transform:
   - {fileID: 909130398814576352}
   - {fileID: 6004410561968186714}
   - {fileID: 731888447023314044}
+  - {fileID: 3325981028089953408}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2964479580755217619
@@ -634,6 +667,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   portalManager: {fileID: 3809560422600107664}
+  stageManager: {fileID: 0}
   direction: 3
   toBoss: 0
 --- !u!1 &5144979569810962450
@@ -868,6 +902,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   portalManager: {fileID: 3809560422600107664}
+  stageManager: {fileID: 0}
   direction: 2
   toBoss: 0
 --- !u!1 &6813720926476073496
@@ -1322,6 +1357,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   portalManager: {fileID: 3809560422600107664}
+  stageManager: {fileID: 0}
   direction: 1
   toBoss: 0
 --- !u!1 &7332272905514733608
@@ -1448,6 +1484,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   portalManager: {fileID: 3809560422600107664}
+  stageManager: {fileID: 0}
   direction: 8
   toBoss: 0
 --- !u!1 &7578044407623005106
@@ -1902,6 +1939,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   portalManager: {fileID: 3809560422600107664}
+  stageManager: {fileID: 0}
   direction: 0
   toBoss: 0
 --- !u!1 &8076056445954916831

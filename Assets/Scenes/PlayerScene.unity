@@ -1318,6 +1318,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   portalManager: {fileID: 0}
   stageManager: {fileID: 0}
+  monsterSpawnManager: {fileID: 0}
 --- !u!65 &510482533
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1990,6 +1991,7 @@ MonoBehaviour:
   itemGetAll: 0
   skillInstall: 0
   curDungeonNumber: 2
+  curDungeonFloorNumber: 0
   installImpossibleStart: 0
   goldMultiplier: 0
   buffStoneGetStatusNumber: 0
@@ -2487,6 +2489,71 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1001 &1032407242
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 79874145516727904, guid: 698040357b7e49b41ae4c8156c9e92ec, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.68630767
+      objectReference: {fileID: 0}
+    - target: {fileID: 79874145516727904, guid: 698040357b7e49b41ae4c8156c9e92ec, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.72
+      objectReference: {fileID: 0}
+    - target: {fileID: 79874145516727904, guid: 698040357b7e49b41ae4c8156c9e92ec, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -5.348152
+      objectReference: {fileID: 0}
+    - target: {fileID: 79874145516727904, guid: 698040357b7e49b41ae4c8156c9e92ec, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 79874145516727904, guid: 698040357b7e49b41ae4c8156c9e92ec, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 79874145516727904, guid: 698040357b7e49b41ae4c8156c9e92ec, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 79874145516727904, guid: 698040357b7e49b41ae4c8156c9e92ec, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 79874145516727904, guid: 698040357b7e49b41ae4c8156c9e92ec, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 79874145516727904, guid: 698040357b7e49b41ae4c8156c9e92ec, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 79874145516727904, guid: 698040357b7e49b41ae4c8156c9e92ec, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5749934921204049389, guid: 698040357b7e49b41ae4c8156c9e92ec, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7279627412490526026, guid: 698040357b7e49b41ae4c8156c9e92ec, type: 3}
+      propertyPath: m_Name
+      value: TutorialBoss
+      objectReference: {fileID: 0}
+    - target: {fileID: 7279627412490526026, guid: 698040357b7e49b41ae4c8156c9e92ec, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 698040357b7e49b41ae4c8156c9e92ec, type: 3}
 --- !u!114 &1043394881 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8935009257023589390, guid: 8887c03577ef6854fa13ac4b3c662cdf, type: 3}
@@ -4672,6 +4739,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   portalManager: {fileID: 494960428}
+  stageManager: {fileID: 0}
   direction: 3
   toBoss: 0
 --- !u!65 &2089528374
@@ -4887,6 +4955,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1858061604}
+    - target: {fileID: 5025329566084496893, guid: 8887c03577ef6854fa13ac4b3c662cdf, type: 3}
+      propertyPath: mpSlot
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5095792464317473178, guid: 8887c03577ef6854fa13ac4b3c662cdf, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -5291,3 +5363,4 @@ SceneRoots:
   - {fileID: 6163492989305860835}
   - {fileID: 1748304174}
   - {fileID: 1286757940}
+  - {fileID: 1032407242}

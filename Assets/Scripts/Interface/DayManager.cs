@@ -106,6 +106,7 @@ public class DayManager : MonoBehaviour
                 if (!DialogueManager.instance.start)
                 {
                     DialogueManager.instance.OnDialogue(UIManager.Instance.endExplainDialogue);
+                    //DialogueManager.instance.OnDialogueComplete -= TutorialExplainManager.instance.Appear;
                     DialogueManager.instance.OnDialogueComplete += PortalZoom;
                     GameManager.instance.dayTutorial = true;
                 }

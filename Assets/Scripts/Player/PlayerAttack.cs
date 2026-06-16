@@ -78,8 +78,10 @@ public class PlayerAttack : MonoBehaviour
                 UIManager.Instance.stampJobButton.onClick.AddListener(StampChoice);
         }
 
-        //????? ???
-        StateDecision(1f, 0f, 0f, false, Job.Sword, 10, 3, 0, 0, swordAnimation);
+        //StateDecision(1f, 0f, 0f, false, Job.Sword, 10, 3, 0, 0, swordAnimation);
+        StateDecision(1f, 0f, 0f, false, Job.Sword, 10, 300, 0, 0, swordAnimation);
+        //StateDecision(0.5f, 10.0f, 10.0f, false, Job.Bow, 8, 3, -10, 1, bowAnimation);
+        //StateDecision(2.5f, 10.0f, 5.0f, false, Job.Stamp, 7, 3, 0, 2, stampAnimation);
     }
 
     // Update is called once per frame
@@ -337,6 +339,7 @@ public class PlayerAttack : MonoBehaviour
         if (!DialogueManager.instance.start)
         {
             DialogueManager.instance.OnDialogue(UIManager.Instance.storeExplainDialogue);
+            DialogueManager.instance.OnDialogueComplete -= TutorialExplainManager.instance.Appear;
             DialogueManager.instance.OnDialogueComplete += StorageZoom;
         }
     }
@@ -353,6 +356,7 @@ public class PlayerAttack : MonoBehaviour
         Time.timeScale = 0;
         yield return new WaitForSecondsRealtime((float)UIManager.Instance.storageDirector.duration);
         DialogueManager.instance.OnDialogueComplete -= StorageZoom;
+        TutorialExplainManager.instance.Appear();
         UIManager.Instance.storageDirector.gameObject.SetActive(false);
         Time.timeScale = 1;
     }

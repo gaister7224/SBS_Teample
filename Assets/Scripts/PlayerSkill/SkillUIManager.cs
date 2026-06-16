@@ -24,6 +24,7 @@ public class SkillUIManager : MonoBehaviour
     private InventoryMain inventory;
     private SkillPlay skillPlay;
 
+    private bool statusTutorial = false;
     private void Awake()
     {
         inventory = GetComponent<InventoryMain>();
@@ -66,6 +67,12 @@ public class SkillUIManager : MonoBehaviour
         {
             if (inventory.currentUI == UIType.None && GameManager.instance.mapState == MapState.Village)
             {
+                if (!statusTutorial)
+                {
+                    TutorialExplainManager.instance.Back();
+                    Invoke("TutorialExplainBack", 1);
+                    statusTutorial = true;
+                }
                 if (!playerInfo.activeSelf)
                 {
                     playerInfo.SetActive(true);
@@ -74,6 +81,7 @@ public class SkillUIManager : MonoBehaviour
                     skillPointText.text = "SkillPoint : " + skillPointCount;
                     inventory.currentUI = UIType.SkillWindow;
                     Time.timeScale = 0f;
+
                 }
             }
             else if (inventory.currentUI == UIType.SkillWindow && playerInfo.activeSelf)
@@ -81,6 +89,11 @@ public class SkillUIManager : MonoBehaviour
                 InfoUIClose();
             }
         }
+    }
+
+    private void TutorialExplainBack()
+    {
+        DialogueManager.instance.OnDialogueComplete -= TutorialExplainManager.instance.Appear;
     }
 
     public void InfoUIClose()

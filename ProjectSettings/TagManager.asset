@@ -33,6 +33,7 @@ TagManager:
   - StorageCollider
   - BossRoom
   - BossRoomPos
+  - NoneStage
   layers:
   - Default
   - TransparentFX

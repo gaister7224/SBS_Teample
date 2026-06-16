@@ -64,10 +64,11 @@ public class StorageToInventory : MonoBehaviour
                             int random = Random.Range(allSlots[i].Item.MinGold, allSlots[i].Item.MaxGold);
                             int bounusGold = Mathf.RoundToInt(random * GameManager.instance.goldMultiplier);
                             GameManager.instance.gold += bounusGold;
-                            inventory.goldText.text = "Gold : " + GameManager.instance.gold.ToString();
+                            
                             allSlots[i].itemCount--;
                             if (allSlots[i].itemCount <= 0)
                             {
+                                inventory.goldText.text = "Gold : " + GameManager.instance.gold.ToString();
                                 allSlots[i].ClearSlot();
                                 break;
                             }
@@ -80,20 +81,37 @@ public class StorageToInventory : MonoBehaviour
                     }
                     else
                     {
-                        for (int j = 0; j < e_InventorySlots.Length; j++)
+                        bool isReceived = false;
+                        for (int j = 0; j < p_InventorySlots.Length; j++)
                         {
-                            if (p_InventorySlots[pCount].Item == null && p_InventorySlots[pCount].IsMask(allSlots[i].Item))
+                            if (p_InventorySlots[j].Item != null && p_InventorySlots[j].IsMask(allSlots[i].Item))
                             {
-                                p_InventorySlots[pCount].AddItem(allSlots[i].Item, allSlots[i].itemCount);
-                                allSlots[i].ClearSlot();
-                                pCount++;
-                                break;
-                            }
-                            else if (p_InventorySlots[pCount].Item != null && p_InventorySlots[pCount].IsMask(allSlots[i].Item))
-                            {
-                                if (p_InventorySlots[pCount].Item.ItemID == allSlots[i].Item.ItemID)
+                                if (p_InventorySlots[j].Item.ItemID == allSlots[i].Item.ItemID)
                                 {
-                                    p_InventorySlots[pCount].UpdateSlotCount(allSlots[i].itemCount);
+                                    p_InventorySlots[j].UpdateSlotCount(allSlots[i].itemCount);
+                                    allSlots[i].ClearSlot();
+                                    isReceived = true;
+                                    break;
+                                }
+                            }
+                            //else if (p_InventorySlots[pCount].Item != null && p_InventorySlots[pCount].IsMask(allSlots[i].Item))
+                            //{
+                            //    if (p_InventorySlots[pCount].Item.ItemID == allSlots[i].Item.ItemID)
+                            //    {
+                            //        p_InventorySlots[pCount].UpdateSlotCount(allSlots[i].itemCount);
+                            //        allSlots[i].ClearSlot();
+                            //        break;
+                            //    }
+                            //}
+                        }
+
+                        if (!isReceived) //이미 있는 아이템이 없으면
+                        {
+                            for (int j = 0; j < p_InventorySlots.Length; j++)
+                            {
+                                if (p_InventorySlots[j].Item == null && p_InventorySlots[j].IsMask(allSlots[i].Item))
+                                {
+                                    p_InventorySlots[j].AddItem(allSlots[i].Item, allSlots[i].itemCount);
                                     allSlots[i].ClearSlot();
                                     break;
                                 }
@@ -141,11 +159,12 @@ public class StorageToInventory : MonoBehaviour
                         }
                     }
                 }
-                GameManager.instance.level += GameManager.instance.curLevel;
-                GameManager.instance.curLevel = 0;
-                UIManager.Instance.profileLevelText.text = "LV." + GameManager.instance.level.ToString();
-                GameManager.instance.itemGetAll = true;
+                
             }
+            GameManager.instance.level += GameManager.instance.curLevel;
+            GameManager.instance.curLevel = 0;
+            UIManager.Instance.profileLevelText.text = "LV." + GameManager.instance.level.ToString();
+            GameManager.instance.itemGetAll = true;
         }
         
     }

@@ -8,11 +8,12 @@ public class GameState : MonoBehaviour
 
     [SerializeField] private CinemachineCamera playerCamera;
 
-    [Header(" ")]
+    [Header("?")]
     [SerializeField] private DialogueGroup introStory;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
+        MinimapManager.BootstrapForMainScene();
         if (player == null)
         {
             Debug.LogError("GameState: player prefab is not assigned.");
