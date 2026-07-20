@@ -7,6 +7,8 @@ public class SealedStone : MonoBehaviour
     [SerializeField] float HP;
     [SerializeField] float MaxHP;
 
+    bool destroyed = false;
+
     private void Awake()
     {
         stageManager = GameObject.Find("StageManager").GetComponent<StageManager>();
@@ -22,11 +24,12 @@ public class SealedStone : MonoBehaviour
 
     void Update()
     {
-        if (stageManager == null)
+        if (stageManager == null || destroyed)
             return;
 
         if (HP <= 0)
         {
+            destroyed = true;
             stageManager.SealedStoneLeft--;
             Destroy(gameObject);
         }

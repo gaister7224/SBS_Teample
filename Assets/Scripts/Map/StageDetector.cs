@@ -113,7 +113,16 @@ public class StageDetector : MonoBehaviour
 
         if (stageManager.monsterSpawnManager != null)
         {
-            stageManager.monsterSpawnManager.isMonsterSpawn = true;
+            if (portalManager.stageType == StageType.Trap ||
+                portalManager.stageType == StageType.Treasure)
+            {
+                stageManager.monsterSpawnManager.isMonsterSpawn = true;
+            }
+            else if (!portalManager.isCleared)
+            {
+                stageManager.monsterSpawnManager.isMonsterSpawn = true;
+            }
+
             Debug.Log("몬스터 소환");
         }
 

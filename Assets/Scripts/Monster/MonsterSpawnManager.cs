@@ -47,7 +47,9 @@ public class MonsterSpawnManager : MonoBehaviour
         if (stageManager == null)
             return;
 
-        if (stageManager.curStageCleared)
+        if (stageManager.curStageCleared &&
+            stageManager.curStageType != StageType.Trap &&
+            stageManager.curStageType != StageType.Treasure)
         {
             stageManager.activePortal = true;
             return;
@@ -190,7 +192,6 @@ public class MonsterSpawnManager : MonoBehaviour
 
             if (currentSealedStoneRoom != null && currentSealedStoneRoom.isFake)
             {
-                // 가짜 봉인석 방: 웨이브 스폰
                 WaveMonsterSpawn wave = currentSealedStoneRoom.waveMonsterSpawn;
 
                 if (wave != null)
@@ -210,13 +211,12 @@ public class MonsterSpawnManager : MonoBehaviour
                 return;
             }
 
-            // 진짜 봉인석 방: 일반 그리드 스폰
             bool spawned = SpawnGrid();
 
             if (!spawned)
             {
-                stageManager.curStageCleared = true;
-                stageManager.activePortal = true;
+                stageManager.curStageCleared = false;
+                stageManager.activePortal = false;
                 isMonsterSpawn = false;
                 return;
             }
@@ -229,14 +229,27 @@ public class MonsterSpawnManager : MonoBehaviour
 
         PruneDeadMonsters();
 
+        // 몬스터가 남아있으면 포탈 닫기
         if (CurrentAliveMonsters.Count > 0)
-            stageManager.activePortal = false;
-        else
         {
-            stageManager.activePortal = true;
-            stageManager.curStageCleared = true;
+            stageManager.activePortal = false;
+            stageManager.curStageCleared = false;
+            return;
         }
+
+        // 봉인석이 아직 하나라도 남아있으면 포탈 닫기
+        if (stageManager.SealedStoneLeft > 0)
+        {
+            stageManager.activePortal = false;
+            stageManager.curStageCleared = false;
+            return;
+        }
+
+        // 몬스터와 봉인석이 모두 없어졌을 때만 포탈 생성
+        stageManager.activePortal = true;
+        stageManager.curStageCleared = true;
     }
+
 
     SealedStoneRoom FindCurrentSealedStoneRoom()
     {
